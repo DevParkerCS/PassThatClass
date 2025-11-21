@@ -10,13 +10,17 @@
 }
 
 .navTitle {
-  color: white;
+  color: var(--text-muted);
   cursor: pointer;
 }
 
-.navItem {
-  color: white;
-  margin: 1rem;
-  font-size: 1.25rem;
-  cursor: pointer;
+.navItems {
+  display: flex;
+
+  .navItem {
+    color: white;
+    margin: 0rem 1rem;
+    font-size: 1.25rem;
+    cursor: pointer;
+  }
 }

@@ -6,6 +6,7 @@ import { MockQuiz } from "../../../../mock";
 import styles from "./Quiz.module.scss";
 import shared from "../../Shared/styles.module.scss";
 import { QuizMode } from "../../QuizContent";
+import { Breadcrumb } from "../../../../components/Breadcrumb/Breadcrumb";
 
 type QuizProps = {
   mode: QuizMode;
@@ -19,8 +20,12 @@ export const Quiz = ({ mode, setMode, setNumCorrect }: QuizProps) => {
   const [isReviewing, setisReviewing] = useState(false);
 
   return (
-    <div className={shared.contentWrapper}>
+    <div className={shared.contentWrapper} style={{ width: "60%" }}>
       <h2 className={shared.quizTitle}>Quiz: Test Quiz</h2>
+
+      <div className={styles.breadcrumbWrapper}>
+        <Breadcrumb />
+      </div>
 
       <div className={styles.quizWrapper}>
         <QuizStatusBar qIndex={qIndex} />

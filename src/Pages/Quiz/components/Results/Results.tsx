@@ -4,6 +4,7 @@ import shared from "../../Shared/styles.module.scss";
 import { MockQuiz } from "../../../../mock";
 import { ResultsCircle } from "./components/ResultsCircle/ResultsCircle";
 import { ResultButtons } from "./components/ResultButtons/ResultButtons";
+import { Breadcrumb } from "../../../../components/Breadcrumb/Breadcrumb";
 
 type ResultsProps = {
   setMode: React.Dispatch<React.SetStateAction<QuizMode>>;
@@ -12,11 +13,13 @@ type ResultsProps = {
 
 export const Results = ({ setMode, numCorrect }: ResultsProps) => {
   return (
-    <div className={shared.contentWrapper}>
+    <div className={shared.contentWrapper} style={{ width: "fit-content" }}>
       <div>
         <h2 className={shared.quizTitle}>Quiz Results</h2>
         <p className={styles.resultTxt}>Nice Work, You Crushed This!</p>
       </div>
+
+      <Breadcrumb />
 
       <div className={styles.resultsWrapper}>
         <ResultsCircle numCorrect={numCorrect} />

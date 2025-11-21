@@ -1,0 +1,40 @@
+.resultsBtn {
+  width: 250px;
+  font-size: 1.5rem;
+  border-radius: 15px;
+  border: none;
+  margin: 0 1rem;
+  padding: 1rem;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0px 5px 5px rgba(black, 0.3);
+  transition: all 0.1s linear;
+
+  &.review {
+    background-color: var(--teal);
+  }
+
+  &.retake {
+    background-color: var(--teal);
+  }
+
+  &:hover {
+    background-color: var(--teal-bright);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.dashboardBtnWrapper {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+
+  .resultsBtn {
+    background-color: var(--inner-navy);
+
+    &:hover {
+      background-color: var(--inner-navy-bright);
+    }
+  }
+}

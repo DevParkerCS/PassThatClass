@@ -1,0 +1,18 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--dark-bg);
+}
+
+.quizWrapper {
+  display: none;
+
+  &.active {
+    display: block;
+  }
+}

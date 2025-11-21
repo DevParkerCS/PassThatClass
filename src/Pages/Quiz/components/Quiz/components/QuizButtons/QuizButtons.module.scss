@@ -1,0 +1,31 @@
+.btnsWrapper {
+  background-color: var(--outer-navy);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+
+  .quizBtn {
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    width: 150px;
+    border-radius: 30px;
+    background-color: var(--teal);
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.4);
+    transition: all 0.1s;
+
+    &.inactive {
+      background-color: var(--teal-soft);
+      cursor: default;
+    }
+
+    &:not(.inactive):hover {
+      background-color: var(--teal-bright);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+  }
+}

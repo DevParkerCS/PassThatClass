@@ -1,0 +1,38 @@
+.dashboardTitle {
+  font-size: 3rem;
+  color: var(--text-main);
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.searchAlign {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.searchWrapper {
+  background-color: var(--inner-teal);
+  width: fit-content;
+  padding: 1rem;
+  border-radius: var(--content-radius);
+
+  .searchIcon {
+    font-size: 1.5rem;
+    color: var(--cyan-soft);
+  }
+
+  .searchInput {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    width: 450px;
+    font-size: 1.5rem;
+    padding-left: 1rem;
+    color: var(--cyan-soft);
+
+    &::placeholder {
+      color: var(--cyan-soft);
+    }
+  }
+}

@@ -1,0 +1,102 @@
+import { useEffect, useState } from "react";
+import styles from "./QuizQuestion.module.scss";
+import { QuizMode } from "../../../../QuizContent";
+
+export type QuizQuestionType = {
+  id: string;
+  type: string;
+  question: string;
+  options: QuizAnswerType[];
+  explanation: string;
+  correct_index: number;
+};
+
+type QuizAnswerType = {
+  id: string;
+  text: string;
+};
+
+type QuizQuestionProps = {
+  question: QuizQuestionType;
+  index: number;
+  qIndex: number;
+  setCanGoNext: React.Dispatch<React.SetStateAction<boolean>>;
+  chosenAnswer?: number;
+  mode: QuizMode;
+  setNumCorrect: React.Dispatch<React.SetStateAction<number>>;
+};
+
+export const QuizQuestion = ({
+  question,
+  index,
+  qIndex,
+  setCanGoNext,
+  chosenAnswer,
+  mode,
+  setNumCorrect,
+}: QuizQuestionProps) => {
+  const [chosenAns, setChosenAns] = useState(chosenAnswer || -1);
+  const [isReviewing, setIsReviewing] = useState(mode === "reviewing");
+  const correctAns = question.correct_index;
+
+  useEffect(() => {
+    setIsReviewing(mode === "reviewing");
+
+    if (mode === "answering") {
+      setChosenAns(-1);
+    }
+  }, [mode]);
+
+  useEffect(() => {
+    if (qIndex === index) {
+      setCanGoNext(chosenAns !== -1);
+    }
+  }, [chosenAns, qIndex]);
+
+  const handleClick = (i: number) => {
+    if (isReviewing) return;
+
+    if (i === correctAns) setNumCorrect((prev) => prev + 1);
+    else if (chosenAns !== -1) setNumCorrect((prev) => prev - 1);
+
+    setChosenAns(chosenAns === i ? -1 : i);
+  };
+
+  return (
+    <div
+      className={`${styles.questionWrapper} ${
+        index !== qIndex ? styles.inactive : ""
+      }`}
+    >
+      <div className={styles.questionTxtWrapper}>
+        <p className={styles.questionTxt}>{question.question}</p>
+      </div>
+
+      <div className={styles.optionsWrapper}>
+        {question.options.map((o, i) => {
+          return (
+            <div
+              key={o.id}
+              className={`${styles.optionWrapper} ${
+                chosenAns === i && styles.chosen
+              } ${isReviewing && styles.isReviewing} ${
+                isReviewing && i === correctAns && styles.correctAns
+              } ${
+                isReviewing &&
+                chosenAns !== correctAns &&
+                i === chosenAns &&
+                styles.incorrectAns
+              }`}
+              onClick={() => handleClick(i)}
+            >
+              <p className={`${styles.optionTxt} ${styles.optionID}`}>{o.id}</p>{" "}
+              <p className={`${styles.optionTxt} ${styles.optionAnswer}`}>
+                {o.text}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};

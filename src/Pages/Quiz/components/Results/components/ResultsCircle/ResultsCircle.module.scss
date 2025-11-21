@@ -1,0 +1,40 @@
+.outerCircle {
+  padding: 1rem;
+  background: conic-gradient(
+    var(--cyan-accent) calc(var(--progress) * 1%),
+    var(--outer-teal) 0
+  );
+  border-radius: 50%;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.innerCircle {
+  background-color: var(--inner-teal);
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.25rem;
+  box-shadow: inset 0 0 15px rgba(black, 0.5);
+
+  .scoreTxt {
+    color: var(--text-main);
+    font-size: 3.2rem;
+    font-weight: 700;
+    line-height: 3.2rem;
+  }
+
+  .scorePercent {
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    font-weight: 600;
+    opacity: 0.9;
+  }
+}

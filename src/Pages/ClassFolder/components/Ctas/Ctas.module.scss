@@ -1,0 +1,36 @@
+@import "../../../../styles/variables.module.scss";
+
+.ctasWrapper {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.newCta {
+  background-color: var(--outer-navy);
+  border: none;
+  display: flex;
+  gap: 5px;
+  padding: 1rem;
+  border-radius: var(--mid-radius);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: $light-shadow;
+  transition: all 0.1s linear;
+
+  &:hover {
+    box-shadow: $light-shadow-highlight;
+  }
+
+  .ctaIcon {
+    color: var(--cyan-accent);
+    font-size: 1.25rem;
+  }
+
+  .ctaTxt {
+    color: var(--text-main);
+    font-size: 1.5rem;
+  }
+}

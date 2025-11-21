@@ -1,14 +1,16 @@
+@import "../../../../../../styles/variables.module.scss";
+
 .questionWrapper {
   &.inactive {
     display: none;
   }
 }
 .questionTxtWrapper {
-  background-color: var(--inner-navy);
+  background-color: var(--inner-teal);
   padding: 1rem;
 
   .questionTxt {
-    font-size: 2rem;
+    font-size: 1.75rem;
     color: white;
     font-weight: bold;
     text-align: center;
@@ -16,7 +18,7 @@
 }
 
 .optionsWrapper {
-  background-color: var(--inner-teal);
+  background-color: var(--outer-navy);
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -33,7 +35,7 @@
 }
 
 .optionWrapper {
-  background-color: var(--inner-navy);
+  background-color: var(--inner-teal);
   display: flex;
   width: 95%;
   padding: 1rem;
@@ -42,11 +44,11 @@
   cursor: pointer;
   border: 2px solid transparent;
   transition: all 0.1s linear;
-  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.4);
+  box-shadow: $dark-shadow;
 
   &.chosen {
     border: 2px solid var(--cyan-accent);
-    box-shadow: 0 4px 10px rgba(black, 0.5);
+    box-shadow: $dark-shadow-highlight;
     transform: scale(1.015);
   }
 
@@ -64,7 +66,7 @@
 
   &:not(.isReviewing):hover {
     transform: scale(1.015);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: $dark-shadow-highlight;
   }
 
   .optionTxt {

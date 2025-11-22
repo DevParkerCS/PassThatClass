@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Ctas } from "./components/Ctas/Ctas";
 import { Content } from "./components/Content/Content";
+import { ContentModal } from "./components/ContentModal/ContentModal";
+import { useState } from "react";
 
 export const ClassFolder = () => {
   const nav = useNavigate();

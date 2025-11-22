@@ -1,3 +1,4 @@
+@use "../../../../styles/mixins.scss" as mixins;
 @import "../../../../styles/variables.module.scss";
 
 .ctasWrapper {
@@ -8,7 +9,7 @@
 }
 
 .newCta {
-  background-color: var(--outer-navy);
+  background-color: var(--sec-layer);
   border: none;
   display: flex;
   gap: 5px;
@@ -17,11 +18,12 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: $light-shadow;
+  border: 2px solid var(--light-border);
   transition: all 0.1s linear;
 
   &:hover {
-    box-shadow: $light-shadow-highlight;
+    background-color: var(--third-layer);
+    border: 2px solid var(--highlight-border);
   }
 
   .ctaIcon {

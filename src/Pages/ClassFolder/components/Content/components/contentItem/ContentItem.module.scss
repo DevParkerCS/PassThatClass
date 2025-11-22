@@ -1,0 +1,53 @@
+@use "../../../../../../styles/mixins.scss" as mixins;
+@import "../../../../../../styles/variables.module.scss";
+
+.contentFlex {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.contentItem {
+  flex: 1 1 calc(50% - 0.5rem);
+  max-width: calc(50% - 0.5rem);
+  background-color: var(--first-layer);
+  border-radius: var(--mid-radius);
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  cursor: pointer;
+  border: 2px solid var(--light-border);
+  transition: all 0.1s linear;
+
+  &:hover {
+    border: 2px solid var(--highlight-border);
+    background-color: var(--sec-layer);
+    transform: scale(1.01);
+
+    .itemLabel {
+      background-color: var(--third-layer);
+    }
+  }
+
+  .itemLabel {
+    background-color: var(--sec-layer);
+    color: var(--cyan-accent);
+    padding: 0.5rem;
+    font-weight: bold;
+    font-size: 1rem;
+    border-radius: var(--mid-radius);
+    height: fit-content;
+    transition: all 0.1s linear;
+  }
+
+  .itemName {
+    font-size: 1.5rem;
+    color: white;
+    @include mixins.ellipsis;
+  }
+
+  .itemInfoTxt {
+    font-size: 1.25rem;
+    margin-top: 0.25rem;
+    color: var(--text-muted);
+  }
+}

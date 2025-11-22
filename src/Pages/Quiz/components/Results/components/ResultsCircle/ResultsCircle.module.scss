@@ -1,8 +1,8 @@
 .outerCircle {
   padding: 1rem;
   background: conic-gradient(
-    var(--cyan-accent) calc(var(--progress) * 1%),
-    var(--outer-teal) 0
+    var(--cyan-soft) calc(var(--progress) * 1%),
+    var(--third-layer) 0
   );
   border-radius: 50%;
   width: 220px;
@@ -13,7 +13,7 @@
 }
 
 .innerCircle {
-  background-color: var(--inner-teal);
+  background-color: var(--sec-layer);
   height: 100%;
   width: 100%;
   border-radius: 50%;

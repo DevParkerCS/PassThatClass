@@ -6,24 +6,26 @@
   }
 }
 .questionTxtWrapper {
-  background-color: var(--inner-teal);
+  box-shadow: inset 0 5px 12px rgba(0, 0, 0, 0.5);
+  background-color: var(--sec-layer);
   padding: 1rem;
 
   .questionTxt {
     font-size: 1.75rem;
-    color: white;
+    color: var(--text-main);
     font-weight: bold;
     text-align: center;
   }
 }
 
 .optionsWrapper {
-  background-color: var(--outer-navy);
-  padding: 1rem;
+  background-color: var(--first-layer);
+  padding: 1.5rem 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-shadow: inset 0 5px 12px rgba(0, 0, 0, 0.5);
+  gap: 1rem;
 
   :first-child {
     margin-top: 0rem;
@@ -35,21 +37,24 @@
 }
 
 .optionWrapper {
-  background-color: var(--inner-teal);
+  background-color: var(--sec-layer);
   display: flex;
   width: 95%;
   padding: 1rem;
   border-radius: 25px;
-  margin: 0.5rem 0rem;
   cursor: pointer;
-  border: 2px solid transparent;
+  border: 2px solid var(--light-border);
   transition: all 0.1s linear;
   box-shadow: $dark-shadow;
 
   &.chosen {
     border: 2px solid var(--cyan-accent);
-    box-shadow: $dark-shadow-highlight;
+    box-shadow: $dark-shadow;
     transform: scale(1.015);
+
+    .optionAnswer {
+      color: var(--text-main);
+    }
   }
 
   &.correctAns {
@@ -66,16 +71,26 @@
 
   &:not(.isReviewing):hover {
     transform: scale(1.015);
-    box-shadow: $dark-shadow-highlight;
+    box-shadow: $dark-shadow;
+    color: var(--text-main);
+
+    .optionAnswer {
+      color: var(--text-main);
+    }
   }
 
   .optionTxt {
-    color: white;
     font-size: 1.5rem;
     font-weight: bold;
+    transition: color 0.1s linear;
+  }
+
+  .optionAnswer {
+    color: var(--text-secondary);
   }
 
   .optionID {
     margin-right: 1rem;
+    color: var(--cyan-soft);
   }
 }

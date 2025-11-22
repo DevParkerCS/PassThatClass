@@ -1,29 +1,32 @@
 .btnsWrapper {
-  background-color: var(--outer-teal);
+  background-color: var(--sec-layer);
   width: 100%;
   display: flex;
   justify-content: space-between;
   padding: 1rem;
+  border-top: 2px solid var(--light-border);
 
   .quizBtn {
     font-size: 1.5rem;
     padding: 0.5rem;
     width: 150px;
     border-radius: 30px;
-    background-color: var(--teal);
-    color: white;
+    background-color: var(--third-layer);
+    color: var(--text-main);
     border: none;
     cursor: pointer;
     box-shadow: 0 4px 5px rgba(0, 0, 0, 0.4);
-    transition: all 0.1s;
+    transition: all 0.15s;
+    border: 2px solid var(--third-highlight);
 
     &.inactive {
-      background-color: var(--teal-soft);
+      background-color: var(--bg-trans);
       cursor: default;
+      border: 2px solid transparent;
     }
 
     &:not(.inactive):hover {
-      background-color: var(--teal-bright);
+      background-color: var(--third-highlight);
       transform: translateY(-1px);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     }

@@ -1,11 +1,11 @@
 .resultTxt {
   font-size: 2rem;
-  color: white;
+  color: var(--text-secondary);
   text-align: center;
 }
 
 .resultsWrapper {
-  background-color: var(--outer-navy);
+  background-color: var(--first-layer);
   border-radius: var(--content-radius);
   padding: 2rem 2.5rem;
   display: flex;
@@ -17,7 +17,7 @@
 }
 
 .infoTxt {
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: 1.75rem;
   text-align: center;
 }

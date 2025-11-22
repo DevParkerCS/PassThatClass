@@ -56,10 +56,20 @@ export const QuizQuestion = ({
   const handleClick = (i: number) => {
     if (isReviewing) return;
 
-    if (i === correctAns) setNumCorrect((prev) => prev + 1);
-    else if (chosenAns !== -1) setNumCorrect((prev) => prev - 1);
+    // remove effect of previous answer if it was correct
+    if (chosenAns === correctAns) {
+      setNumCorrect((prev) => prev - 1);
+    }
 
-    setChosenAns(chosenAns === i ? -1 : i);
+    // compute new selection (toggle if same)
+    const newChosen = chosenAns === i ? -1 : i;
+
+    // add effect of new answer if it is correct
+    if (newChosen === correctAns) {
+      setNumCorrect((prev) => prev + 1);
+    }
+
+    setChosenAns(newChosen);
   };
 
   return (

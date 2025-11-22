@@ -1,3 +1,5 @@
+@import "../../../../../../styles/variables.module.scss";
+
 .resultsBtn {
   width: 250px;
   font-size: 1.5rem;
@@ -5,23 +7,18 @@
   border: none;
   margin: 0 1rem;
   padding: 1rem;
-  color: white;
+  color: var(--text-main);
   cursor: pointer;
-  box-shadow: 0px 5px 5px rgba(black, 0.3);
+  box-shadow: $sm-dark-shadow;
   transition: all 0.1s linear;
-
-  &.review {
-    background-color: var(--teal);
-  }
-
-  &.retake {
-    background-color: var(--teal);
-  }
+  background-color: var(--third-layer);
+  border: 2px solid var(--highlight-border);
 
   &:hover {
-    background-color: var(--teal-bright);
+    background-color: var(--third-highlight);
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: $dark-shadow;
+    border: 2px solid var(--bright-border);
   }
 }
 
@@ -31,10 +28,13 @@
   justify-content: center;
 
   .resultsBtn {
-    background-color: var(--inner-navy);
+    color: var(--text-secondary);
+    background-color: var(--sec-layer);
+    border: 2px solid var(--light-border);
 
     &:hover {
-      background-color: var(--inner-navy-bright);
+      background-color: var(--third-layer);
+      border: 2px solid var(--highlight-border);
     }
   }
 }

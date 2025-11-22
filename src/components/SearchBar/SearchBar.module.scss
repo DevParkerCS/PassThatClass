@@ -1,5 +1,6 @@
 .searchWrapper {
-  background-color: var(--outer-navy);
+  background-color: var(--first-layer);
+  border: 2px solid var(--light-border);
   width: 100%;
   padding: 1rem;
   border-radius: var(--content-radius);
@@ -8,7 +9,7 @@
 
   .searchIcon {
     font-size: 1.5rem;
-    color: var(--cyan-soft);
+    color: var(--text-secondary);
   }
 
   .searchInput {
@@ -18,11 +19,11 @@
     width: 450px;
     font-size: 1.5rem;
     padding-left: 1rem;
-    color: var(--cyan-soft);
+    color: var(--text-secondary);
     flex-grow: 1;
 
     &::placeholder {
-      color: var(--cyan-soft);
+      color: var(--text-muted);
     }
   }
 }

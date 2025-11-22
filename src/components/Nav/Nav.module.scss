@@ -1,12 +1,13 @@
 .navWrapper {
   display: flex;
   justify-content: space-between;
-  background-color: var(--outer-teal);
+  background-color: var(--dark-bg);
   position: sticky;
   align-items: center;
   padding: 0.5rem 1rem;
   top: 0;
   box-shadow: 0 2px 10px 1px rgba(black, 0.5);
+  z-index: 100;
 }
 
 .navTitle {
@@ -18,7 +19,7 @@
   display: flex;
 
   .navItem {
-    color: white;
+    color: var(--text-main);
     margin: 0rem 1rem;
     font-size: 1.25rem;
     cursor: pointer;

@@ -270,4 +270,31 @@ export const MockQuiz: QuizQuestionType[] = [
     explanation:
       "Transforming notes into your own summaries and questions promotes deeper processing and better retention.",
   },
+  {
+    id: "q_010",
+    type: "multiple_choice_single_answer",
+    question:
+      "When converting your lecture notes into better study material, which of the following is generally the most effective approach?",
+    options: [
+      {
+        id: "A",
+        text: "Typing your handwritten notes word-for-word into a document.",
+      },
+      {
+        id: "B",
+        text: "Creating summaries and questions in your own words based on the notes.",
+      },
+      {
+        id: "C",
+        text: "Adding more highlighting and underlining to the existing notes.",
+      },
+      {
+        id: "D",
+        text: "Reorganizing the notes into different font styles and colors.",
+      },
+    ],
+    correct_index: 0,
+    explanation:
+      "Transforming notes into your own summaries and questions promotes deeper processing and better retention.",
+  },
 ];

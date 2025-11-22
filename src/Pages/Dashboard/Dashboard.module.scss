@@ -1,3 +1,4 @@
+@use "../../styles/mixins.scss" as mixins;
 @import "../../styles/variables.module.scss";
 
 .dashboardTitle {
@@ -15,16 +16,16 @@
 
 .classWrapper {
   padding: 2rem 1rem;
-  background-color: var(--outer-navy);
+  background-color: var(--first-layer);
   width: 300px;
   border-radius: var(--mid-radius);
+  border: 2px solid var(--light-border);
+  box-shadow: $dark-shadow;
   cursor: pointer;
-  box-shadow: $light-shadow;
-
   transition: all 0.1s linear;
 
   &:hover {
-    box-shadow: $light-shadow-highlight;
+    background-color: var(--third-layer);
   }
 }
 
@@ -32,6 +33,10 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
+
+  &.addClassBtn {
+    justify-content: center;
+  }
 
   .classIcon {
     color: var(--cyan-soft);
@@ -54,6 +59,6 @@
   justify-content: center;
   gap: 1rem;
   margin-top: 2rem;
-  max-width: 80vw;
+  width: calc(300px * 4 + 3rem);
   flex-wrap: wrap;
 }

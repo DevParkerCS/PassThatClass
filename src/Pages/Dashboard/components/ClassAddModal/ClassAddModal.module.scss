@@ -1,0 +1,96 @@
+@use "../../../../styles/mixins.scss" as mixins;
+@import "../../../../styles/variables.module.scss";
+
+.modalBackground {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: var(--bg-trans);
+  z-index: 9;
+}
+
+.modalWrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--first-layer);
+  border-radius: var(--content-radius);
+  cursor: default;
+  padding: 2rem;
+  width: min(500px, 80vw);
+  z-index: 10;
+
+  .modalTitle {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+}
+
+.modalInputWrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+
+  .inputLabel {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+  }
+
+  .input {
+    font-size: 1.25rem;
+    padding: 0.75rem;
+    border-radius: var(--mid-radius);
+    border: none;
+    outline: none;
+    background-color: var(--dark-bg);
+    color: var(--text-main);
+
+    &::placeholder {
+      color: var(--text-secondary);
+    }
+  }
+}
+
+.modalBtns {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  .modalBtn {
+    width: 180px;
+    font-size: 1.5rem;
+    padding: 1rem 0.5rem;
+    border: none;
+    color: white;
+    border-radius: var(--mid-radius);
+    box-shadow: $sm-dark-shadow;
+    cursor: pointer;
+    border: 2px solid var(--light-border);
+    transition: all 0.1s linear;
+  }
+
+  .cancelBtn {
+    background-color: var(--sec-layer);
+
+    &:hover {
+      background-color: var(--third-layer);
+      border: 2px solid var(--highlight-border);
+    }
+  }
+
+  .addBtn {
+    background-color: var(--third-layer);
+    border: 2px solid var(--highlight-border);
+
+    &:hover {
+      background-color: var(--third-highlight);
+      border: 2px solid var(--bright-border);
+    }
+  }
+}

@@ -1,5 +1,8 @@
-$light-shadow: 0px 1px 5px rgba(darkgray, 0.5);
-$light-shadow-highlight: 0px 2px 5px rgba(darkgray, 1);
+$light-shadow: 0px 1px 4px rgba(darkgray, 0.5);
 
-$dark-shadow: 0px 3px 5px rgba(black, 0.4);
-$dark-shadow-highlight: 0px 5px 6px rgba(black, 0.5);
+$mid-shadow: 0px 5px 10px rgba(#043453, 1);
+$mid-shadow-highlight: 0px 5px 6px rgba(darkgray, 0.5);
+
+$sm-dark-shadow: 0px 3px 5px rgba(black, 1);
+$dark-shadow: 0px 5px 8px rgba(black, 1);
+$dark-shadow-highlight: 0px 5px 5px rgba(black, 1);

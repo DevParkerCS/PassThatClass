@@ -1,7 +1,13 @@
 import styles from "./NotesInput.module.scss";
 import shared from "../shared/styles.module.scss";
+import { Dispatch, SetStateAction } from "react";
 
-export const NotesInput = () => {
+type NotesInputProps = {
+  setInput: Dispatch<SetStateAction<string>>;
+  input: string;
+};
+
+export const NotesInput = ({ setInput, input }: NotesInputProps) => {
   return (
     <div className={`${styles.notesWrapper}`}>
       <label className={shared.inputLabel} htmlFor="notes-paste">
@@ -15,6 +21,8 @@ export const NotesInput = () => {
         className={styles.notesInput}
         id="notes-paste"
         placeholder="Paste Notes Here"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
       />
     </div>
   );

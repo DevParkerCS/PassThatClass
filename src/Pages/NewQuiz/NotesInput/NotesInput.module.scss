@@ -11,6 +11,7 @@
     color: var(--text-secondary);
     padding: 0.5rem;
     border-radius: var(--mid-radius);
+    border-bottom-right-radius: 0px;
     resize: vertical;
 
     &:focus {

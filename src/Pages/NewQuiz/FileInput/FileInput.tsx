@@ -11,14 +11,24 @@ type FileInputProps = {
 
 export const FileInput = ({ setFiles, files }: FileInputProps) => {
   const MAX_FILES = 5;
+  const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024;
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const incoming = e.target.files ? Array.from(e.target.files) : [];
+    const valid = incoming.filter((file) => file.size <= MAX_IMAGE_SIZE_BYTES);
+    const rejected = incoming.filter(
+      (file) => file.size > MAX_IMAGE_SIZE_BYTES
+    );
+
     const curFiles = [...files];
     curFiles.push(...incoming);
     const limited = curFiles.slice(0, MAX_FILES);
 
     if (curFiles.length > MAX_FILES) {
+    }
+
+    if (rejected.length > 0) {
+      console.log("Some Files Were Too Big.  Max Size is 10MB");
     }
 
     setFiles(limited);

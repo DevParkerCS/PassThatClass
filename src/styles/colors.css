@@ -1,18 +1,18 @@
 :root {
   /* Page + shells */
-  --dark-bg: rgb(18, 18, 18); /* overall page background (almost black navy) */
+  --dark-bg: rgb(18, 18, 18);
   --bg-trans: rgba(18, 18, 18, 0.55);
   --first-layer: rgb(33, 33, 33);
   --sec-layer: rgb(44, 44, 44);
   --third-layer: rgb(60, 60, 60);
   --third-highlight: rgb(80, 80, 80);
 
-  --cyan-accent: #22d3ee; /* bright cyan accent: selected borders, links */
+  --cyan-accent: #22d3ee;
   --cyan-soft: #17a1b6;
   --cyan-trans: #17a1b669;
 
   /* Text */
-  --text-main: #f4f7ff; /* main white-ish text */
+  --text-main: #f4f7ff;
   --text-secondary: #d0d7e2;
-  --text-muted: #9da5b3; /* secondary labels */
+  --text-muted: #9da5b3;
 }

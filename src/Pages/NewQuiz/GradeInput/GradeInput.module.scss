@@ -1,0 +1,42 @@
+.gradeInput {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  position: relative;
+}
+
+.chosenGrade {
+  background-color: var(--sec-layer);
+  border: 2px solid var(--light-border);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.gradesWrapper {
+  list-style: none;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  padding: 0;
+  transition: all 0.1s linear;
+  max-height: 0px;
+  overflow: hidden;
+  width: 100%;
+
+  &.active {
+    max-height: 300px;
+  }
+
+  .grade {
+    background-color: var(--third-layer);
+    padding: 0.5rem;
+    transition: all 0.1s linear;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--third-highlight);
+    }
+  }
+}

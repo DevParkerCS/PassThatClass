@@ -1,0 +1,46 @@
+.numInput {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent; // let the track handle the bg
+  margin: 1rem 0;
+
+  // WebKit track (Chrome, Edge, Safari)
+  &::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--third-layer);
+    //   border: 1px solid var(--bright-border);
+  }
+
+  // WebKit thumb
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--third-layer);
+    border: 1px solid black;
+    margin-top: -7px; // centers thumb on the track
+    cursor: pointer;
+  }
+
+  // Firefox track
+  &::-moz-range-track {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--sec-layer);
+  }
+
+  // Firefox thumb
+  &::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--sec-layer);
+    border: 1px solid black;
+    margin-top: -8px; // centers thumb on the track
+    cursor: pointer;
+  }
+}

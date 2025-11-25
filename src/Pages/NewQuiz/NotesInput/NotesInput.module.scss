@@ -1,0 +1,30 @@
+.notesWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .notesInput {
+    height: 200px;
+    background-color: var(--sec-layer);
+    border: 2px solid var(--light-border);
+    outline: none;
+    color: var(--text-secondary);
+    padding: 0.5rem;
+    border-radius: var(--mid-radius);
+    resize: vertical;
+
+    &:focus {
+      border: 2px solid var(--highlight-border);
+    }
+
+    &::placeholder {
+      color: var(--text-muted);
+    }
+  }
+}
+
+.characterNote {
+  color: var(--text-muted);
+  line-height: 1rem;
+  margin-bottom: 0.25rem;
+}

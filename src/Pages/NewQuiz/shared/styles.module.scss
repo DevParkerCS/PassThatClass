@@ -1,0 +1,11 @@
+.inputLabel {
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  width: fit-content;
+}
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}

@@ -1,0 +1,29 @@
+.filesInput {
+  display: none;
+}
+
+.filesInputBtn {
+  color: var(--text-secondary);
+  border: 3px dotted var(--third-layer);
+  width: fit-content;
+  padding: 2rem;
+  text-align: center;
+  font-size: 1.25rem;
+  cursor: pointer;
+  border-radius: var(--mid-radius);
+}
+
+.previewGrid {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+
+  .previewImg {
+    height: 151px;
+    max-height: 151px;
+    max-width: 151px;
+    border: 3px dotted var(--third-layer);
+    cursor: pointer;
+  }
+}

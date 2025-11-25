@@ -1,36 +1,36 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./ContentItem.module.scss";
 import { Dispatch, SetStateAction, useState } from "react";
-
-export type ContentType = {
-  label: string;
-  name: string;
-  numAmount: number;
-  daysSince: number;
-};
+import { ContentMeta } from "../../../../../../context/DataContext/types";
 
 type ContentItemProps = {
-  content: ContentType;
+  content: ContentMeta;
   setModalActive: Dispatch<SetStateAction<boolean>>;
+  setSelectedInfo: Dispatch<SetStateAction<ContentMeta | null>>;
 };
 
-export const ContentItem = ({ content, setModalActive }: ContentItemProps) => {
-  const nav = useNavigate();
-
+export const ContentItem = ({
+  content,
+  setModalActive,
+  setSelectedInfo,
+}: ContentItemProps) => {
   const handleClick = () => {
+    setSelectedInfo(content);
     setModalActive(true);
   };
 
   return (
     <div className={styles.contentItem} onClick={handleClick}>
       <div className={styles.contentFlex}>
-        <div className={styles.itemLabel}>{content.label}</div>
-        <p className={styles.itemName}>{content.name}</p>
+        <div className={styles.itemLabel}>
+          {content.type === "quiz" ? "QUIZ" : "CARD"}
+        </div>
+        <p className={styles.itemName}>{content.title}</p>
       </div>
       <div>
         <p className={styles.itemInfoTxt}>
-          <span>{content.numAmount} Questions</span> &bull;{" "}
-          <span>Last Used {content.daysSince} days ago</span>
+          <span>{content.num_items}</span> &bull;{" "}
+          <span>Last Used 2 days ago</span>
         </p>
       </div>
     </div>

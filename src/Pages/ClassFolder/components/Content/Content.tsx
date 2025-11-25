@@ -2,153 +2,27 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Content.module.scss";
 import { useEffect, useState } from "react";
 import { ContentItem } from "./components/contentItem/ContentItem";
-import { ContentModal } from "../ContentModal/ContentModal";
-import { MockQuiz } from "../../../../mock";
-
-const quizzes = [
-  {
-    label: "QUIZ",
-    name: "Chapter 1: Introduction & Syllabus",
-    numAmount: 10,
-    daysSince: 3,
-  },
-  {
-    label: "CARD",
-    name: "Final Exam Prep: Mixed Topics",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "CARD",
-    name: "Final Exam Prep: Mixed Topics",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "QUIZ",
-    name: "Lecture 3: Sorting Algorithms",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "QUIZ",
-    name: "Midterm Review: Units 1–3",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "CARD",
-    name: "Lecture 3: Sorting Algorithms",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "CARD",
-    name: "Midterm Review: Units 1–3",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "QUIZ",
-    name: "Dynamic Programming Practice",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "QUIZ",
-    name: "Final Exam Prep: Mixed Topics",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "CARD",
-    name: "Chapter 1: Introduction & Syllabus",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "CARD",
-    name: "Dynamic Programming Practice",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "QUIZ",
-    name: "Chapter 1: Introduction & Syllabus",
-    numAmount: 10,
-    daysSince: 3,
-  },
-  {
-    label: "CARD",
-    name: "Final Exam Prep: Mixed Topics",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "CARD",
-    name: "Final Exam Prep: Mixed Topics",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "QUIZ",
-    name: "Lecture 3: Sorting Algorithms",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "QUIZ",
-    name: "Midterm Review: Units 1–3",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "CARD",
-    name: "Lecture 3: Sorting Algorithms",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "CARD",
-    name: "Midterm Review: Units 1–3",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "QUIZ",
-    name: "Dynamic Programming Practice",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "QUIZ",
-    name: "Final Exam Prep: Mixed Topics fadfljfdalkfklaklflkadfk  la lfda",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "CARD",
-    name: "Chapter 1: Introduction & Syllabus",
-    numAmount: 10,
-    daysSince: 2,
-  },
-  {
-    label: "CARD",
-    name: "Dynamic Programming Practice",
-    numAmount: 10,
-    daysSince: 2,
-  },
-];
+import { ContentModal } from "./components/ContentModal/ContentModal";
+import { useDataContext } from "../../../../context/DataContext/DataContext";
+import { ContentMeta } from "../../../../context/DataContext/types";
 
 type FilterType = "all" | "quiz" | "card";
 
-export const Content = () => {
+type ContentProps = {
+  classId: string;
+};
+
+export const Content = ({ classId }: ContentProps) => {
+  const data = useDataContext();
   const [filter, setFilter] = useState<FilterType>("all");
-  const [filtered, setFiltered] = useState(quizzes);
+  const [filtered, setFiltered] = useState<ContentMeta[]>([]);
+  const [selectedInfo, setSelectedInfo] = useState<ContentMeta | null>(null);
   const [modalActive, setModalActive] = useState(false);
 
   useEffect(() => {
     if (modalActive) {
+      if (selectedInfo?.type === "quiz") data.fetchQuizContent(selectedInfo.id);
+
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -160,16 +34,17 @@ export const Content = () => {
   }, [modalActive]);
 
   useEffect(() => {
+    const items = data.contentById[classId] ?? [];
+
     if (filter === "all") {
-      setFiltered(quizzes);
+      setFiltered(items);
       return;
     }
+
     setFiltered(
-      quizzes.filter((p) => {
-        return p.label === (filter === "card" ? "CARD" : "QUIZ");
-      })
+      items.filter((p) => p.type === (filter === "card" ? "card" : "quiz"))
     );
-  }, [filter]);
+  }, [filter, data.contentById, classId]);
 
   return (
     <div
@@ -177,10 +52,10 @@ export const Content = () => {
         modalActive && styles.modalActive
       }`}
     >
-      {modalActive && (
+      {modalActive && selectedInfo && (
         <ContentModal
-          ModalContent={MockQuiz}
-          ModalInfo={quizzes[0]}
+          classId={classId}
+          contentId={selectedInfo.id}
           setModalActive={setModalActive}
         />
       )}
@@ -220,6 +95,7 @@ export const Content = () => {
               <ContentItem
                 content={q}
                 setModalActive={setModalActive}
+                setSelectedInfo={setSelectedInfo}
                 key={i}
               />
             ))}

@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useState,
+} from "react";
 import styles from "./ClassAddModal.module.scss";
 
 type ClassAddModalProps = {
@@ -8,6 +14,26 @@ type ClassAddModalProps = {
 
 export const ClassAddModal = ({ setModalOpen, cb }: ClassAddModalProps) => {
   const [input, setInput] = useState("");
+  const [inputError, setInputError] = useState(false);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputError(false);
+    setInput(e.target.value);
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const form = e.target as HTMLFormElement;
+    const input = form[0] as HTMLInputElement;
+
+    if (input.value.trim() === "") {
+      setInputError(true);
+      return;
+    }
+
+    cb(input.value);
+  };
 
   return (
     <div className={styles.container}>
@@ -19,31 +45,33 @@ export const ClassAddModal = ({ setModalOpen, cb }: ClassAddModalProps) => {
       <div className={styles.modalWrapper}>
         <p className={styles.modalTitle}>Add New Class</p>
 
-        <div className={styles.modalInputWrapper}>
-          <label className={styles.inputLabel}>Class Name</label>
-          <input
-            className={styles.input}
-            type="text"
-            placeholder="e.g., Biology 201"
-            onChange={(e) => setInput(e.target.value)}
-            onSubmit={() => cb(input)}
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className={styles.modalInputWrapper}>
+            <label className={styles.inputLabel}>Class Name</label>
+            <input
+              className={`${styles.input} ${inputError && styles.error}`}
+              type="text"
+              placeholder="e.g., Biology 201"
+              onChange={handleChange}
+            />
+          </div>
 
-        <div className={styles.modalBtns}>
-          <button
-            className={`${styles.modalBtn} ${styles.cancelBtn}`}
-            onClick={() => setModalOpen(false)}
-          >
-            Cancel
-          </button>
-          <button
-            className={`${styles.modalBtn} ${styles.addBtn}`}
-            onClick={() => cb(input)}
-          >
-            Add Class
-          </button>
-        </div>
+          <div className={styles.modalBtns}>
+            <button
+              type="button"
+              className={`${styles.modalBtn} ${styles.cancelBtn}`}
+              onClick={() => setModalOpen(false)}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className={`${styles.modalBtn} ${styles.addBtn}`}
+            >
+              Add Class
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

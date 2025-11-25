@@ -50,9 +50,14 @@
     outline: none;
     background-color: var(--dark-bg);
     color: var(--text-main);
+    border: 2px solid transparent;
 
     &::placeholder {
       color: var(--text-secondary);
+    }
+
+    &.error {
+      border: 2px solid red;
     }
   }
 }

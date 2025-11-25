@@ -10,17 +10,19 @@ import { SearchBar } from "../../components/SearchBar/SearchBar";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ClassAddModal } from "./components/ClassAddModal/ClassAddModal";
+import axios from "axios";
+import { useDataContext } from "../../context/DataContext/DataContext";
+
+export type ClassUIType = {
+  id: string;
+  name: string;
+};
 
 export const Dashboard = () => {
+  const data = useDataContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const nav = useNavigate();
-
-  const [classes, setClasses] = useState([
-    "Biology 201",
-    "CSCI 447",
-    "CSCI 497",
-    "ECON 206",
-  ]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -34,17 +36,30 @@ export const Dashboard = () => {
     };
   }, [isModalOpen]);
 
-  const handleAddClass = (name: string) => {
-    setClasses([...classes, name]);
-    setIsModalOpen(false);
+  const handleAddClass = async (name: string) => {
+    if (name.trim() === "" || isSubmitting) return;
+
+    setIsSubmitting(true);
+
+    try {
+      const res = await axios.post("http://localhost:8000/classes", { name });
+      const classData: ClassUIType = res.data;
+
+      data.setClasses((prev) => [...prev, classData]);
+      setIsModalOpen(false);
+    } catch (e) {
+      console.log("Error adding class");
+    }
+
+    setIsSubmitting(false);
   };
 
-  const handleClick = (id: number) => {
-    if (id === -1) {
+  const handleClick = (id: string) => {
+    if (id === "") {
       return;
     }
 
-    nav("/class");
+    nav(`/class/${id}`);
   };
 
   return (
@@ -59,25 +74,25 @@ export const Dashboard = () => {
         <h2 className={styles.dashboardTitle}>Dashboard</h2>
       </div>
 
-      <div className={styles.searchWrapper}>
+      {/* <div className={styles.searchWrapper}>
         <SearchBar p={"Search For Classes"} />
-      </div>
+      </div> */}
 
       <div className={styles.classesWrapper}>
         <div className={styles.classesSizeWrapper}>
-          {classes.map((n, i) => {
+          {data.classes.map((n, i) => {
             return (
               <Class
-                name={n}
+                name={n.name}
                 key={i}
-                id={i}
+                id={n.id}
                 icon={faFolderOpen}
                 cb={handleClick}
               />
             );
           })}
           <Class
-            id={-1}
+            id={""}
             name="Add Class"
             icon={faPlus}
             cb={() => setIsModalOpen(true)}
@@ -91,8 +106,8 @@ export const Dashboard = () => {
 type ClassProps = {
   name: string;
   icon: IconDefinition;
-  id: number;
-  cb: (id: number) => void;
+  id: string;
+  cb: (id: string) => void;
 };
 
 export const Class = ({ name, icon, id, cb }: ClassProps) => {

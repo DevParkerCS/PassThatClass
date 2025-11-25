@@ -1,4 +1,4 @@
-import { MockQuiz } from "../../../../../../mock";
+import { QuizQuestionType } from "../../../../../../context/DataContext/types";
 import { QuizMode } from "../../../../QuizContent";
 import styles from "./QuizButtons.module.scss";
 
@@ -9,6 +9,7 @@ type QuizButtonsProps = {
   setCanGoNext: React.Dispatch<React.SetStateAction<boolean>>;
   setMode: React.Dispatch<React.SetStateAction<QuizMode>>;
   mode: QuizMode;
+  questions: QuizQuestionType[];
 };
 
 export const QuizButtons = ({
@@ -18,14 +19,15 @@ export const QuizButtons = ({
   setCanGoNext,
   setMode,
   mode,
+  questions,
 }: QuizButtonsProps) => {
   const handleNextClick = () => {
     if (mode !== "reviewing" && !canGoNext) return;
 
-    if (qIndex !== MockQuiz.length - 1) {
+    if (qIndex !== questions.length - 1) {
       setQIndex(qIndex + 1);
       setCanGoNext(false);
-    } else if (qIndex === MockQuiz.length - 1) {
+    } else if (qIndex === questions.length - 1) {
       setMode("results");
       setQIndex(0);
     }
@@ -53,7 +55,7 @@ export const QuizButtons = ({
         }`}
         onClick={handleNextClick}
       >
-        {qIndex + 1 !== MockQuiz.length
+        {qIndex + 1 !== questions.length
           ? "Next"
           : mode === "reviewing"
           ? "Finish"

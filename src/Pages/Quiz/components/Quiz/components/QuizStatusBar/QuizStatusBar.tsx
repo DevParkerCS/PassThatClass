@@ -1,17 +1,18 @@
-import { MockQuiz } from "../../../../../../mock";
+import { QuizQuestionType } from "../../../../../../context/DataContext/types";
 import styles from "./QuizStatusBar.module.scss";
 
 type QuizStatusBarProps = {
   qIndex: number;
+  questions: QuizQuestionType[];
 };
 
-export const QuizStatusBar = ({ qIndex }: QuizStatusBarProps) => {
-  const progress = ((qIndex + 1) / MockQuiz.length) * 100;
+export const QuizStatusBar = ({ qIndex, questions }: QuizStatusBarProps) => {
+  const progress = ((qIndex + 1) / questions.length) * 100;
 
   return (
     <div className={styles.statusInfoWrapper}>
       <p className={styles.indexTxt}>
-        {qIndex + 1} of {MockQuiz.length}
+        {qIndex + 1} of {questions.length}
       </p>
 
       <div className={styles.statusBarWrapper}>

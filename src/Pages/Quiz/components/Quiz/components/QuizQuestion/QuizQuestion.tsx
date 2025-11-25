@@ -1,20 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./QuizQuestion.module.scss";
 import { QuizMode } from "../../../../QuizContent";
-
-export type QuizQuestionType = {
-  id: string;
-  type: string;
-  question: string;
-  options: QuizAnswerType[];
-  explanation: string;
-  correct_index: number;
-};
-
-type QuizAnswerType = {
-  id: string;
-  text: string;
-};
+import { QuizQuestionType } from "../../../../../../context/DataContext/types";
 
 type QuizQuestionProps = {
   question: QuizQuestionType;

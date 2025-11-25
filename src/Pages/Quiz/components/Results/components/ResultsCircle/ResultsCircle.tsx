@@ -1,12 +1,12 @@
-import { MockQuiz } from "../../../../../../mock";
 import styles from "./ResultsCircle.module.scss";
 
 type ResultsCircleProps = {
   numCorrect: number;
+  length: number;
 };
 
-export const ResultsCircle = ({ numCorrect }: ResultsCircleProps) => {
-  const percent = Math.round((numCorrect / MockQuiz.length) * 100);
+export const ResultsCircle = ({ numCorrect, length }: ResultsCircleProps) => {
+  const percent = Math.round((numCorrect / length) * 100);
 
   return (
     <div>
@@ -16,7 +16,7 @@ export const ResultsCircle = ({ numCorrect }: ResultsCircleProps) => {
       >
         <div className={styles.innerCircle}>
           <p className={styles.scoreTxt}>
-            {numCorrect}/{MockQuiz.length}
+            {numCorrect}/{length}
           </p>
           <p className={styles.scorePercent}>{percent}%</p>
         </div>

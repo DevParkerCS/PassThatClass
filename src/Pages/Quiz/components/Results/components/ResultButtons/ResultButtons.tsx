@@ -4,9 +4,10 @@ import styles from "./ResultButtons.module.scss";
 
 type ResultButtonsProps = {
   setMode: React.Dispatch<React.SetStateAction<QuizMode>>;
+  classId: string;
 };
 
-export const ResultButtons = ({ setMode }: ResultButtonsProps) => {
+export const ResultButtons = ({ setMode, classId }: ResultButtonsProps) => {
   const nav = useNavigate();
 
   return (
@@ -28,7 +29,7 @@ export const ResultButtons = ({ setMode }: ResultButtonsProps) => {
       <div className={styles.dashboardBtnWrapper}>
         <button
           className={`${styles.resultsBtn}`}
-          onClick={() => nav("/class")}
+          onClick={() => nav(`/class/${classId}`)}
         >
           Back to Class
         </button>

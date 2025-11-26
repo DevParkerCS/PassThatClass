@@ -47,7 +47,7 @@ export const Results = ({
           <p className={styles.infoTxt}>Overall Avg Score: 75%</p>
         </div>
 
-        <ResultButtons setMode={setMode} classId={classId} />
+        <ResultButtons setMode={setMode} quizId={quizId} classId={classId} />
       </div>
     </div>
   );

@@ -86,7 +86,9 @@ export const QuizQuestion = ({
               }`}
               onClick={() => handleClick(i)}
             >
-              <p className={`${styles.optionTxt} ${styles.optionID}`}>{o.id}</p>{" "}
+              <p className={`${styles.optionTxt} ${styles.optionID}`}>
+                {String.fromCharCode(65 + i)}
+              </p>{" "}
               <p className={`${styles.optionTxt} ${styles.optionAnswer}`}>
                 {o.text}
               </p>

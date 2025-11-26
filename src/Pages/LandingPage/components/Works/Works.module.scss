@@ -1,0 +1,25 @@
+.worksCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+  color: var(--text-secondary);
+}
+
+.worksIcon {
+  font-size: 2rem;
+  flex: 1;
+}
+
+.worksTxt {
+  flex: 1;
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.worksArrow {
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+}

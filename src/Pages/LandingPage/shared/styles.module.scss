@@ -1,0 +1,86 @@
+@import "../../../styles/variables.module.scss";
+
+.section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: $sm-dark-shadow;
+  border-radius: var(--mid-radius);
+  overflow: hidden;
+}
+
+.sectionContent {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--first-layer);
+  padding: 1rem;
+}
+
+.title {
+  color: var(--text-main);
+  font-size: 3rem;
+  text-align: center;
+  width: fit-content;
+}
+
+.subtitle {
+  margin-top: 1rem;
+  font-size: 2rem;
+  color: var(--text-secondary);
+  width: 80%;
+  text-align: center;
+  width: fit-content;
+}
+
+.sectionImg {
+  width: 70%;
+  border-radius: var(--mid-radius);
+  margin-top: 1rem;
+  box-shadow: $sm-dark-shadow;
+}
+
+.sectionCardsWrapper {
+  display: flex;
+  margin-top: 2rem;
+  gap: 1rem;
+  align-items: center;
+
+  .sectionCard {
+    background-color: var(--sec-layer);
+    padding: 1rem;
+    border-radius: var(--mid-radius);
+    box-shadow: $sm-dark-shadow;
+    border: 2px solid var(--light-border);
+    color: var(--text-secondary);
+  }
+
+  .cardName {
+    color: var(--text-main);
+    font-size: 2.5rem;
+    text-align: center;
+  }
+
+  .cardValue {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .cardList {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .listItem {
+    font-size: 1.25rem;
+    color: var(--text-main);
+
+    .itemBold {
+      font-weight: bold;
+    }
+  }
+}

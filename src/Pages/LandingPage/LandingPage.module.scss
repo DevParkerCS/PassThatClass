@@ -1,0 +1,14 @@
+@import "../../styles/variables.module.scss";
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  width: 100%;
+}
+
+.sectionsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+}

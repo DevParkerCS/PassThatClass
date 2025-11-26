@@ -13,6 +13,7 @@ export const GradeInput = ({
 }: GradeInputProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  // Update Chosen Grade
   const handleClick = (e: React.MouseEvent<HTMLLIElement>) => {
     const text = e.currentTarget.textContent;
     if (text) setChosenGrade(text);

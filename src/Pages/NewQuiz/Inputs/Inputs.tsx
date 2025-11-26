@@ -20,6 +20,7 @@ export const Inputs = ({ submitCb }: InputsProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const [input, setInput] = useState<string>("");
 
+  // Prevent Refresh and call cb function
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     submitCb(chosenGrade, files, input, numQuestions);

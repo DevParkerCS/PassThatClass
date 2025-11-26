@@ -20,27 +20,30 @@ export const NewQuiz = () => {
   const data = useDataContext();
   const nav = useNavigate();
 
+  // Sets Timeout For Error Message That Pops Up
   useEffect(() => {
     if (!error) return;
 
+    // Hides error after 2 seconds
     const timeoutId = setTimeout(() => {
       setError("");
-      console.log("DONE");
     }, 2000);
 
-    return () => clearTimeout(timeoutId); // clean up if error changes/unmounts
+    return () => clearTimeout(timeoutId);
   }, [error]);
 
   if (!classId || !data.classesById[classId]) {
     return <div>Class Not Found</div>;
   }
 
+  // Runs when quiz form is submitted
   const handleSubmit = async (
     chosenGrade: string,
     files: File[],
     input: string,
     numQuestions: number
   ) => {
+    // Ensure all fields are filled out
     if (chosenGrade === "Select Grade") {
       setError("Grade Isn't Chosen");
       return;
@@ -50,12 +53,14 @@ export const NewQuiz = () => {
     }
     setSubmitionState("generating");
 
+    // Load data in FormData to pass to API
     const formData = new FormData();
     formData.append("notesText", input);
     formData.append("gradeLevel", chosenGrade);
     formData.append("numQuestions", String(numQuestions));
     formData.append("classId", classId);
 
+    // Add files
     files.forEach((file) => {
       formData.append("images", file);
     });
@@ -63,8 +68,10 @@ export const NewQuiz = () => {
     console.log("SENDING");
 
     try {
+      // Call API to add generate new quiz
       const qd: QuizMeta = await data.AddNewQuiz(formData, classId);
-      console.log(qd);
+
+      // Navigate to class folder with new modal open
       nav(`/class/${classId}?quizId=${qd.id}`);
     } catch (e) {
       const error = e as AxiosError;

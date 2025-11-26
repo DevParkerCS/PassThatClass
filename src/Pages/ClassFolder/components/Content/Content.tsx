@@ -5,6 +5,7 @@ import { ContentItem } from "./components/contentItem/ContentItem";
 import { ContentModal } from "./components/ContentModal/ContentModal";
 import { useDataContext } from "../../../../context/DataContext/DataContext";
 import { ContentMeta } from "../../../../context/DataContext/types";
+import { Ctas } from "../Ctas/Ctas";
 
 type FilterType = "all" | "quiz" | "card";
 
@@ -75,7 +76,15 @@ export const Content = ({ classId }: ContentProps) => {
 
       <div style={{ width: "100%" }}>
         <div className={styles.contentTxtWrapper}>
-          <p className={styles.contentTitle}>{filtered.length} Items</p>
+          <p className={styles.contentTitle}>
+            {filtered.length} {filtered.length !== 1 ? "Quizzes" : "Quiz"}
+          </p>
+
+          <Ctas id={classId} />
+        </div>
+
+        {/* Uncomment For Filtering 
+          
           <p
             className={`${styles.contentFilter} ${
               filter === "all" && styles.active
@@ -99,8 +108,7 @@ export const Content = ({ classId }: ContentProps) => {
             onClick={() => setFilter("card")}
           >
             Cards
-          </p>
-        </div>
+          </p> */}
 
         <div className={styles.itemsOuter}>
           <div className={styles.itemsWrapper}>

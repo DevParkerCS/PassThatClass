@@ -2,27 +2,23 @@
 @import "../../../../styles/variables.module.scss";
 
 .contentWrapper {
-  margin-top: 2rem;
   display: flex;
 }
 
 .contentTxtWrapper {
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  position: sticky;
-  top: 59px;
-  left: 0;
+  align-items: flex-end;
+  justify-content: space-between;
   width: 100%;
   background-color: var(--dark-bg);
-  padding: 0.5rem;
   z-index: 5;
+  margin-bottom: 0.5rem;
 }
 
 .contentTitle {
   font-size: 2rem;
   font-weight: bold;
-  color: white;
+  color: var(--text-main);
 
   .contentAmt {
     color: var(--text-muted);
@@ -48,7 +44,6 @@
 .itemsWrapper {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 1rem;
   gap: 1rem;
 
   padding-bottom: 1rem;

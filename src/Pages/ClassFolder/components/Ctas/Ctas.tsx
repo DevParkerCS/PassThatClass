@@ -19,11 +19,6 @@ export const Ctas = ({ id }: CtasProps) => {
         <FontAwesomeIcon icon={faPlus} className={styles.ctaIcon} />
         <p className={styles.ctaTxt}>New Quiz</p>
       </button>
-
-      <button className={styles.newCta}>
-        <FontAwesomeIcon icon={faPlus} className={styles.ctaIcon} />
-        <p className={styles.ctaTxt}>New Flashcard</p>
-      </button>
     </div>
   );
 };

@@ -38,9 +38,6 @@ export const ClassFolder = () => {
         {/* <div className={styles.searchWrapper}>
           <SearchBar p="Search Quizzes and Flashcards" />
         </div> */}
-
-        <Ctas id={id} />
-
         <Content classId={id || ""} />
       </div>
     </div>

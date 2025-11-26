@@ -38,7 +38,7 @@ export const Quiz = ({ mode, setMode, setNumCorrect, id }: QuizProps) => {
       className={shared.contentWrapper}
       style={{ width: "var(--app-width)" }}
     >
-      <h2 className={shared.quizTitle}>Quiz: Test Quiz</h2>
+      <h2 className={shared.quizTitle}>{data.quizMetaById[id].title}</h2>
 
       <div className={styles.breadcrumbWrapper}>
         <Breadcrumb />

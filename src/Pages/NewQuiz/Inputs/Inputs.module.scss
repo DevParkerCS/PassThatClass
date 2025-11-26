@@ -1,0 +1,31 @@
+.inputsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+  max-height: 812px;
+  padding: 1rem 2rem;
+}
+
+.submitWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  align-items: center;
+
+  .genInfo {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+  }
+
+  .submitBtn {
+    font-size: 1.5rem;
+    padding: 0.75rem;
+    border-radius: var(--mid-radius);
+    border: 2px solid var(--highlight-border);
+    background-color: var(--third-layer);
+    color: var(--cyan-soft);
+    cursor: pointer;
+    width: 150px;
+  }
+}

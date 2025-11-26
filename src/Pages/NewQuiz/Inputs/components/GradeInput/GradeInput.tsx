@@ -1,5 +1,5 @@
 import styles from "./GradeInput.module.scss";
-import shared from "../shared/styles.module.scss";
+import shared from "../../../shared/styles.module.scss";
 import { Dispatch, SetStateAction, useState } from "react";
 
 type GradeInputProps = {

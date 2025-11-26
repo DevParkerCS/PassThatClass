@@ -1,66 +1,24 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Nav } from "../../components/Nav/Nav";
 import styles from "./NewQuiz.module.scss";
 import { useDataContext } from "../../context/DataContext/DataContext";
 import { Breadcrumb } from "../../components/Breadcrumb/Breadcrumb";
-import {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { GradeInput } from "./GradeInput/GradeInput";
-import { FileInput } from "./FileInput/FileInput";
-import { NumInput } from "./NumInput/NumInput";
-import { NotesInput } from "./NotesInput/NotesInput";
+import { useEffect, useState } from "react";
 import { ErrorModal } from "./ErrorModal/ErrorModal";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { Inputs } from "./Inputs/Inputs";
+import { Spinner } from "../../components/Spinner/Spinner";
+import { ContentList } from "../ClassFolder/components/Content/components/ContentModal/ContentModal";
+import { QuizMeta } from "../../context/DataContext/types";
+
+type SubmitionState = "info" | "generating" | "finished";
 
 export const NewQuiz = () => {
-  const { id } = useParams<{ id: string }>();
-  const [numQuestions, setNumQuestions] = useState(10);
-  const [chosenGrade, setChosenGrade] = useState("Select Grade");
-  const [files, setFiles] = useState<File[]>([]);
-  const [input, setInput] = useState<string>("");
+  const { id: classId } = useParams<{ id: string }>();
   const [error, setError] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [submitionState, setSubmitionState] = useState<SubmitionState>("info");
   const data = useDataContext();
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (chosenGrade === "Select Grade") {
-      setError("Grade Isn't Chosen");
-      return;
-    } else if (files.length === 0 && input.length === 0) {
-      setError("No Files Or Text Was Inputted");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("notesText", input);
-    formData.append("gradeLevel", chosenGrade);
-    formData.append("numQuestions", String(numQuestions));
-
-    files.forEach((file) => {
-      formData.append("images", file);
-    });
-
-    console.log("SENDING");
-
-    const res = await axios.post(
-      "http://localhost:8000/quiz/from-notes",
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
-
-    console.log(res.data);
-  };
+  const nav = useNavigate();
 
   useEffect(() => {
     if (!error) return;
@@ -73,43 +31,70 @@ export const NewQuiz = () => {
     return () => clearTimeout(timeoutId); // clean up if error changes/unmounts
   }, [error]);
 
-  if (!id || !data.classesById[id]) {
+  if (!classId || !data.classesById[classId]) {
     return <div>Class Not Found</div>;
   }
+
+  const handleSubmit = async (
+    chosenGrade: string,
+    files: File[],
+    input: string,
+    numQuestions: number
+  ) => {
+    if (chosenGrade === "Select Grade") {
+      setError("Grade Isn't Chosen");
+      return;
+    } else if (files.length === 0 && input.length === 0) {
+      setError("No Files Or Text Was Inputted");
+      return;
+    }
+    setSubmitionState("generating");
+
+    const formData = new FormData();
+    formData.append("notesText", input);
+    formData.append("gradeLevel", chosenGrade);
+    formData.append("numQuestions", String(numQuestions));
+    formData.append("classId", classId);
+
+    files.forEach((file) => {
+      formData.append("images", file);
+    });
+
+    console.log("SENDING");
+
+    try {
+      const qd: QuizMeta = await data.AddNewQuiz(formData, classId);
+      console.log(qd);
+      nav(`/class/${classId}?quizId=${qd.id}`);
+    } catch (e) {
+      const error = e as AxiosError;
+      setSubmitionState("info");
+      setError(error.message);
+    }
+  };
 
   return (
     <div>
       <Nav />
       <div className={styles.contentWrapper}>
-        <Breadcrumb />
-        <p className={styles.title}>New Quiz</p>
+        {submitionState === "info" && (
+          <div>
+            <Breadcrumb />
+            <p className={styles.title}>New Quiz</p>
 
-        <div className={`${styles.infoWrapper} ${error && styles.error}`}>
-          <ErrorModal error={error} isActive={!!error} />
+            <div className={`${styles.infoWrapper} ${error && styles.error}`}>
+              <ErrorModal error={error} isActive={!!error} />
 
-          <form onSubmit={handleSubmit} className={styles.inputsWrapper}>
-            <GradeInput
-              setChosenGrade={setChosenGrade}
-              chosenGrade={chosenGrade}
-            />
-            <NumInput
-              numQuestions={numQuestions}
-              setNumQuestions={setNumQuestions}
-            />
-            <FileInput files={files} setFiles={setFiles} />
-            <NotesInput setInput={setInput} input={input} />
-
-            <div className={styles.submitWrapper}>
-              <p className={styles.genInfo}>
-                <span>1 Generation </span>&bull;{" "}
-                <span>7 Generations Left This Month</span>
-              </p>
-              <button className={styles.submitBtn} type="submit">
-                Generate
-              </button>
+              <Inputs submitCb={handleSubmit} />
             </div>
-          </form>
-        </div>
+          </div>
+        )}
+
+        {submitionState === "generating" && (
+          <div>
+            <Spinner txt="Parsing information and generating quiz..." />
+          </div>
+        )}
       </div>
     </div>
   );

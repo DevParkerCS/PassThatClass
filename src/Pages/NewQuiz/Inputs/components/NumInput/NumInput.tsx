@@ -1,5 +1,5 @@
 import styles from "./NumInput.module.scss";
-import shared from "../shared/styles.module.scss";
+import shared from "../../../shared/styles.module.scss";
 import { Dispatch, SetStateAction } from "react";
 
 type NumInputProps = {

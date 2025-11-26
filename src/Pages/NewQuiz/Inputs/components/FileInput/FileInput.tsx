@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import styles from "./FileInput.module.scss";
-import shared from "../shared/styles.module.scss";
+import shared from "../../../shared/styles.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 

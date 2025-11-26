@@ -1,5 +1,5 @@
 import styles from "./NotesInput.module.scss";
-import shared from "../shared/styles.module.scss";
+import shared from "../../../shared/styles.module.scss";
 import { Dispatch, SetStateAction } from "react";
 
 type NotesInputProps = {
@@ -20,7 +20,7 @@ export const NotesInput = ({ setInput, input }: NotesInputProps) => {
         maxLength={10000}
         className={styles.notesInput}
         id="notes-paste"
-        placeholder="Paste Notes Here"
+        placeholder={`Paste Notes Here Or Ask For Specific Content (ex: "Generate A Quiz About Dogs")"`}
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />

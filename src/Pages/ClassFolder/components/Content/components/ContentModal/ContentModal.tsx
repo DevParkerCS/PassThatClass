@@ -54,7 +54,7 @@ export const ContentModal = ({
             </div>
 
             <div className={styles.modalContent}>
-              <ModalContentList ModalContent={content} />
+              <ContentList ModalContent={content} />
               <div className={styles.contentRight}>
                 <ModalStats info={meta} />
 
@@ -77,7 +77,7 @@ type ModalContentProps = {
   ModalContent: QuizQuestionType[];
 };
 
-const ModalContentList = ({ ModalContent }: ModalContentProps) => {
+export const ContentList = ({ ModalContent }: ModalContentProps) => {
   return (
     <div className={styles.modalListWrapper}>
       <div className={styles.modalList}>

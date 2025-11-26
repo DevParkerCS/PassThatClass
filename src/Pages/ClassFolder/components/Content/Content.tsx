@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import styles from "./Content.module.scss";
 import { useEffect, useState } from "react";
 import { ContentItem } from "./components/contentItem/ContentItem";
@@ -14,10 +14,22 @@ type ContentProps = {
 
 export const Content = ({ classId }: ContentProps) => {
   const data = useDataContext();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [filter, setFilter] = useState<FilterType>("all");
   const [filtered, setFiltered] = useState<ContentMeta[]>([]);
   const [selectedInfo, setSelectedInfo] = useState<ContentMeta | null>(null);
   const [modalActive, setModalActive] = useState(false);
+
+  const quizId = searchParams.get("quizId");
+
+  useEffect(() => {
+    if (quizId && data.contentById[classId]) {
+      setModalActive(true);
+      setSelectedInfo(
+        data.contentById[classId].find((d) => d.id === quizId) ?? null
+      );
+    }
+  }, [quizId, data.contentById]);
 
   useEffect(() => {
     if (modalActive) {
@@ -35,6 +47,7 @@ export const Content = ({ classId }: ContentProps) => {
 
   useEffect(() => {
     const items = data.contentById[classId] ?? [];
+    console.log(items);
 
     if (filter === "all") {
       setFiltered(items);
@@ -60,7 +73,7 @@ export const Content = ({ classId }: ContentProps) => {
         />
       )}
 
-      <div>
+      <div style={{ width: "100%" }}>
         <div className={styles.contentTxtWrapper}>
           <p className={styles.contentTitle}>{filtered.length} Items</p>
           <p

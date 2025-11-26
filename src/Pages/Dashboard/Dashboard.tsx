@@ -42,13 +42,10 @@ export const Dashboard = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await axios.post("http://localhost:8000/classes", { name });
-      const classData: ClassUIType = res.data;
-
-      data.setClasses((prev) => [...prev, classData]);
+      await data.AddClass(name);
       setIsModalOpen(false);
     } catch (e) {
-      console.log("Error adding class");
+      console.log(e);
     }
 
     setIsSubmitting(false);

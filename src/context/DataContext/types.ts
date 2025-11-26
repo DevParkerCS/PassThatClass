@@ -3,13 +3,14 @@ import { ClassUIType } from "../../Pages/Dashboard/Dashboard";
 
 export type DataState = {
   classes: ClassUIType[];
-  setClasses: React.Dispatch<React.SetStateAction<ClassUIType[]>>;
   classesById: ClassesById;
   contentById: ContentById;
   loadContent: (classId: string) => void;
   fetchQuizContent: (quizId: string) => Promise<void>;
+  AddClass: (name: string) => Promise<void>;
   questionsById: QuestionsById;
   quizMetaById: QuizMetaById;
+  AddNewQuiz: (formData: FormData, classId: string) => Promise<any>;
 };
 
 export type DataProviderProps = {
@@ -27,7 +28,7 @@ export type ContentMeta = {
   type: string;
   title: string;
   num_items: string;
-  last_used_at: Date;
+  last_used_at: string | null;
 };
 
 export type QuizMeta = {

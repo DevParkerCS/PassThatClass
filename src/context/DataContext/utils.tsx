@@ -1,10 +1,9 @@
 import axios from "axios";
 import { ClassesById, ClassMeta, ContentById, ContentMeta } from "./types";
-import { ClassUIType } from "../../Pages/Dashboard/Dashboard";
 
 export const fetchClasses = async (
   setClassesById: React.Dispatch<React.SetStateAction<ClassesById>>,
-  setClasses: React.Dispatch<React.SetStateAction<ClassUIType[]>>
+  setClasses: React.Dispatch<React.SetStateAction<ClassMeta[]>>
 ) => {
   try {
     const res = await axios.get("http://localhost:8000/classes");
@@ -30,7 +29,7 @@ export const fetchContent = async (
     const res = await axios.get(`http://localhost:8000/content/${classId}`);
     const data = res.data.map((item: ContentMeta) => ({
       ...item,
-      last_used_at: new Date(item.last_used_at),
+      last_used_at: item.last_used_at,
     }));
 
     setContentById((prev) => ({

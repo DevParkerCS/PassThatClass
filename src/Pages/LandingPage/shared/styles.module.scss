@@ -77,10 +77,11 @@
 
   .listItem {
     font-size: 1.25rem;
-    color: var(--text-main);
+    color: var(--text-secondary);
 
     .itemBold {
       font-weight: bold;
+      color: var(--text-main);
     }
   }
 }

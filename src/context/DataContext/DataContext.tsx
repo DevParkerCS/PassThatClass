@@ -43,7 +43,10 @@ export const DataProvider = ({ children }: DataProviderProps) => {
 
   const AddClass = async (name: string) => {
     try {
-      const res = await axios.post("http://localhost:8000/classes", { name });
+      const res = await axios.post(
+        `${process.env.REACT_APP_BACKEND_API}/classes`,
+        { name }
+      );
       const classData: ClassMeta = res.data;
 
       setClasses((prev) => [...prev, classData]);
@@ -66,7 +69,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     }
 
     const res = await axios.get(
-      `http://localhost:8000/quiz/questions/${quizId}`
+      `${process.env.REACT_APP_BACKEND_API}/quiz/questions/${quizId}`
     );
     const data: QuizContentFetch = res.data;
     setQuestionsById((prev) => ({ ...prev, [quizId]: data.questions }));
@@ -75,7 +78,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
 
   const AddNewQuiz = async (formData: FormData, classId: string) => {
     const res = await axios.post(
-      "http://localhost:8000/quiz/from-notes",
+      `${process.env.REACT_APP_BACKEND_API}/quiz/from-notes`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },

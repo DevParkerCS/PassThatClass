@@ -6,7 +6,7 @@ export const fetchClasses = async (
   setClasses: React.Dispatch<React.SetStateAction<ClassMeta[]>>
 ) => {
   try {
-    const res = await axios.get("http://localhost:8000/classes");
+    const res = await axios.get(`${process.env.REACT_APP_BACKEND_API}/classes`);
     const data: ClassMeta[] = res.data;
     setClasses(res.data);
 
@@ -26,7 +26,9 @@ export const fetchContent = async (
   setContentById: React.Dispatch<React.SetStateAction<ContentById>>
 ) => {
   try {
-    const res = await axios.get(`http://localhost:8000/content/${classId}`);
+    const res = await axios.get(
+      `${process.env.REACT_APP_BACKEND_API}/content/${classId}`
+    );
     const data = res.data.map((item: ContentMeta) => ({
       ...item,
       last_used_at: item.last_used_at,

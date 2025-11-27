@@ -1,6 +1,7 @@
 @import "../../../../../../styles/variables.module.scss";
 
 .questionWrapper {
+  flex: 1;
   &.inactive {
     display: none;
   }

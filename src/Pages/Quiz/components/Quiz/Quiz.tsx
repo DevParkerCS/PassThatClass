@@ -22,6 +22,7 @@ export const Quiz = ({ mode, setMode, setNumCorrect, id }: QuizProps) => {
   const [canGoNext, setCanGoNext] = useState(false);
   const [isReviewing, setisReviewing] = useState(false);
   const [questions, setQuestions] = useState<QuizQuestionType[]>([]);
+  const [wrongIndexes, setWrongIndexes] = useState<number[]>([]);
 
   const data = useDataContext();
   useEffect(() => {
@@ -38,7 +39,7 @@ export const Quiz = ({ mode, setMode, setNumCorrect, id }: QuizProps) => {
       className={shared.contentWrapper}
       style={{ width: "var(--app-width)" }}
     >
-      <h2 className={shared.quizTitle}>{data.quizMetaById[id].title}</h2>
+      {/* <h2 className={shared.quizTitle}>{data.quizMetaById[id].title}</h2> */}
 
       <div className={styles.breadcrumbWrapper}>
         <Breadcrumb />
@@ -47,19 +48,39 @@ export const Quiz = ({ mode, setMode, setNumCorrect, id }: QuizProps) => {
       <div className={styles.quizWrapper}>
         <QuizStatusBar qIndex={qIndex} questions={questions} />
 
-        {questions.map((q, i) => {
-          return (
-            <QuizQuestion
-              key={q.id}
-              question={q}
-              index={i}
-              qIndex={qIndex}
-              setCanGoNext={setCanGoNext}
-              mode={mode}
-              setNumCorrect={setNumCorrect}
-            />
-          );
-        })}
+        <div className={styles.quizContent}>
+          {mode === "reviewing" && (
+            <div className={styles.incorrectWrapper}>
+              <p className={styles.incorrectTitle}>Incorrect Questions</p>
+
+              <div className={styles.incorrectItems}>
+                {wrongIndexes.map((w) => (
+                  <div
+                    className={styles.incorrectItem}
+                    onClick={() => setQIndex(w)}
+                  >
+                    <p>Question {w + 1}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {questions.map((q, i) => {
+            return (
+              <QuizQuestion
+                key={q.id}
+                question={q}
+                index={i}
+                qIndex={qIndex}
+                setCanGoNext={setCanGoNext}
+                mode={mode}
+                setNumCorrect={setNumCorrect}
+                setWrongIndexes={setWrongIndexes}
+              />
+            );
+          })}
+        </div>
 
         <QuizButtons
           qIndex={qIndex}

@@ -7,6 +7,8 @@ type NotesInputProps = {
   input: string;
 };
 
+const MAX_CHARS = 20000;
+
 export const NotesInput = ({ setInput, input }: NotesInputProps) => {
   return (
     <div className={`${styles.notesWrapper}`}>
@@ -14,10 +16,10 @@ export const NotesInput = ({ setInput, input }: NotesInputProps) => {
         Paste Notes
       </label>
       <p className={styles.characterNote}>
-        * We Will Use Up To The First 10,000 Characters Of Notes
+        * We Will Use Up To The First 20,000 Characters Of Notes
       </p>
       <textarea
-        maxLength={10000}
+        maxLength={20000}
         className={styles.notesInput}
         id="notes-paste"
         placeholder={`Paste Notes Here Or Ask For Specific Content (ex: "Generate A Quiz About Dogs")"`}

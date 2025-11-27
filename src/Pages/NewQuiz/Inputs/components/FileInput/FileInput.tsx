@@ -61,7 +61,7 @@ export const FileInput = ({ setFiles, files }: FileInputProps) => {
           className={styles.filesInput}
           type="file"
           id="notes-upload"
-          accept=".jpg, .png"
+          accept=".jpg, .png, .jpeg"
           multiple
           onChange={handleFilesChange}
         ></input>

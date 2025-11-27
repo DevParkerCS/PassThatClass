@@ -18,7 +18,7 @@ export const NumInput = ({ numQuestions, setNumQuestions }: NumInputProps) => {
         id="num-questions"
         type="range"
         min={5}
-        max={20}
+        max={50}
         value={numQuestions}
         onChange={(e) => setNumQuestions(parseInt(e.target.value))}
       />

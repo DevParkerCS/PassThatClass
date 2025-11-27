@@ -1,0 +1,80 @@
+@import "../../styles/variables.module.scss";
+
+.authWrapper {
+  width: 500px;
+  background-color: var(--first-layer);
+  margin: 0 auto;
+  margin-top: 2rem;
+  padding: 1rem;
+  border-radius: var(--mid-radius);
+  box-shadow: $dark-shadow;
+}
+
+.authTitle {
+  font-size: 2rem;
+  color: var(--text-main);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.inputsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.inputWrapper {
+  background-color: var(--sec-layer);
+  padding: 0.5rem;
+  border-radius: var(--mid-radius);
+  display: flex;
+  flex-direction: column;
+  box-shadow: $sm-dark-shadow;
+
+  .inputLabel {
+    font-size: 1.15rem;
+    color: var(--text-main);
+    margin-bottom: 0.25rem;
+  }
+
+  .input {
+    border: 2px solid var(--light-border);
+    background-color: var(--dark-bg);
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    border-radius: var(--mid-radius);
+    color: var(--text-secondary);
+
+    &::placeholder {
+      color: var(--text-secondary);
+    }
+  }
+}
+
+.inputBtn {
+  font-size: 1.25rem;
+  padding: 0.5rem;
+  border-radius: var(--mid-radius);
+  color: var(--text-secondary);
+  cursor: pointer;
+  background-color: var(--third-layer);
+  border: 2px solid var(--highlight-border);
+  transition: all 0.1s linear;
+  box-shadow: $sm-dark-shadow;
+  width: 100%;
+  margin: 2rem 0rem 1rem 0rem;
+
+  &:hover {
+    background-color: var(--third-highlight);
+  }
+}
+
+.ctaTxt {
+  color: var(--text-secondary);
+  text-align: center;
+
+  .cta {
+    font-weight: bold;
+    cursor: pointer;
+  }
+}

@@ -12,6 +12,8 @@ import { ClassFolder } from "./Pages/ClassFolder/ClassFolder";
 import { DataProvider } from "./context/DataContext/DataContext";
 import { NewQuiz } from "./Pages/NewQuiz/NewQuiz";
 import { LandingPage } from "./Pages/LandingPage/LandingPage";
+import { Authentication } from "./Pages/Authentication/Authentication";
+import { AuthProvider } from "./context/AuthContext/AuthContext";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -19,13 +21,19 @@ const root = ReactDOM.createRoot(
 root.render(
   <Router>
     <DataProvider>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/class/:id" element={<ClassFolder />} />
-        <Route path="/class/:classId/quiz/:quizId" element={<QuizContent />} />
-        <Route path="/class/:id/newQuiz" element={<NewQuiz />} />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Authentication />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/class/:id" element={<ClassFolder />} />
+          <Route
+            path="/class/:classId/quiz/:quizId"
+            element={<QuizContent />}
+          />
+          <Route path="/class/:id/newQuiz" element={<NewQuiz />} />
+        </Routes>
+      </AuthProvider>
     </DataProvider>
   </Router>
 );

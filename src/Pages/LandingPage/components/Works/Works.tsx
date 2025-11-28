@@ -15,7 +15,7 @@ export const Works = () => {
       <div className={shared.sectionContent}>
         <p className={shared.title}>How It Works</p>
         <p className={shared.subtitle}>
-          Go from messy notes to ready to study quizzes in four simple steps.
+          Turn messy notes into study-ready quizzes in four simple steps.
         </p>
 
         <div className={shared.sectionCardsWrapper}>

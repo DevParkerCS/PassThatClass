@@ -1,4 +1,5 @@
 import shared from "../../shared/styles.module.scss";
+import styles from "./Pricing.module.scss";
 
 export const Pricing = () => {
   return (
@@ -6,23 +7,24 @@ export const Pricing = () => {
       <div className={shared.sectionContent}>
         <h2 className={shared.title}>Pricing</h2>
         <p className={shared.subtitle}>
-          Sign up today and get an extra 5 free quiz generations on us!
+          Sign up today and get an extra{" "}
+          <span className={shared.highlight}>5 free</span> quiz generations on
+          us!
         </p>
 
-        <div className={shared.sectionCardsWrapper}>
-          <div className={shared.sectionCard}>
+        <div className={styles.sectionCardsWrapper}>
+          <div className={styles.sectionCard}>
             <p className={shared.cardName}>Basic Plan</p>
             <p className={shared.cardValue}>Free</p>
 
             <ul className={shared.cardList}>
               <li className={shared.listItem}>
-                Generate <span className={shared.itemBold}>1 free quiz</span> a
+                Generate <span className={shared.itemBold}>1 quiz</span> per
                 month from notes
               </li>
               <li className={shared.listItem}>
-                Input up to{" "}
-                <span className={shared.itemBold}>5000 characters</span> of
-                notes per quiz.
+                Up to <span className={shared.itemBold}>5000 characters</span>{" "}
+                of notes per quiz.
               </li>
               <li className={shared.listItem}>
                 Input <span className={shared.itemBold}>1 image</span> of notes
@@ -35,7 +37,7 @@ export const Pricing = () => {
             </ul>
           </div>
 
-          <div className={shared.sectionCard}>
+          <div className={`${styles.sectionCard} ${styles.proSection}`}>
             <p className={shared.cardName}>Pro Plan</p>
             <p className={shared.cardValue}>$5/Month</p>
 
@@ -50,7 +52,7 @@ export const Pricing = () => {
               </li>
               <li className={shared.listItem}>
                 Input up to{" "}
-                <span className={shared.itemBold}>10,000 characters</span> of
+                <span className={shared.itemBold}>20,000 characters</span> of
                 notes per quiz.
               </li>
               <li className={shared.listItem}>

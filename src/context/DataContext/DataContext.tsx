@@ -13,6 +13,7 @@ import {
   QuizQuestionType,
 } from "./types";
 import { fetchClasses, fetchContent } from "./utils";
+import { useAuthContext } from "../AuthContext/AuthContext";
 
 export const DataContext = createContext<DataState | null>(null);
 
@@ -36,16 +37,26 @@ export const DataProvider = ({ children }: DataProviderProps) => {
   const [contentById, setContentById] = useState<ContentById>({});
   const [questionsById, setQuestionsById] = useState<QuestionsById>({});
   const [quizMetaById, setQuizMetaById] = useState<QuizMetaById>({});
+  const auth = useAuthContext();
 
   useEffect(() => {
-    fetchClasses(setClassesById, setClasses);
-  }, []);
+    if (!auth.loading && auth.session) {
+      fetchClasses(setClassesById, setClasses, auth.session?.access_token);
+    }
+  }, [auth.loading, auth.session]);
 
   const AddClass = async (name: string) => {
     try {
       const res = await axios.post(
         `${process.env.REACT_APP_BACKEND_API}/classes`,
-        { name }
+        { name },
+        {
+          headers: {
+            Authorization: auth.session?.access_token
+              ? `Bearer ${auth.session.access_token}`
+              : "",
+          },
+        }
       );
       const classData: ClassMeta = res.data;
 
@@ -57,7 +68,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
   };
 
   const loadContent = (classId: string) => {
-    fetchContent(classId, setContentById);
+    fetchContent(classId, setContentById, auth.session?.access_token);
   };
 
   const fetchQuizContent = async (quizId: string) => {
@@ -69,7 +80,14 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     }
 
     const res = await axios.get(
-      `${process.env.REACT_APP_BACKEND_API}/quiz/questions/${quizId}`
+      `${process.env.REACT_APP_BACKEND_API}/quiz/questions/${quizId}`,
+      {
+        headers: {
+          Authorization: auth.session?.access_token
+            ? `Bearer ${auth.session.access_token}`
+            : "",
+        },
+      }
     );
     const data: QuizContentFetch = res.data;
     setQuestionsById((prev) => ({ ...prev, [quizId]: data.questions }));
@@ -81,7 +99,12 @@ export const DataProvider = ({ children }: DataProviderProps) => {
       `${process.env.REACT_APP_BACKEND_API}/quiz/from-notes`,
       formData,
       {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: auth.session?.access_token
+            ? `Bearer ${auth.session.access_token}`
+            : "",
+        },
       }
     );
 

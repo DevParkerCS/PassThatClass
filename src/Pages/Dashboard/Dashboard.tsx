@@ -10,7 +10,6 @@ import { SearchBar } from "../../components/SearchBar/SearchBar";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ClassAddModal } from "./components/ClassAddModal/ClassAddModal";
-import axios from "axios";
 import { useDataContext } from "../../context/DataContext/DataContext";
 
 export type ClassUIType = {

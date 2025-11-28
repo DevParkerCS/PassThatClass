@@ -5,7 +5,7 @@ import { useDataContext } from "../../context/DataContext/DataContext";
 import { Breadcrumb } from "../../components/Breadcrumb/Breadcrumb";
 import { useEffect, useState } from "react";
 import { ErrorModal } from "./ErrorModal/ErrorModal";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { Inputs } from "./Inputs/Inputs";
 import { Spinner } from "../../components/Spinner/Spinner";
 import { ContentList } from "../ClassFolder/components/Content/components/ContentModal/ContentModal";

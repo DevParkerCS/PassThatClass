@@ -1,0 +1,17 @@
+@import "../../../../styles/variables.module.scss";
+
+.sectionCardsWrapper {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.sectionCard {
+  background-color: var(--sec-layer);
+  padding: 1rem;
+  border-radius: var(--mid-radius);
+  box-shadow: $sm-dark-shadow;
+  border: 2px solid var(--light-border);
+  color: var(--text-secondary);
+  width: 500px;
+}

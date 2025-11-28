@@ -1,12 +1,21 @@
 import axios from "axios";
 import { ClassesById, ClassMeta, ContentById, ContentMeta } from "./types";
+import { useAuthContext } from "../AuthContext/AuthContext";
 
 export const fetchClasses = async (
   setClassesById: React.Dispatch<React.SetStateAction<ClassesById>>,
-  setClasses: React.Dispatch<React.SetStateAction<ClassMeta[]>>
+  setClasses: React.Dispatch<React.SetStateAction<ClassMeta[]>>,
+  access_token: string | undefined
 ) => {
   try {
-    const res = await axios.get(`${process.env.REACT_APP_BACKEND_API}/classes`);
+    const res = await axios.get(
+      `${process.env.REACT_APP_BACKEND_API}/classes`,
+      {
+        headers: {
+          Authorization: access_token ? `Bearer ${access_token}` : "",
+        },
+      }
+    );
     const data: ClassMeta[] = res.data;
     setClasses(res.data);
 
@@ -23,11 +32,17 @@ export const fetchClasses = async (
 
 export const fetchContent = async (
   classId: string,
-  setContentById: React.Dispatch<React.SetStateAction<ContentById>>
+  setContentById: React.Dispatch<React.SetStateAction<ContentById>>,
+  access_token: string | undefined
 ) => {
   try {
     const res = await axios.get(
-      `${process.env.REACT_APP_BACKEND_API}/content/${classId}`
+      `${process.env.REACT_APP_BACKEND_API}/content/${classId}`,
+      {
+        headers: {
+          Authorization: access_token ? `Bearer ${access_token}` : "",
+        },
+      }
     );
     const data = res.data.map((item: ContentMeta) => ({
       ...item,

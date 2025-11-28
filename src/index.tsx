@@ -20,8 +20,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <Router>
-    <DataProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <DataProvider>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Authentication />} />
@@ -33,7 +33,7 @@ root.render(
           />
           <Route path="/class/:id/newQuiz" element={<NewQuiz />} />
         </Routes>
-      </AuthProvider>
-    </DataProvider>
+      </DataProvider>
+    </AuthProvider>
   </Router>
 );

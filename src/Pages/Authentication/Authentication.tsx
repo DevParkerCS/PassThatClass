@@ -45,10 +45,15 @@ export const AuthForm = ({ loggingIn, setLoggingIn }: AuthFormProps) => {
 
   const ctaAction = loggingIn ? "Sign Up" : "Log In";
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (loggingIn) auth.handleLogin(email, password);
+    try {
+      if (loggingIn) await auth.handleLogin(email, password);
+      else await auth.handleSignup(email, password);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (

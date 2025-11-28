@@ -6,7 +6,8 @@ export const Hero = () => {
     <div className={`${styles.hero}`}>
       <div className={styles.heroContent}>
         <h1 className={`${styles.title} ${shared.title}`}>
-          Looking for a New Way to Study?
+          Looking for a New Way to{" "}
+          <span className={shared.highlight}>Study?</span>
         </h1>
         <p className={`${styles.subtitle} ${shared.subtitle}`}>
           Generate practice quizzes from your notes in seconds

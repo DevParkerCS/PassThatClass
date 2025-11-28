@@ -43,9 +43,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     console.log(data);
 
     if (error) {
-      console.log(error);
-    } else {
-      // user is signed up (may need email confirmation based on your settings)
+      throw new Error("Error Occurred While Signing Up");
     }
 
     setLoading(false);

@@ -106,7 +106,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
 
-    setAuthError(error);
+    setSession(null);
   };
 
   useEffect(() => {

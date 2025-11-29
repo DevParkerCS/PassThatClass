@@ -13,7 +13,7 @@ import {
   QuizQuestionType,
 } from "./types";
 import { fetchClasses, fetchContent } from "./utils";
-import { useAuthContext } from "../AuthContext/AuthContext";
+import { supabase, useAuthContext } from "../AuthContext/AuthContext";
 import { useShallowMemo } from "../../hooks/useShallowMemo";
 
 export const DataContext = createContext<DataState | null>(null);
@@ -51,20 +51,30 @@ export const DataProvider = ({ children }: DataProviderProps) => {
   }, [auth.loading, auth.session?.user?.id]);
 
   const callClasses = async () => {
+    // optional guard
+    if (!auth.session?.access_token) {
+      setClassesError("Not authenticated");
+      return;
+    }
+
     setClassesError("");
     setClassesLoading(true);
-    await fetchClasses(
-      setClassesById,
-      setClasses,
-      auth.session?.access_token
-    ).catch((err) => {
-      console.error("Error in fetchClasses effect", err);
-      // allow retry next render
+
+    try {
+      await fetchClasses(setClassesById, setClasses, auth.session.access_token);
+    } catch (err: any) {
+      console.error("Error in fetchClasses", err);
+
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
+        await auth.handleLogout();
+        return;
+      }
+
+      // generic error
       setClassesError("Error getting classes");
-      classesFetched.current = false;
+    } finally {
       setClassesLoading(false);
-    });
-    setClassesLoading(false);
+    }
   };
 
   const AddClass = async (name: string) => {

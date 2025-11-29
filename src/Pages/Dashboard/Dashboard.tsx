@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { ClassAddModal } from "./components/ClassAddModal/ClassAddModal";
 import { useDataContext } from "../../context/DataContext/DataContext";
 import { Spinner } from "../../components/Spinner/Spinner";
+import { useAuthContext } from "../../context/AuthContext/AuthContext";
 
 export const Dashboard = () => {
   const {
@@ -26,6 +27,7 @@ export const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const nav = useNavigate();
+  const auth = useAuthContext();
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -39,6 +41,12 @@ export const Dashboard = () => {
       document.body.style.overflow = "";
     };
   }, [isModalOpen]);
+
+  useEffect(() => {
+    if (!auth.loading && !auth.session) {
+      nav("/login");
+    }
+  }, [auth.session, auth.loading]);
 
   const handleAddClass = async (name: string) => {
     if (name.trim() === "" || isSubmitting) return;
@@ -101,11 +109,24 @@ export const Dashboard = () => {
 
       {/* EMPTY STATE */}
       {showEmpty && (
-        <div className={styles.emptyWrapper}>
-          <p className={styles.emptyTxt}>You don’t have any classes yet.</p>
-          <p className={`${styles.emptyTxt} ${styles.secTxt}`}>
-            Create your first class to start generating quizzes from your notes.
-          </p>
+        <div>
+          <div className={styles.emptyWrapper}>
+            <p className={styles.emptyTxt}>You don’t have any classes yet.</p>
+            <p className={`${styles.emptyTxt} ${styles.secTxt}`}>
+              Create your first class to start generating quizzes from your
+              notes.
+            </p>
+          </div>
+
+          <div className={styles.classesWrapper}>
+            <div className={styles.classesSizeWrapper}>
+              <ClassCard
+                name="Add Class"
+                icon={faPlus}
+                onClick={() => setIsModalOpen(true)}
+              />
+            </div>
+          </div>
         </div>
       )}
 
@@ -141,12 +162,14 @@ export const Dashboard = () => {
               onClick={() => setIsModalOpen(true)}
             />
           </div>
+
+          <ClassCard
+            name="Add Class"
+            icon={faPlus}
+            onClick={() => setIsModalOpen(true)}
+          />
         </div>
       )}
-
-      {/* Always show Add Class card even if empty/error? 
-          If you want that, you can move the Add Class card 
-          out of the showList block and into its own section. */}
     </div>
   );
 };

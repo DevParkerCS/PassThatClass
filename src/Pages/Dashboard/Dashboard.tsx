@@ -12,11 +12,6 @@ import { useEffect, useState } from "react";
 import { ClassAddModal } from "./components/ClassAddModal/ClassAddModal";
 import { useDataContext } from "../../context/DataContext/DataContext";
 
-export type ClassUIType = {
-  id: string;
-  name: string;
-};
-
 export const Dashboard = () => {
   const data = useDataContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,7 +50,7 @@ export const Dashboard = () => {
       return;
     }
 
-    nav(`/class/${id}`);
+    nav(`/class/${data.classesById[id].name}/${id}`);
   };
 
   return (
@@ -70,9 +65,22 @@ export const Dashboard = () => {
         <h2 className={styles.dashboardTitle}>Dashboard</h2>
       </div>
 
+      <div className={styles.headingWrapper}>
+        <p className={styles.heading}>Your Classes</p>
+      </div>
+
       {/* <div className={styles.searchWrapper}>
         <SearchBar p={"Search For Classes"} />
       </div> */}
+
+      {data.classes.length === 0 && (
+        <div className={styles.emptyWrapper}>
+          <p className={styles.emptyTxt}>You don’t have any classes yet.</p>
+          <p className={`${styles.emptyTxt} ${styles.secTxt}`}>
+            Create your first class to start generating quizzes from your notes.
+          </p>
+        </div>
+      )}
 
       <div className={styles.classesWrapper}>
         <div className={styles.classesSizeWrapper}>

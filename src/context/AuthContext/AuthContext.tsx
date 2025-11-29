@@ -74,9 +74,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       },
     });
 
-    console.log(data);
-    console.log(error);
-
+    if (!error) {
+      setNeedsVerify(true);
+    }
     setAuthError(error);
 
     if (error) {

@@ -1,19 +1,32 @@
+// Breadcrumb.tsx
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Breadcrumb.module.scss";
+import { useBreadcrumbs } from "../../hooks/useBreadcrumbs"; // or inline from above
 
 export const Breadcrumb = () => {
   const nav = useNavigate();
+  const crumbs = useBreadcrumbs();
+
+  if (crumbs.length === 0) return null;
 
   return (
     <span className={styles.breadcrumb}>
-      <p
-        className={`${styles.breadcrumbItem} ${styles.breadcrumbClickable}`}
-        onClick={() => nav("/dashboard")}
-      >
-        Dashboard
-      </p>
-      <p className={`${styles.breadcrumbItem}`}>{">"}</p>
-      <p className={`${styles.breadcrumbItem}`}>Biology 201</p>
+      {crumbs.map((crumb, index) => (
+        <React.Fragment key={index}>
+          <p
+            className={`${styles.breadcrumbItem} ${
+              crumb.to ? styles.breadcrumbClickable : ""
+            }`}
+            onClick={() => crumb.to && nav(crumb.to)}
+          >
+            {crumb.label}
+          </p>
+          {index < crumbs.length - 1 && (
+            <p className={styles.breadcrumbItem}>{">"}</p>
+          )}
+        </React.Fragment>
+      ))}
     </span>
   );
 };

@@ -14,24 +14,20 @@ import { NewQuiz } from "./Pages/NewQuiz/NewQuiz";
 import { LandingPage } from "./Pages/LandingPage/LandingPage";
 import { Authentication } from "./Pages/Authentication/Authentication";
 import { AuthProvider } from "./context/AuthContext/AuthContext";
+import { routes } from "./components/Routes";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+console.log(routes);
 root.render(
   <Router>
     <AuthProvider>
       <DataProvider>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<Authentication />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/class/:id" element={<ClassFolder />} />
-          <Route
-            path="/class/:classId/quiz/:quizId"
-            element={<QuizContent />}
-          />
-          <Route path="/class/:id/newQuiz" element={<NewQuiz />} />
+          {routes.map(({ element: PageElement, ...r }) => (
+            <Route path={r.path} element={<PageElement />} />
+          ))}
         </Routes>
       </DataProvider>
     </AuthProvider>

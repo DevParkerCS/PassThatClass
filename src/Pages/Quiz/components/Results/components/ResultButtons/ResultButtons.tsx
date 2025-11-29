@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { QuizMode } from "../../../../QuizContent";
 import styles from "./ResultButtons.module.scss";
+import { useDataContext } from "../../../../../../context/DataContext/DataContext";
 
 type ResultButtonsProps = {
   setMode: React.Dispatch<React.SetStateAction<QuizMode>>;
@@ -14,6 +15,7 @@ export const ResultButtons = ({
   quizId,
 }: ResultButtonsProps) => {
   const nav = useNavigate();
+  const data = useDataContext();
 
   return (
     <div className={styles.resultsBtns}>
@@ -34,7 +36,11 @@ export const ResultButtons = ({
       <div className={styles.dashboardBtnWrapper}>
         <button
           className={`${styles.resultsBtn}`}
-          onClick={() => nav(`/class/${classId}?quizId=${quizId}`)}
+          onClick={() =>
+            nav(
+              `/class/${data.classesById[classId].name}/${classId}?quizId=${quizId}`
+            )
+          }
         >
           Back to Class
         </button>

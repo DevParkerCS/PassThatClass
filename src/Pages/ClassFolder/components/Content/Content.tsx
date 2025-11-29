@@ -2,7 +2,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import styles from "./Content.module.scss";
 import { useEffect, useState } from "react";
 import { ContentItem, EmptyItem } from "./components/contentItem/ContentItem";
-import { ContentModal } from "./components/ContentModal/ContentModal";
+import {
+  ContentModal,
+  DeleteModal,
+} from "./components/ContentModal/ContentModal";
 import { useDataContext } from "../../../../context/DataContext/DataContext";
 import { ContentMeta } from "../../../../context/DataContext/types";
 import { Ctas } from "../Ctas/Ctas";
@@ -21,6 +24,7 @@ export const Content = ({ classId }: ContentProps) => {
   const [filtered, setFiltered] = useState<ContentMeta[]>([]);
   const [selectedInfo, setSelectedInfo] = useState<ContentMeta | null>(null);
   const [modalActive, setModalActive] = useState(false);
+  const [deleteActive, setDeleteActive] = useState(false);
 
   const quizId = searchParams.get("quizId");
 
@@ -74,6 +78,13 @@ export const Content = ({ classId }: ContentProps) => {
         />
       )}
 
+      {deleteActive && selectedInfo && (
+        <DeleteModal
+          contentId={selectedInfo.id}
+          setDeleteActive={setDeleteActive}
+        />
+      )}
+
       <div style={{ width: "100%" }}>
         <div className={styles.contentTxtWrapper}>
           <div>
@@ -97,6 +108,7 @@ export const Content = ({ classId }: ContentProps) => {
                 content={q}
                 setModalActive={setModalActive}
                 setSelectedInfo={setSelectedInfo}
+                setDeleteActive={setDeleteActive}
                 key={i}
               />
             ))}

@@ -20,7 +20,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: var(--third-layer);
+    background: var(--cyan-accent);
     border: 1px solid black;
     margin-top: -7px; // centers thumb on the track
     cursor: pointer;
@@ -30,7 +30,7 @@
   &::-moz-range-track {
     height: 6px;
     border-radius: 999px;
-    background: var(--sec-layer);
+    background: var(--third-layer);
   }
 
   // Firefox thumb
@@ -38,7 +38,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: var(--sec-layer);
+    background: var(--cyan-accent);
     border: 1px solid black;
     margin-top: -8px; // centers thumb on the track
     cursor: pointer;

@@ -6,18 +6,28 @@ import {
 import styles from "./Dashboard.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Nav } from "../../components/Nav/Nav";
-import { SearchBar } from "../../components/SearchBar/SearchBar";
+// import { SearchBar } from "../../components/SearchBar/SearchBar";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ClassAddModal } from "./components/ClassAddModal/ClassAddModal";
 import { useDataContext } from "../../context/DataContext/DataContext";
+import { Spinner } from "../../components/Spinner/Spinner";
 
 export const Dashboard = () => {
-  const data = useDataContext();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const nav = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const {
+    classes,
+    classesById,
+    classesLoading,
+    classesError,
+    AddClass,
+    callClasses,
+  } = useDataContext();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const nav = useNavigate();
+
+  // Lock body scroll when modal is open
   useEffect(() => {
     if (isModalOpen) {
       document.body.style.overflow = "hidden";
@@ -34,24 +44,37 @@ export const Dashboard = () => {
     if (name.trim() === "" || isSubmitting) return;
 
     setIsSubmitting(true);
-
     try {
-      await data.AddClass(name);
+      await AddClass(name);
       setIsModalOpen(false);
     } catch (e) {
-      console.log(e);
+      console.error("Error adding class", e);
+      // you could surface a toast here later
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
-  const handleClick = (id: string) => {
-    if (id === "") {
-      return;
-    }
-
-    nav(`/class/${data.classesById[id].name}/${id}`);
+  const handleClassClick = (id: string) => {
+    if (!id) return;
+    const cls = classesById[id];
+    if (!cls) return;
+    nav(`/class/${cls.name}/${id}`);
   };
+
+  const handleRetry = async () => {
+    try {
+      await callClasses();
+    } catch (e) {
+      console.error("Error refetching classes", e);
+    }
+  };
+
+  const showEmpty = !classesLoading && !classesError && classes.length === 0;
+  const showError = !classesLoading && !!classesError;
+  const showList = !classesLoading && !classesError && classes.length > 0;
+
+  console.log(classesLoading);
 
   return (
     <div>
@@ -69,11 +92,15 @@ export const Dashboard = () => {
         <p className={styles.heading}>Your Classes</p>
       </div>
 
-      {/* <div className={styles.searchWrapper}>
-        <SearchBar p={"Search For Classes"} />
-      </div> */}
+      {/* LOADING STATE */}
+      {classesLoading && (
+        <div className={styles.emptyWrapper}>
+          <Spinner txt="Loading Classes..." />
+        </div>
+      )}
 
-      {data.classes.length === 0 && (
+      {/* EMPTY STATE */}
+      {showEmpty && (
         <div className={styles.emptyWrapper}>
           <p className={styles.emptyTxt}>You don’t have any classes yet.</p>
           <p className={`${styles.emptyTxt} ${styles.secTxt}`}>
@@ -82,45 +109,61 @@ export const Dashboard = () => {
         </div>
       )}
 
-      <div className={styles.classesWrapper}>
-        <div className={styles.classesSizeWrapper}>
-          {data.classes.map((n, i) => {
-            return (
-              <Class
-                name={n.name}
-                key={i}
-                id={n.id}
-                icon={faFolderOpen}
-                cb={handleClick}
-              />
-            );
-          })}
-          <Class
-            id={""}
-            name="Add Class"
-            icon={faPlus}
-            cb={() => setIsModalOpen(true)}
-          />
+      {/* ERROR STATE */}
+      {showError && (
+        <div className={styles.emptyWrapper}>
+          <p className={styles.emptyTxt}>
+            There was an error loading your classes.
+          </p>
+          <button className={styles.retryBtn} onClick={handleRetry}>
+            Retry
+          </button>
         </div>
-      </div>
+      )}
+
+      {/* LIST STATE */}
+      {showList && (
+        <div className={styles.classesWrapper}>
+          <div className={styles.classesSizeWrapper}>
+            {classes.map((cls) => (
+              <ClassCard
+                key={cls.id}
+                name={cls.name}
+                icon={faFolderOpen}
+                onClick={() => handleClassClick(cls.id)}
+              />
+            ))}
+
+            {/* Add Class card */}
+            <ClassCard
+              name="Add Class"
+              icon={faPlus}
+              onClick={() => setIsModalOpen(true)}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Always show Add Class card even if empty/error? 
+          If you want that, you can move the Add Class card 
+          out of the showList block and into its own section. */}
     </div>
   );
 };
 
-type ClassProps = {
+type ClassCardProps = {
   name: string;
   icon: IconDefinition;
-  id: string;
-  cb: (id: string) => void;
+  onClick: () => void;
 };
 
-export const Class = ({ name, icon, id, cb }: ClassProps) => {
+const ClassCard = ({ name, icon, onClick }: ClassCardProps) => {
   return (
-    <div className={styles.classWrapper} onClick={() => cb(id)}>
+    <button type="button" className={styles.classWrapper} onClick={onClick}>
       <div className={styles.classTxtWrapper}>
         <FontAwesomeIcon className={styles.classIcon} icon={icon} />
         <p className={styles.className}>{name}</p>
       </div>
-    </div>
+    </button>
   );
 };

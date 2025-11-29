@@ -98,7 +98,7 @@ export const FileInput = ({ setFiles, files }: FileInputProps) => {
           ref={inputRef}
           className={styles.filesInput}
           type="file"
-          accept=".jpg, .png, .jpeg"
+          accept=".jpg, .png, .jpeg, .pdf"
           multiple
           onChange={handleFilesChange}
           // you can keep this visually hidden via CSS as you had before

@@ -79,6 +79,9 @@
 
 .emptyWrapper {
   margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   .emptyTxt {
     font-size: 1.25rem;
@@ -88,5 +91,23 @@
 
   .secTxt {
     color: var(--text-secondary);
+  }
+}
+
+.retryBtn {
+  font-size: 1.25rem;
+  background-color: var(--cyan-soft);
+  border: 2px solid var(--light-border);
+  color: var(--text-main);
+  padding: 0.5rem;
+  width: 200px;
+  margin: 0 auto;
+  margin-top: 1rem;
+  cursor: pointer;
+  border-radius: var(--mid-radius);
+  transition: all 0.1s linear;
+
+  &:hover {
+    background-color: var(--cyan-accent);
   }
 }

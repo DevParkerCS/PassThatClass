@@ -151,3 +151,42 @@ const ModalStats = ({ info }: ModalStatsProps) => {
     </div>
   );
 };
+
+type DeleteModalProps = {
+  contentId: string;
+  setDeleteActive: Dispatch<SetStateAction<boolean>>;
+};
+
+export const DeleteModal = ({
+  contentId,
+  setDeleteActive,
+}: DeleteModalProps) => {
+  const data = useDataContext();
+
+  return (
+    <div>
+      <div
+        className={styles.modalBackground}
+        onClick={() => setDeleteActive(false)}
+      ></div>
+
+      <div className={styles.modalWrapper}>
+        <div className={styles.outsideWrapper}>
+          <div
+            className={styles.exitBtn}
+            onClick={() => setDeleteActive(false)}
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </div>
+
+          <div>
+            <p className={styles.modalTitle}>
+              Are you sure you want to delete{" "}
+              {data.quizMetaById[contentId].title}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

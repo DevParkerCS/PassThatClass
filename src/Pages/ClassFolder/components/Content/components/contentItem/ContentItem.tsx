@@ -3,25 +3,41 @@ import styles from "./ContentItem.module.scss";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ContentMeta } from "../../../../../../context/DataContext/types";
 import { useDataContext } from "../../../../../../context/DataContext/DataContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 type ContentItemProps = {
   content: ContentMeta;
   setModalActive: Dispatch<SetStateAction<boolean>>;
   setSelectedInfo: Dispatch<SetStateAction<ContentMeta | null>>;
+  setDeleteActive: Dispatch<SetStateAction<boolean>>;
 };
 
 export const ContentItem = ({
   content,
   setModalActive,
   setSelectedInfo,
+  setDeleteActive,
 }: ContentItemProps) => {
+  const [hovered, setHovered] = useState(false);
+
   const handleClick = () => {
     setSelectedInfo(content);
     setModalActive(true);
   };
 
   return (
-    <div className={styles.contentItem} onClick={handleClick}>
+    <div
+      className={styles.contentItem}
+      onClick={handleClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <FontAwesomeIcon
+        icon={faTrash}
+        onClick={() => setDeleteActive(true)}
+        className={`${styles.deleteIcon} ${hovered && styles.active}`}
+      />
       <div className={styles.contentFlex}>
         <div className={styles.itemLabel}>
           {content.type === "quiz" ? "QUIZ" : "CARD"}

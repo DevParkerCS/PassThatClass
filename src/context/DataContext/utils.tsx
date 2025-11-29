@@ -7,17 +7,22 @@ export const fetchClasses = async (
   setClasses: React.Dispatch<React.SetStateAction<ClassMeta[]>>,
   access_token: string | undefined
 ) => {
+  if (!access_token) {
+    throw new Error("Missing access token");
+  }
+
   try {
     const res = await axios.get(
       `${process.env.REACT_APP_BACKEND_API}/classes`,
       {
         headers: {
-          Authorization: access_token ? `Bearer ${access_token}` : "",
+          Authorization: `Bearer ${access_token}`,
         },
       }
     );
+
     const data: ClassMeta[] = res.data;
-    setClasses(res.data);
+    setClasses(data);
 
     setClassesById(
       data.reduce<ClassesById>((acc, cls) => {
@@ -26,7 +31,8 @@ export const fetchClasses = async (
       }, {})
     );
   } catch (e) {
-    console.log("error adding class");
+    console.error("Failed to fetch classes", e);
+    throw e;
   }
 };
 

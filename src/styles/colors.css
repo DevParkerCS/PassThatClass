@@ -13,6 +13,7 @@
 
   --error-red: #e35b5b;
   --error-red-dark: rgb(206, 77, 77);
+  --error-red-trans: #e35b5b86;
 
   /* Text */
   --text-main: #f4f7ff;

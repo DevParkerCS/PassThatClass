@@ -38,15 +38,34 @@ export const DataProvider = ({ children }: DataProviderProps) => {
   const [contentById, setContentById] = useState<ContentById>({});
   const [questionsById, setQuestionsById] = useState<QuestionsById>({});
   const [quizMetaById, setQuizMetaById] = useState<QuizMetaById>({});
+  const [classesLoading, setClassesLoading] = useState(false);
   const classesFetched = useRef(false);
+  const [classesError, setClassesError] = useState("");
   const auth = useAuthContext();
 
   useEffect(() => {
     if (!auth.loading && auth.session && !classesFetched.current) {
       classesFetched.current = true;
-      fetchClasses(setClassesById, setClasses, auth.session?.access_token);
+      callClasses();
     }
-  }, [auth.loading, auth.session]);
+  }, [auth.loading, auth.session?.user?.id]);
+
+  const callClasses = async () => {
+    setClassesError("");
+    setClassesLoading(true);
+    await fetchClasses(
+      setClassesById,
+      setClasses,
+      auth.session?.access_token
+    ).catch((err) => {
+      console.error("Error in fetchClasses effect", err);
+      // allow retry next render
+      setClassesError("Error getting classes");
+      classesFetched.current = false;
+      setClassesLoading(false);
+    });
+    setClassesLoading(false);
+  };
 
   const AddClass = async (name: string) => {
     try {
@@ -75,9 +94,6 @@ export const DataProvider = ({ children }: DataProviderProps) => {
   };
 
   const fetchQuizContent = async (quizId: string) => {
-    console.log(quizId);
-    console.log(questionsById[quizId]);
-    console.log(quizMetaById[quizId]);
     if (questionsById[quizId] && quizMetaById[quizId]) {
       return;
     }
@@ -193,6 +209,9 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     contentById,
     loadContent,
     fetchQuizContent,
+    callClasses,
+    classesLoading,
+    classesError,
     questionsById,
     quizMetaById,
     AddClass,

@@ -17,6 +17,7 @@
   cursor: pointer;
   border: 2px solid var(--light-border);
   transition: all 0.1s linear;
+  position: relative;
 
   &.emptyItem {
     display: flex;
@@ -33,6 +34,24 @@
 
     .itemLabel {
       background-color: var(--third-layer);
+    }
+  }
+
+  .deleteIcon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1.5rem;
+    color: var(--error-red-trans);
+    opacity: 0;
+    transition: color 0.1s linear;
+
+    &.active {
+      opacity: 1;
+    }
+
+    &:hover {
+      color: var(--error-red);
     }
   }
 

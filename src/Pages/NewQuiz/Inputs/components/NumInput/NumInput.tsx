@@ -13,6 +13,9 @@ export const NumInput = ({ numQuestions, setNumQuestions }: NumInputProps) => {
       <label className={shared.inputLabel} htmlFor="num-questions">
         Number of Questions: {numQuestions}
       </label>
+      <p className={shared.inputNote}>
+        * We Will Generate Up To this amount but may be less depending on notes
+      </p>
       <input
         className={styles.numInput}
         id="num-questions"

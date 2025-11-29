@@ -4,13 +4,16 @@ import { GradeInput } from "./components/GradeInput/GradeInput";
 import { NotesInput } from "./components/NotesInput/NotesInput";
 import { NumInput } from "./components/NumInput/NumInput";
 import styles from "./Inputs.module.scss";
+import shared from "../shared/styles.module.scss";
+import { ExamplesInput } from "./components/ExamplesInput/ExamplesInput";
 
 type InputsProps = {
   submitCb: (
     chosenGrade: string,
     files: File[],
     input: string,
-    numQuestions: number
+    numQuestions: number,
+    genExamples: boolean
   ) => Promise<void>;
 };
 
@@ -19,11 +22,12 @@ export const Inputs = ({ submitCb }: InputsProps) => {
   const [chosenGrade, setChosenGrade] = useState("Select Grade");
   const [files, setFiles] = useState<File[]>([]);
   const [input, setInput] = useState<string>("");
+  const [genExamples, setGenExamples] = useState(false);
 
   // Prevent Refresh and call cb function
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    submitCb(chosenGrade, files, input, numQuestions);
+    submitCb(chosenGrade, files, input, numQuestions, genExamples);
   };
 
   return (
@@ -36,6 +40,11 @@ export const Inputs = ({ submitCb }: InputsProps) => {
         />
         <FileInput files={files} setFiles={setFiles} />
         <NotesInput setInput={setInput} input={input} />
+
+        <ExamplesInput
+          genExamples={genExamples}
+          setGenExamples={setGenExamples}
+        />
 
         <div className={styles.submitWrapper}>
           <p className={styles.genInfo}>

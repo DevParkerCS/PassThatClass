@@ -5,19 +5,22 @@ import { useDataContext } from "../../context/DataContext/DataContext";
 import { Breadcrumb } from "../../components/Breadcrumb/Breadcrumb";
 import { useEffect, useState } from "react";
 import { ErrorModal } from "./ErrorModal/ErrorModal";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { Inputs } from "./Inputs/Inputs";
 import { Spinner } from "../../components/Spinner/Spinner";
 import { ContentList } from "../ClassFolder/components/Content/components/ContentModal/ContentModal";
 import { QuizMeta } from "../../context/DataContext/types";
+import { useAuthContext } from "../../context/AuthContext/AuthContext";
 
 type SubmitionState = "info" | "generating" | "finished";
 
 export const NewQuiz = () => {
-  const { id: classId } = useParams<{ id: string }>();
+  const { classId } = useParams<{ classId: string }>();
   const [error, setError] = useState("");
   const [submitionState, setSubmitionState] = useState<SubmitionState>("info");
+  const [runningOcr, setRunningOcr] = useState(false);
   const data = useDataContext();
+  const auth = useAuthContext();
   const nav = useNavigate();
 
   // Sets Timeout For Error Message That Pops Up
@@ -41,7 +44,8 @@ export const NewQuiz = () => {
     chosenGrade: string,
     files: File[],
     input: string,
-    numQuestions: number
+    numQuestions: number,
+    genExample: boolean
   ) => {
     // Ensure all fields are filled out
     if (chosenGrade === "Select Grade") {
@@ -51,30 +55,29 @@ export const NewQuiz = () => {
       setError("No Files Or Text Was Inputted");
       return;
     }
+
     setSubmitionState("generating");
-
-    // Load data in FormData to pass to API
-    const formData = new FormData();
-    formData.append("notesText", input);
-    formData.append("gradeLevel", chosenGrade);
-    formData.append("numQuestions", String(numQuestions));
-    formData.append("classId", classId);
-
-    // Add files
-    files.forEach((file) => {
-      formData.append("images", file);
-    });
-
-    console.log("SENDING");
+    setRunningOcr(true);
 
     try {
-      // Call API to add generate new quiz
-      const qd: QuizMeta = await data.AddNewQuiz(formData, classId);
+      const qd = await data.AddNewQuiz({
+        classId,
+        chosenGrade,
+        files,
+        input,
+        numQuestions,
+        genExample,
+      });
 
-      // Navigate to class folder with new modal open
-      nav(`/class/${classId}?quizId=${qd.id}`);
+      setRunningOcr(false);
+
+      // fix the URL: /class/:className/:classId
+      const className = data.classesById[classId].name;
+      nav(`/class/${encodeURIComponent(className)}/${classId}?quizId=${qd.id}`);
     } catch (e) {
+      setRunningOcr(false);
       const error = e as AxiosError;
+      console.error(error);
       setSubmitionState("info");
       setError(error.message);
     }
@@ -99,7 +102,9 @@ export const NewQuiz = () => {
 
         {submitionState === "generating" && (
           <div>
-            <Spinner txt="Parsing information and generating quiz..." />
+            <Spinner
+              txt={`${runningOcr ? "Parsing Images..." : "Generating Quiz..."}`}
+            />
           </div>
         )}
       </div>

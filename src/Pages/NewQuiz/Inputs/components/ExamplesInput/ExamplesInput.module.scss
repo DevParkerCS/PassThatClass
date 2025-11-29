@@ -1,0 +1,21 @@
+.checkbox {
+  border: 2px solid var(--light-border);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  padding: 0.5rem;
+  border-radius: var(--mid-radius);
+  cursor: pointer;
+  background-color: var(--sec-layer);
+  margin-top: 0.5rem;
+
+  .checkboxIcon {
+    color: var(--cyan-accent);
+    opacity: 0;
+
+    &.active {
+      opacity: 1;
+    }
+  }
+}

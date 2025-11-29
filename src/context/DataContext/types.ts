@@ -1,8 +1,7 @@
 import { Dispatch, ReactNode, SetStateAction } from "react";
-import { ClassUIType } from "../../Pages/Dashboard/Dashboard";
 
 export type DataState = {
-  classes: ClassUIType[];
+  classes: ClassMeta[];
   classesById: ClassesById;
   contentById: ContentById;
   loadContent: (classId: string) => void;
@@ -10,7 +9,14 @@ export type DataState = {
   AddClass: (name: string) => Promise<void>;
   questionsById: QuestionsById;
   quizMetaById: QuizMetaById;
-  AddNewQuiz: (formData: FormData, classId: string) => Promise<any>;
+  AddNewQuiz: (params: {
+    classId: string;
+    chosenGrade: string;
+    files: File[];
+    input: string;
+    numQuestions: number;
+    genExample: boolean;
+  }) => Promise<QuizMeta>;
 };
 
 export type DataProviderProps = {

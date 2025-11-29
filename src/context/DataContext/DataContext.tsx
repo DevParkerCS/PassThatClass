@@ -77,6 +77,43 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     }
   };
 
+  const deleteQuiz = async (quizId: string, classId: string) => {
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_BACKEND_API}/quiz/${quizId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.session?.access_token}`,
+          },
+        }
+      );
+
+      setQuizMetaById((prev) => {
+        const { [quizId]: _removed, ...rest } = prev;
+        return rest;
+      });
+
+      // 3. Remove questions for that quiz
+      setQuestionsById((prev) => {
+        const { [quizId]: _removed, ...rest } = prev;
+        return rest;
+      });
+
+      // 4. Remove it from the content list for that class
+      setContentById((prev) => {
+        const prevContent = prev[classId] ?? [];
+        return {
+          ...prev,
+          [classId]: prevContent.filter(
+            (item) => !(item.type === "quiz" && item.id === quizId)
+          ),
+        };
+      });
+    } catch (e) {
+      throw e;
+    }
+  };
+
   const AddClass = async (name: string) => {
     try {
       const res = await axios.post(
@@ -220,6 +257,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     loadContent,
     fetchQuizContent,
     callClasses,
+    deleteQuiz,
     classesLoading,
     classesError,
     questionsById,

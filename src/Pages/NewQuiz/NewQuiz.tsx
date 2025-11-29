@@ -104,6 +104,7 @@ export const NewQuiz = () => {
           <div>
             <Spinner
               txt={`${runningOcr ? "Parsing Images..." : "Generating Quiz..."}`}
+              size="l"
             />
           </div>
         )}

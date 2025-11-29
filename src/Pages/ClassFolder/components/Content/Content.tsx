@@ -80,7 +80,9 @@ export const Content = ({ classId }: ContentProps) => {
 
       {deleteActive && selectedInfo && (
         <DeleteModal
+          setSelectedInfo={setSelectedInfo}
           contentId={selectedInfo.id}
+          classId={classId}
           setDeleteActive={setDeleteActive}
         />
       )}

@@ -19,24 +19,25 @@ export const ContentItem = ({
   setSelectedInfo,
   setDeleteActive,
 }: ContentItemProps) => {
-  const [hovered, setHovered] = useState(false);
-
   const handleClick = () => {
     setSelectedInfo(content);
     setModalActive(true);
   };
 
+  const handleDelClick = () => {
+    setSelectedInfo(content);
+    setDeleteActive(true);
+  };
+
   return (
-    <div
-      className={styles.contentItem}
-      onClick={handleClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
+    <div className={styles.contentItem} onClick={handleClick}>
       <FontAwesomeIcon
         icon={faTrash}
-        onClick={() => setDeleteActive(true)}
-        className={`${styles.deleteIcon} ${hovered && styles.active}`}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleDelClick();
+        }}
+        className={`${styles.deleteIcon}`}
       />
       <div className={styles.contentFlex}>
         <div className={styles.itemLabel}>

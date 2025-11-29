@@ -8,6 +8,7 @@ export type DataState = {
   fetchQuizContent: (quizId: string) => Promise<void>;
   AddClass: (name: string) => Promise<void>;
   callClasses: () => void;
+  deleteQuiz: (quizId: string, classId: string) => Promise<void>;
   classesLoading: boolean;
   classesError: string;
   questionsById: QuestionsById;

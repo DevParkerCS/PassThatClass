@@ -10,10 +10,21 @@
 
 .spinner {
   color: var(--cyan-accent);
-  font-size: 5rem;
   margin-bottom: 1rem;
 
   animation: 1.5s infinite spin linear;
+
+  &.l {
+    font-size: 5rem;
+  }
+
+  &.m {
+    font-size: 3rem;
+  }
+
+  &.s {
+    font-size: 2rem;
+  }
 }
 
 .spinnerTxt {

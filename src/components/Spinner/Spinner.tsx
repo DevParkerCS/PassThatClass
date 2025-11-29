@@ -4,12 +4,18 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 type SpinnerProps = {
   txt?: string;
+  size: Size;
 };
 
-export const Spinner = ({ txt }: SpinnerProps) => {
+type Size = "l" | "m" | "s";
+
+export const Spinner = ({ txt, size }: SpinnerProps) => {
   return (
     <div className={styles.wrapper}>
-      <FontAwesomeIcon className={styles.spinner} icon={faSpinner} />
+      <FontAwesomeIcon
+        className={`${styles.spinner} ${styles[size]}`}
+        icon={faSpinner}
+      />
       <p className={styles.spinnerTxt}>{txt}</p>
     </div>
   );

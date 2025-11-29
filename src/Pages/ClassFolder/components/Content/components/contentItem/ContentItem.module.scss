@@ -32,6 +32,10 @@
     background-color: var(--sec-layer);
     transform: scale(1.01);
 
+    .deleteIcon {
+      opacity: 1;
+    }
+
     .itemLabel {
       background-color: var(--third-layer);
     }
@@ -45,10 +49,6 @@
     color: var(--error-red-trans);
     opacity: 0;
     transition: color 0.1s linear;
-
-    &.active {
-      opacity: 1;
-    }
 
     &:hover {
       color: var(--error-red);

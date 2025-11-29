@@ -46,7 +46,7 @@ export const ContentModal = ({
           </div>
           {!content || !meta ? (
             <div className={styles.loadingWrapper}>
-              <Spinner />
+              <Spinner size="l" />
             </div>
           ) : (
             <div>
@@ -154,14 +154,46 @@ const ModalStats = ({ info }: ModalStatsProps) => {
 
 type DeleteModalProps = {
   contentId: string;
+  classId: string;
   setDeleteActive: Dispatch<SetStateAction<boolean>>;
+  setSelectedInfo: Dispatch<SetStateAction<ContentMeta | null>>;
 };
 
 export const DeleteModal = ({
   contentId,
+  classId,
   setDeleteActive,
+  setSelectedInfo,
 }: DeleteModalProps) => {
   const data = useDataContext();
+  const [title, setTitle] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+
+    data.contentById[classId].map((c) => {
+      if (c.id === contentId) {
+        setTitle(c.title);
+      }
+    });
+
+    setLoading(false);
+  }, [contentId, classId]);
+
+  const handleDelete = async () => {
+    try {
+      setDeleting(true);
+      await data.deleteQuiz(contentId, classId);
+      setSelectedInfo(null);
+      setDeleteActive(false);
+      setDeleting(false);
+    } catch (e) {
+      setDeleting(false);
+      console.log(e);
+    }
+  };
 
   return (
     <div>
@@ -170,7 +202,7 @@ export const DeleteModal = ({
         onClick={() => setDeleteActive(false)}
       ></div>
 
-      <div className={styles.modalWrapper}>
+      <div className={styles.deleteWrapper}>
         <div className={styles.outsideWrapper}>
           <div
             className={styles.exitBtn}
@@ -179,12 +211,30 @@ export const DeleteModal = ({
             <FontAwesomeIcon icon={faXmark} />
           </div>
 
-          <div>
-            <p className={styles.modalTitle}>
-              Are you sure you want to delete{" "}
-              {data.quizMetaById[contentId].title}
-            </p>
-          </div>
+          {loading && <Spinner size="m" />}
+          {deleting && <Spinner size="m" txt="Deleting Quiz..." />}
+
+          {!loading && !deleting && (
+            <div>
+              <p className={styles.exitTxt}>Are you sure you want to delete </p>
+              <p className={`${styles.exitTxt} ${styles.exitName}`}>{title}</p>
+
+              <div className={styles.exitBtns}>
+                <button
+                  className={`${styles.exitCta} ${styles.cancel}`}
+                  onClick={() => setDeleteActive(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className={`${styles.exitCta} ${styles.delete}`}
+                  onClick={handleDelete}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

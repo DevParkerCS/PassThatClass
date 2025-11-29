@@ -103,7 +103,7 @@ export const Dashboard = () => {
       {/* LOADING STATE */}
       {classesLoading && (
         <div className={styles.emptyWrapper}>
-          <Spinner txt="Loading Classes..." />
+          <Spinner txt="Loading Classes..." size="l" />
         </div>
       )}
 
@@ -162,12 +162,6 @@ export const Dashboard = () => {
               onClick={() => setIsModalOpen(true)}
             />
           </div>
-
-          <ClassCard
-            name="Add Class"
-            icon={faPlus}
-            onClick={() => setIsModalOpen(true)}
-          />
         </div>
       )}
     </div>

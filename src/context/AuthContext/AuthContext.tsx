@@ -4,10 +4,12 @@ import {
   ReactNode,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { AuthState } from "./types";
-import { createClient, Session } from "@supabase/supabase-js";
+import { AuthError, createClient, Session } from "@supabase/supabase-js";
+import { useShallowMemo } from "../../hooks/useShallowMemo";
 
 export const AuthContext = createContext<AuthState | null>(null);
 
@@ -32,15 +34,50 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [needsVerify, setNeedsVerify] = useState(false);
+  const [authError, setAuthError] = useState<AuthError | null>(null);
+
+  useEffect(() => {
+    if (authError === undefined) return;
+
+    if (authError?.code === "email_not_confirmed") setNeedsVerify(true);
+  }, [authError]);
+
+  const resendVerification = async (email: string) => {
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/email-confirmed`,
+      },
+    });
+
+    if (error) {
+      console.error("Error resending verification", error);
+      throw new Error(error.message || "Error resending verification email");
+    }
+  };
+
+  useEffect(() => {
+    console.log("SESSION:" + session);
+  }, [session]);
 
   const handleSignup = async (email: string, password: string) => {
+    if (loading) return;
+
     setLoading(true);
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/email-confirmed`,
+      },
     });
 
     console.log(data);
+    console.log(error);
+
+    setAuthError(error);
 
     if (error) {
       throw new Error("Error Occurred While Signing Up");
@@ -50,14 +87,26 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const handleLogin = async (email: string, password: string) => {
+    if (loading) return;
+
     setLoading(true);
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
+    console.log(error);
+
+    setAuthError(error);
+
     setSession(data.session);
     setLoading(false);
+  };
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+
+    setAuthError(error);
   };
 
   useEffect(() => {
@@ -65,12 +114,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const getInitialSession = async () => {
       setLoading(true);
       const { data, error } = await supabase.auth.getSession();
-      if (!error) {
-        setSession(data.session);
-        console.log(data.session);
-      } else {
-        console.error(error);
-      }
+      setSession(data.session);
+      setAuthError(error);
       setLoading(false);
     };
 
@@ -89,11 +134,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
   }, []);
 
+  const authMemo = useShallowMemo({
+    handleLogin,
+    handleSignup,
+    handleLogout,
+    resendVerification,
+    loading,
+    session,
+    needsVerify,
+  });
+
   return (
-    <AuthContext.Provider
-      value={{ handleLogin, handleSignup, loading, session }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={authMemo}>{children}</AuthContext.Provider>
   );
 };

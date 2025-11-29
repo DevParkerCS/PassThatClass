@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 export const Authentication = () => {
   const [loggingIn, setLoggingIn] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const auth = useAuthContext();
   const nav = useNavigate();
 
@@ -20,10 +22,76 @@ export const Authentication = () => {
     <div>
       <Nav />
       <div className={styles.authWrapper}>
-        <p className={styles.authTitle}>{loggingIn ? "Log In" : "Sign Up"}</p>
+        <p className={styles.authTitle}>
+          {auth.needsVerify
+            ? "Check Your Email"
+            : loggingIn
+            ? "Log In"
+            : "Sign Up"}
+        </p>
 
-        <AuthForm loggingIn={loggingIn} setLoggingIn={setLoggingIn} />
+        {auth.needsVerify ? (
+          <ConfirmEmail email={email} />
+        ) : (
+          <AuthForm
+            loggingIn={loggingIn}
+            setLoggingIn={setLoggingIn}
+            email={email}
+            password={password}
+            setEmail={setEmail}
+            setPassword={setPassword}
+          />
+        )}
       </div>
+    </div>
+  );
+};
+
+type ConfirmEmailProps = {
+  email: string;
+};
+
+const ConfirmEmail = ({ email }: ConfirmEmailProps) => {
+  const auth = useAuthContext();
+  const nav = useNavigate();
+  const [disabled, setDisabled] = useState(false);
+
+  const handleClick = async () => {
+    try {
+      setDisabled(true);
+      await auth.resendVerification(email);
+
+      setTimeout(() => {
+        setDisabled(false);
+      }, 30000);
+    } catch (e) {
+      console.error(e);
+      setDisabled(false); // <- important
+    }
+  };
+
+  useEffect(() => {
+    if (auth.session) {
+      nav("/dashboard");
+    }
+  }, [auth.session]);
+
+  return (
+    <div>
+      <p className={styles.confirmTxt}>
+        Please check your email for a verification link to complete your sign
+        in.
+      </p>
+      <p className={styles.confirmSub}>Not seeing your email?</p>
+      <button
+        onClick={handleClick}
+        className={`${styles.inputBtn} ${styles.confirmBtn} ${
+          disabled && styles.disabled
+        }`}
+        disabled={disabled}
+      >
+        Resend Email
+      </button>
     </div>
   );
 };
@@ -31,11 +99,20 @@ export const Authentication = () => {
 type AuthFormProps = {
   loggingIn: boolean;
   setLoggingIn: Dispatch<SetStateAction<boolean>>;
+  email: string;
+  password: string;
+  setEmail: Dispatch<SetStateAction<string>>;
+  setPassword: Dispatch<SetStateAction<string>>;
 };
 
-export const AuthForm = ({ loggingIn, setLoggingIn }: AuthFormProps) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export const AuthForm = ({
+  loggingIn,
+  setLoggingIn,
+  email,
+  password,
+  setEmail,
+  setPassword,
+}: AuthFormProps) => {
   const [verifiedPassword, setVerifiedPassword] = useState("");
   const auth = useAuthContext();
 
@@ -86,7 +163,7 @@ export const AuthForm = ({ loggingIn, setLoggingIn }: AuthFormProps) => {
         )}
       </div>
 
-      <button className={styles.inputBtn} type="submit">
+      <button disabled={auth.loading} className={styles.inputBtn} type="submit">
         {loggingIn ? "Log In" : "Create Account"}
       </button>
 

@@ -7,18 +7,24 @@
 
 .contentTxtWrapper {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
-  background-color: var(--dark-bg);
   z-index: 5;
   margin-bottom: 0.5rem;
 }
 
-.contentTitle {
-  font-size: 2rem;
-  font-weight: bold;
+.classTitle {
+  font-size: 3rem;
   color: var(--text-main);
+  font-weight: bold;
+  // text-align: center;
+}
+
+.contentTitle {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: var(--text-secondary);
 
   .contentAmt {
     color: var(--text-muted);

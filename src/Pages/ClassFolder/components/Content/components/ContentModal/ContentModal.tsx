@@ -7,6 +7,9 @@ import {
   QuizQuestionType,
 } from "../../../../../../context/DataContext/types";
 import { useDataContext } from "../../../../../../context/DataContext/DataContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { Spinner } from "../../../../../../components/Spinner/Spinner";
 
 type ContentModalProps = {
   contentId: string;
@@ -37,37 +40,60 @@ export const ContentModal = ({
       ></div>
 
       <div className={styles.modalWrapper}>
-        {!content || !meta ? (
-          <div>Loading</div>
-        ) : (
-          <div>
-            <h2 className={styles.modalTitle}>{meta.title}</h2>
-
-            <div className={styles.infoWrapper}>
-              <div className={styles.infoItem}>
-                <p className={styles.infoTxt}>{meta.num_questions} Questions</p>
-              </div>
-
-              <div className={styles.infoItem}>
-                <p className={styles.infoTxt}>Last Attempt: 2 days ago</p>
-              </div>
-            </div>
-
-            <div className={styles.modalContent}>
-              <ContentList ModalContent={content} />
-              <div className={styles.contentRight}>
-                <ModalStats info={meta} />
-
-                <button
-                  className={styles.modalCta}
-                  onClick={() => nav(`/class/${classId}/quiz/${contentId}`)}
-                >
-                  Start Quiz
-                </button>
-              </div>
-            </div>
+        <div className={styles.outsideWrapper}>
+          <div className={styles.exitBtn} onClick={() => setModalActive(false)}>
+            <FontAwesomeIcon icon={faXmark} />
           </div>
-        )}
+          {!content || !meta ? (
+            <div className={styles.loadingWrapper}>
+              <Spinner />
+            </div>
+          ) : (
+            <div>
+              <h2 className={styles.modalTitle}>{meta.title}</h2>
+
+              <div className={styles.infoWrapper}>
+                <div className={styles.infoItem}>
+                  <p className={styles.infoTxt}>
+                    {meta.num_questions} Questions
+                  </p>
+                </div>
+
+                <div className={styles.infoItem}>
+                  <p className={styles.infoTxt}>Last Attempt: 2 days ago</p>
+                </div>
+              </div>
+
+              <div className={styles.modalContent}>
+                <ContentList ModalContent={content} />
+                <div className={styles.contentRight}>
+                  <ModalStats info={meta} />
+
+                  <button
+                    className={`${styles.modalCta} ${styles.startBtn}`}
+                    onClick={() =>
+                      nav(
+                        `/quiz/${data.classesById[classId].name}/${classId}/${data.quizMetaById[contentId].title}/${contentId}`
+                      )
+                    }
+                  >
+                    Start Quiz
+                  </button>
+                  <button
+                    className={`${styles.modalCta} ${styles.editBtn}`}
+                    onClick={() =>
+                      nav(
+                        `/quiz/${data.classesById[classId].name}/${classId}/${contentId}`
+                      )
+                    }
+                  >
+                    Edit Quiz
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

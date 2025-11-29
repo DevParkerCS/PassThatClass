@@ -1,11 +1,12 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import styles from "./Content.module.scss";
 import { useEffect, useState } from "react";
-import { ContentItem } from "./components/contentItem/ContentItem";
+import { ContentItem, EmptyItem } from "./components/contentItem/ContentItem";
 import { ContentModal } from "./components/ContentModal/ContentModal";
 import { useDataContext } from "../../../../context/DataContext/DataContext";
 import { ContentMeta } from "../../../../context/DataContext/types";
 import { Ctas } from "../Ctas/Ctas";
+import { Breadcrumb } from "../../../../components/Breadcrumb/Breadcrumb";
 
 type FilterType = "all" | "quiz" | "card";
 
@@ -48,7 +49,6 @@ export const Content = ({ classId }: ContentProps) => {
 
   useEffect(() => {
     const items = data.contentById[classId] ?? [];
-    console.log(items);
 
     if (filter === "all") {
       setFiltered(items);
@@ -76,39 +76,19 @@ export const Content = ({ classId }: ContentProps) => {
 
       <div style={{ width: "100%" }}>
         <div className={styles.contentTxtWrapper}>
-          <p className={styles.contentTitle}>
-            {filtered.length} {filtered.length !== 1 ? "Quizzes" : "Quiz"}
-          </p>
+          <div>
+            <p className={styles.classTitle}>
+              {data.classesById[classId]?.name}
+            </p>
+            <p className={styles.contentTitle}>
+              {filtered.length} {filtered.length !== 1 ? "Quizzes" : "Quiz"}
+            </p>
+          </div>
 
-          <Ctas id={classId} />
+          <Ctas classId={classId} />
         </div>
 
-        {/* Uncomment For Filtering 
-          
-          <p
-            className={`${styles.contentFilter} ${
-              filter === "all" && styles.active
-            }`}
-            onClick={() => setFilter("all")}
-          >
-            All
-          </p>
-          <p
-            className={`${styles.contentFilter} ${
-              filter === "quiz" && styles.active
-            }`}
-            onClick={() => setFilter("quiz")}
-          >
-            Quizzes
-          </p>
-          <p
-            className={`${styles.contentFilter} ${
-              filter === "card" && styles.active
-            }`}
-            onClick={() => setFilter("card")}
-          >
-            Cards
-          </p> */}
+        {filtered.length === 0 && <EmptyItem classId={classId} />}
 
         <div className={styles.itemsOuter}>
           <div className={styles.itemsWrapper}>

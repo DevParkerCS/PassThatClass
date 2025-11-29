@@ -17,7 +17,7 @@
 .classWrapper {
   padding: 2rem 1rem;
   background-color: var(--first-layer);
-  width: 300px;
+  width: calc(100% / 4 - 1rem);
   border-radius: var(--mid-radius);
   border: 2px solid var(--light-border);
   box-shadow: $dark-shadow;
@@ -58,7 +58,35 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 2rem;
-  width: calc(300px * 4 + 3rem);
+  width: var(--app-width);
   flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.headingWrapper {
+  margin: 0 auto;
+  margin-top: 1.5rem;
+  width: var(--app-width);
+  border-bottom: 2px solid var(--light-border);
+  padding-bottom: 1.5rem;
+
+  .heading {
+    font-size: 2rem;
+    color: var(--text-secondary);
+    text-align: center;
+  }
+}
+
+.emptyWrapper {
+  margin-top: 0.5rem;
+
+  .emptyTxt {
+    font-size: 1.25rem;
+    color: var(--text-main);
+    text-align: center;
+  }
+
+  .secTxt {
+    color: var(--text-secondary);
+  }
 }

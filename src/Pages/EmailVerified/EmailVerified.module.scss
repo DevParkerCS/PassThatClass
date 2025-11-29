@@ -1,0 +1,43 @@
+@import "../../styles/variables.module.scss";
+
+.contentWrapper {
+  width: 500px;
+  background-color: var(--first-layer);
+  margin: 0 auto;
+  margin-top: 2rem;
+  padding: 1rem;
+  border-radius: var(--mid-radius);
+  box-shadow: $dark-shadow;
+  border: 2px solid var(--light-border);
+}
+
+.title {
+  margin-top: 1rem;
+  font-size: 2rem;
+  color: var(--text-main);
+  text-align: center;
+}
+
+.txt {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.ctaBtn {
+  font-size: 1.25rem;
+  margin-top: 1rem;
+  width: 100%;
+  border-radius: var(--mid-radius);
+  padding: 0.5rem;
+  background-color: var(--cyan-soft);
+  color: var(--text-main);
+  border: 2px solid var(--light-border);
+  transition: all 0.1s linear;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--cyan-accent);
+  }
+}

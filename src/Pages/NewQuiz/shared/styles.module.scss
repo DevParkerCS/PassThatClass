@@ -1,11 +1,17 @@
 .inputLabel {
   font-size: 1.5rem;
   color: var(--text-secondary);
-  margin-bottom: 0.5rem;
   width: fit-content;
 }
+
 .inputWrapper {
   display: flex;
   flex-direction: column;
   width: 50%;
+  margin-top: 0.5rem;
+}
+
+.inputNote {
+  color: var(--text-muted);
+  line-height: 1rem;
 }

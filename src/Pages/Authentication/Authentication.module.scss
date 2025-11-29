@@ -8,6 +8,7 @@
   padding: 1rem;
   border-radius: var(--mid-radius);
   box-shadow: $dark-shadow;
+  border: 2px solid var(--light-border);
 }
 
 .authTitle {
@@ -51,21 +52,48 @@
   }
 }
 
+.confirmTxt {
+  font-size: 1.5rem;
+  color: var(--text-main);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.confirmSub {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
 .inputBtn {
   font-size: 1.25rem;
   padding: 0.5rem;
   border-radius: var(--mid-radius);
-  color: var(--text-secondary);
+  color: var(--text-main);
+  font-weight: bold;
   cursor: pointer;
-  background-color: var(--third-layer);
+  background-color: var(--cyan-soft);
   border: 2px solid var(--highlight-border);
   transition: all 0.1s linear;
   box-shadow: $sm-dark-shadow;
   width: 100%;
   margin: 2rem 0rem 1rem 0rem;
 
+  &.confirmBtn {
+    margin-top: 1rem;
+  }
+
+  &.disabled {
+    background-color: var(--cyan-trans);
+    color: var(--text-muted);
+
+    &:hover {
+      background-color: var(--cyan-trans);
+    }
+  }
+
   &:hover {
-    background-color: var(--third-highlight);
+    background-color: var(--cyan-accent);
   }
 }
 
@@ -74,6 +102,8 @@
   text-align: center;
 
   .cta {
+    color: var(--cyan-accent);
+
     font-weight: bold;
     cursor: pointer;
   }

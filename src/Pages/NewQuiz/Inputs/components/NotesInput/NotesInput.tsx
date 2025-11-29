@@ -15,7 +15,7 @@ export const NotesInput = ({ setInput, input }: NotesInputProps) => {
       <label className={shared.inputLabel} htmlFor="notes-paste">
         Paste Notes
       </label>
-      <p className={styles.characterNote}>
+      <p className={shared.inputNote}>
         * We Will Use Up To The First 20,000 Characters Of Notes
       </p>
       <textarea

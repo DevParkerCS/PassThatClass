@@ -7,21 +7,40 @@ import { Ctas } from "./components/Ctas/Ctas";
 import { Content } from "./components/Content/Content";
 import { useEffect, useState } from "react";
 import { useDataContext } from "../../context/DataContext/DataContext";
+import { useAuthContext } from "../../context/AuthContext/AuthContext";
+import { Spinner } from "../../components/Spinner/Spinner";
 
 export const ClassFolder = () => {
-  const { id } = useParams<{ id: string }>();
+  const { classId } = useParams<{ classId: string }>();
   const data = useDataContext();
+  const auth = useAuthContext();
+  const nav = useNavigate();
+
+  const hasContentForClass = !!(classId && data.contentById[classId]);
 
   useEffect(() => {
-    if (!id || data.contentById[id]) {
-      console.log("no call");
+    if (!classId) return;
+
+    // 1) Auth redirect
+    if (!auth.loading && !auth.session) {
+      nav("/login");
       return;
     }
 
-    data.loadContent(id);
-  }, []);
+    // 2) Load content once per class (only when authenticated and not yet loaded)
+    if (!auth.loading && auth.session && !hasContentForClass) {
+      data.loadContent(classId);
+    }
+  }, [
+    auth.loading,
+    auth.session,
+    classId,
+    hasContentForClass,
+    data.loadContent,
+    nav,
+  ]);
 
-  if (!id) {
+  if (!classId) {
     return <div>Class not found</div>;
   }
 
@@ -29,16 +48,15 @@ export const ClassFolder = () => {
     <div>
       <Nav />
       <div className={styles.folderWrapper}>
-        <p className={styles.classTitle}>{data.classesById[id]?.name}</p>
+        <Breadcrumb />
 
-        <div className={styles.breadcrumbWrapper}>
-          <Breadcrumb />
-        </div>
-
-        {/* <div className={styles.searchWrapper}>
-          <SearchBar p="Search Quizzes and Flashcards" />
-        </div> */}
-        <Content classId={id || ""} />
+        {auth.loading || !data.contentById[classId] ? (
+          <div>
+            <Spinner />
+          </div>
+        ) : (
+          <Content classId={classId || ""} />
+        )}
       </div>
     </div>
   );

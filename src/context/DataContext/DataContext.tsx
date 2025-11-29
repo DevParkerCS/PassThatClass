@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import {
   ClassesById,
   ClassMeta,
@@ -14,6 +14,7 @@ import {
 } from "./types";
 import { fetchClasses, fetchContent } from "./utils";
 import { useAuthContext } from "../AuthContext/AuthContext";
+import { useShallowMemo } from "../../hooks/useShallowMemo";
 
 export const DataContext = createContext<DataState | null>(null);
 
@@ -37,10 +38,12 @@ export const DataProvider = ({ children }: DataProviderProps) => {
   const [contentById, setContentById] = useState<ContentById>({});
   const [questionsById, setQuestionsById] = useState<QuestionsById>({});
   const [quizMetaById, setQuizMetaById] = useState<QuizMetaById>({});
+  const classesFetched = useRef(false);
   const auth = useAuthContext();
 
   useEffect(() => {
-    if (!auth.loading && auth.session) {
+    if (!auth.loading && auth.session && !classesFetched.current) {
+      classesFetched.current = true;
       fetchClasses(setClassesById, setClasses, auth.session?.access_token);
     }
   }, [auth.loading, auth.session]);
@@ -94,21 +97,66 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     setQuizMetaById((prev) => ({ ...prev, [quizId]: data.quizInfo }));
   };
 
-  const AddNewQuiz = async (formData: FormData, classId: string) => {
-    const res = await axios.post(
-      `${process.env.REACT_APP_BACKEND_API}/quiz/from-notes`,
-      formData,
+  const AddNewQuiz = async (params: {
+    classId: string;
+    chosenGrade: string;
+    files: File[];
+    input: string;
+    numQuestions: number;
+    genExample: boolean;
+  }): Promise<QuizMeta> => {
+    const { classId, chosenGrade, files, input, numQuestions, genExample } =
+      params;
+
+    if (!auth.session) {
+      throw new Error("No active session");
+    }
+
+    const token = auth.session.access_token;
+
+    // ---------- 1) OCR STEP ----------
+    const ocrFormData = new FormData();
+    ocrFormData.append("notesText", input);
+
+    files.forEach((file) => {
+      ocrFormData.append("images", file);
+    });
+
+    const ocrRes = await axios.post(
+      `${process.env.REACT_APP_BACKEND_API}/quiz/from-notes/ocr`,
+      ocrFormData,
       {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: auth.session?.access_token
-            ? `Bearer ${auth.session.access_token}`
-            : "",
+          Authorization: `Bearer ${token}`,
         },
       }
     );
 
-    const data = res.data;
+    const { combinedNotes } = ocrRes.data as {
+      combinedNotes: string;
+      typedNotes: string;
+      ocrText: string;
+    };
+
+    // ---------- 2) QUIZ GENERATION STEP ----------
+    const generateRes = await axios.post(
+      `${process.env.REACT_APP_BACKEND_API}/quiz/from-notes`,
+      {
+        notesText: combinedNotes,
+        gradeLevel: chosenGrade,
+        numQuestions,
+        classId,
+        genExample,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = generateRes.data;
     const quizData: QuizMeta = data.quiz;
     const questions: QuizQuestionType[] = data.questions;
 
@@ -120,9 +168,10 @@ export const DataProvider = ({ children }: DataProviderProps) => {
       type: "quiz",
     };
 
+    // ---- update local state caches ----
     setQuizMetaById((prev) => ({
       ...prev,
-      [quizData.id]: quizData, // also use quizData.id, not data.id
+      [quizData.id]: quizData,
     }));
 
     setContentById((prev) => ({
@@ -134,26 +183,23 @@ export const DataProvider = ({ children }: DataProviderProps) => {
       ...prev,
       [quizData.id]: questions,
     }));
-    console.log(quizData.id);
 
     return quizData;
   };
 
+  const dataMemo = useShallowMemo({
+    classes,
+    classesById,
+    contentById,
+    loadContent,
+    fetchQuizContent,
+    questionsById,
+    quizMetaById,
+    AddClass,
+    AddNewQuiz,
+  });
+
   return (
-    <DataContext.Provider
-      value={{
-        classes,
-        classesById,
-        contentById,
-        loadContent,
-        fetchQuizContent,
-        questionsById,
-        quizMetaById,
-        AddClass,
-        AddNewQuiz,
-      }}
-    >
-      {children}
-    </DataContext.Provider>
+    <DataContext.Provider value={dataMemo}>{children}</DataContext.Provider>
   );
 };

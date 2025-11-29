@@ -18,6 +18,14 @@
   border: 2px solid var(--light-border);
   transition: all 0.1s linear;
 
+  &.emptyItem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 1rem;
+  }
+
   &:hover {
     border: 2px solid var(--highlight-border);
     background-color: var(--sec-layer);

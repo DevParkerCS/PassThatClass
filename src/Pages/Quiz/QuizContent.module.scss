@@ -4,8 +4,8 @@
 }
 
 body {
-  height: 100vh;
-  background-color: var(--dark-bg);
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #0b1728 0%, var(--dark-bg) 100%);
 }
 
 .quizWrapper {

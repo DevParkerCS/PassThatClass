@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import styles from "./ContentModal.module.scss";
 import { useNavigate } from "react-router-dom";
 import {
@@ -108,14 +108,46 @@ export const ContentList = ({ ModalContent }: ModalContentProps) => {
     <div className={styles.modalListWrapper}>
       <div className={styles.modalList}>
         {ModalContent.map((c, i) => (
-          <div className={styles.listItem} key={i}>
-            <p className={styles.itemTxt}>
-              <span className={styles.itemIndex}>{i + 1}</span>
-              {c.question}
-            </p>
-          </div>
+          <ListItem itemContent={c} key={i} index={i} />
         ))}
       </div>
+    </div>
+  );
+};
+
+type ListItemProps = {
+  itemContent: QuizQuestionType;
+  index: number;
+};
+
+export const ListItem = ({ itemContent, index }: ListItemProps) => {
+  const [displayHover, setDisplayHover] = useState(false);
+  const timeoutId = useRef<number>(-1);
+
+  const handleHover = () => {
+    timeoutId.current = window.setTimeout(() => {
+      setDisplayHover(true);
+    }, 500);
+  };
+
+  const handleExit = () => {
+    clearTimeout(timeoutId.current);
+    setDisplayHover(false);
+  };
+
+  return (
+    <div className={styles.listItem} key={index}>
+      <div className={`${styles.itemHover} ${displayHover && styles.active}`}>
+        <p className={styles.itemHoverTxt}>{itemContent.question}</p>
+      </div>
+      <p
+        className={styles.itemTxt}
+        onMouseEnter={handleHover}
+        onMouseLeave={handleExit}
+      >
+        <span className={styles.itemIndex}>{index + 1}</span>
+        {itemContent.question}
+      </p>
     </div>
   );
 };
@@ -218,7 +250,6 @@ export const DeleteModal = ({
             <div>
               <p className={styles.exitTxt}>Are you sure you want to delete </p>
               <p className={`${styles.exitTxt} ${styles.exitName}`}>{title}</p>
-
               <div className={styles.exitBtns}>
                 <button
                   className={`${styles.exitCta} ${styles.cancel}`}

@@ -37,14 +37,14 @@
     width: 200px;
     border-radius: var(--mid-radius);
     border: 2px solid var(--highlight-border);
-    background-color: var(--third-layer);
+    background-color: var(--cyan-soft);
     cursor: pointer;
-    color: var(--cyan-accent);
+    color: var(--text-main);
     box-shadow: $sm-dark-shadow;
     transition: all 0.1s linear;
 
     &:hover {
-      background-color: var(--third-highlight);
+      background-color: var(--cyan-accent);
     }
   }
 }

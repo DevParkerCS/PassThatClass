@@ -3,7 +3,7 @@ import styles from "./Pricing.module.scss";
 
 export const Pricing = () => {
   return (
-    <div className={shared.section}>
+    <div className={shared.section} id="pricing">
       <div className={shared.sectionContent}>
         <h2 className={shared.title}>Pricing</h2>
         <p className={shared.subtitle}>
@@ -19,8 +19,8 @@ export const Pricing = () => {
 
             <ul className={shared.cardList}>
               <li className={shared.listItem}>
-                Generate <span className={shared.itemBold}>1 quiz</span> per
-                month from notes
+                Generate <span className={shared.itemBold}>5 quizzes</span> from
+                notes
               </li>
               <li className={shared.listItem}>
                 Up to <span className={shared.itemBold}>5000 characters</span>{" "}

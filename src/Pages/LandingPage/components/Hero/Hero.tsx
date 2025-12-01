@@ -13,7 +13,9 @@ export const Hero = () => {
           Generate practice quizzes from your notes in seconds
         </p>
 
-        <button className={styles.cta}>Start For Free</button>
+        <a href="#pricing">
+          <button className={styles.cta}>Start For Free</button>
+        </a>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { QuizStatusBar } from "./components/QuizStatusBar/QuizStatusBar";
 import { QuizQuestion } from "./components/QuizQuestion/QuizQuestion";
 import { QuizButtons } from "./components/QuizButtons/QuizButtons";
@@ -9,42 +9,30 @@ import { Breadcrumb } from "../../../../components/Breadcrumb/Breadcrumb";
 import { useDataContext } from "../../../../context/DataContext/DataContext";
 import { useParams } from "react-router-dom";
 import { QuizQuestionType } from "../../../../context/DataContext/types";
+import { useAuthContext } from "../../../../context/AuthContext/AuthContext";
 
 type QuizProps = {
   mode: QuizMode;
   setMode: React.Dispatch<React.SetStateAction<QuizMode>>;
   setNumCorrect: React.Dispatch<React.SetStateAction<number>>;
-  id: string;
+  questions: QuizQuestionType[];
 };
 
-export const Quiz = ({ mode, setMode, setNumCorrect, id }: QuizProps) => {
+export const Quiz = ({
+  mode,
+  setMode,
+  setNumCorrect,
+  questions,
+}: QuizProps) => {
   const [qIndex, setQIndex] = useState(0);
   const [canGoNext, setCanGoNext] = useState(false);
-  const [isReviewing, setisReviewing] = useState(false);
-  const [questions, setQuestions] = useState<QuizQuestionType[]>([]);
   const [wrongIndexes, setWrongIndexes] = useState<number[]>([]);
+  const auth = useAuthContext();
 
   const data = useDataContext();
-  useEffect(() => {
-    if (data.questionsById[id]) {
-      setQuestions(data.questionsById[id]);
-      return;
-    }
-
-    data.fetchQuizContent(id);
-  }, [data.questionsById]);
 
   return (
-    <div
-      className={shared.contentWrapper}
-      style={{ width: "var(--app-width)" }}
-    >
-      {/* <h2 className={shared.quizTitle}>{data.quizMetaById[id].title}</h2> */}
-
-      <div className={styles.breadcrumbWrapper}>
-        <Breadcrumb />
-      </div>
-
+    <div className={shared.contentWrapper}>
       <div className={styles.quizWrapper}>
         <QuizStatusBar qIndex={qIndex} questions={questions} />
 

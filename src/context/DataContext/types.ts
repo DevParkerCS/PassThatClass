@@ -9,6 +9,7 @@ export type DataState = {
   AddClass: (name: string) => Promise<void>;
   callClasses: () => void;
   deleteQuiz: (quizId: string, classId: string) => Promise<void>;
+  quizLoading: boolean;
   classesLoading: boolean;
   classesError: string;
   questionsById: QuestionsById;

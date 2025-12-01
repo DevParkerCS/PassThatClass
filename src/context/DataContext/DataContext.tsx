@@ -47,6 +47,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
   const [questionsById, setQuestionsById] = useState<QuestionsById>({});
   const [quizMetaById, setQuizMetaById] = useState<QuizMetaById>({});
   const [classesLoading, setClassesLoading] = useState(false);
+  const [quizLoading, setQuizLoading] = useState(false);
   const classesFetched = useRef(false);
   const [classesError, setClassesError] = useState("");
   const auth = useAuthContext();
@@ -153,19 +154,26 @@ export const DataProvider = ({ children }: DataProviderProps) => {
       return;
     }
 
-    const res = await axios.get(
-      `${process.env.REACT_APP_BACKEND_API}/quiz/questions/${quizId}`,
-      {
-        headers: {
-          Authorization: auth.session?.access_token
-            ? `Bearer ${auth.session.access_token}`
-            : "",
-        },
-      }
-    );
-    const data: QuizContentFetch = res.data;
-    setQuestionsById((prev) => ({ ...prev, [quizId]: data.questions }));
-    setQuizMetaById((prev) => ({ ...prev, [quizId]: data.quizInfo }));
+    try {
+      setQuizLoading(true);
+      const res = await axios.get(
+        `${process.env.REACT_APP_BACKEND_API}/quiz/questions/${quizId}`,
+        {
+          headers: {
+            Authorization: auth.session?.access_token
+              ? `Bearer ${auth.session.access_token}`
+              : "",
+          },
+        }
+      );
+      setQuizLoading(false);
+      const data: QuizContentFetch = res.data;
+      setQuestionsById((prev) => ({ ...prev, [quizId]: data.questions }));
+      setQuizMetaById((prev) => ({ ...prev, [quizId]: data.quizInfo }));
+    } catch (e) {
+      setQuizLoading(false);
+      throw e;
+    }
   };
 
   const AddNewQuiz = async (params: {
@@ -336,6 +344,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     classesError,
     questionsById,
     quizMetaById,
+    quizLoading,
     AddClass,
     AddNewQuiz,
   });

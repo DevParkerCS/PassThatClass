@@ -1,12 +1,5 @@
-* {
-  margin: 0;
-  box-sizing: border-box;
-}
-
-.quizWrapper {
-  display: none;
-
-  &.active {
-    display: block;
-  }
+.contentWrapper {
+  width: var(--app-width);
+  margin: 0 auto;
+  margin-top: 2rem;
 }

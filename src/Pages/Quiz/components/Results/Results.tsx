@@ -34,8 +34,6 @@ export const Results = ({
         <p className={styles.resultTxt}>Nice Work, You Crushed This!</p>
       </div>
 
-      <Breadcrumb />
-
       <div className={styles.resultsWrapper}>
         <ResultsCircle numCorrect={numCorrect} length={questions.length} />
 

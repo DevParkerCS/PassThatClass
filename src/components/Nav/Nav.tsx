@@ -33,7 +33,7 @@ export const Nav = () => {
           </p>
         ) : (
           <p className={styles.navItem} onClick={() => nav("/login")}>
-            Log In
+            Login/Signup
           </p>
         )}
 

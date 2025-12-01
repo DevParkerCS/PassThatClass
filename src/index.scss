@@ -7,10 +7,13 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #0b1728 0%, var(--dark-bg) 100%);
 }
 
 html {
   @include mixins.scrollbar;
+  scroll-behavior: smooth;
 }
 
 code {

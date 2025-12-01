@@ -20,6 +20,7 @@ export type DataState = {
     input: string;
     numQuestions: number;
     genExample: boolean;
+    setRunningOcr: Dispatch<SetStateAction<boolean>>;
   }) => Promise<QuizMeta>;
 };
 

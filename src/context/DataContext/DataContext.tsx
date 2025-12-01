@@ -1,5 +1,13 @@
 import axios from "axios";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   ClassesById,
   ClassMeta,
@@ -167,9 +175,17 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     input: string;
     numQuestions: number;
     genExample: boolean;
+    setRunningOcr: Dispatch<SetStateAction<boolean>>;
   }): Promise<QuizMeta> => {
-    const { classId, chosenGrade, files, input, numQuestions, genExample } =
-      params;
+    const {
+      classId,
+      chosenGrade,
+      files,
+      input,
+      numQuestions,
+      genExample,
+      setRunningOcr,
+    } = params;
 
     if (!auth.session) {
       throw new Error("No active session");
@@ -177,52 +193,111 @@ export const DataProvider = ({ children }: DataProviderProps) => {
 
     const token = auth.session.access_token;
 
-    // ---------- 1) OCR STEP ----------
-    const ocrFormData = new FormData();
-    ocrFormData.append("notesText", input);
+    // Build one FormData for the combined /from-notes endpoint
+    const formData = new FormData();
+    formData.append("notesText", input);
+    formData.append("gradeLevel", chosenGrade);
+    formData.append("numQuestions", String(numQuestions));
+    formData.append("classId", classId);
+    formData.append("genExample", String(genExample));
 
     files.forEach((file) => {
-      ocrFormData.append("images", file);
+      formData.append("images", file);
     });
 
-    const ocrRes = await axios.post(
-      `${process.env.REACT_APP_BACKEND_API}/quiz/from-notes/ocr`,
-      ocrFormData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    // ----- Single streaming request -----
+    // We use fetch here because axios in the browser doesn't handle streaming nicely.
+    setRunningOcr(true);
 
-    const { combinedNotes } = ocrRes.data as {
-      combinedNotes: string;
-      typedNotes: string;
-      ocrText: string;
-    };
-
-    // ---------- 2) QUIZ GENERATION STEP ----------
-    const generateRes = await axios.post(
+    const response = await fetch(
       `${process.env.REACT_APP_BACKEND_API}/quiz/from-notes`,
       {
-        notesText: combinedNotes,
-        gradeLevel: chosenGrade,
-        numQuestions,
-        classId,
-        genExample,
-      },
-      {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
+          // Do NOT set Content-Type here; the browser will handle the multipart boundary.
         },
+        body: formData,
       }
     );
 
-    const data = generateRes.data;
-    const quizData: QuizMeta = data.quiz;
-    const questions: QuizQuestionType[] = data.questions;
+    if (!response.body) {
+      setRunningOcr(false);
+      throw new Error("Streaming response not supported by the browser");
+    }
 
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    let buffer = "";
+    let quizDataNull: QuizMeta | null = null;
+    let questions: QuizQuestionType[] = [];
+    let encounteredError: string | null = null;
+
+    // Read the NDJSON stream line-by-line
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || ""; // keep any partial line for the next chunk
+
+      for (const line of lines) {
+        if (!line.trim()) continue;
+
+        let msg: any;
+        try {
+          msg = JSON.parse(line);
+        } catch (e) {
+          console.error("Failed to parse streaming line:", line, e);
+          continue;
+        }
+
+        switch (msg.stage) {
+          case "ocr_started":
+            // You could also set some local "status" state here if you add it later
+            // e.g., setStatus("Parsing images…");
+            setRunningOcr(true);
+            break;
+
+          case "ocr_done":
+            setRunningOcr(false);
+            break;
+
+          case "quiz_started":
+            break;
+
+          case "quiz_done":
+            quizDataNull = msg.quiz as QuizMeta;
+            questions = msg.questions as QuizQuestionType[];
+            break;
+
+          case "error":
+            console.error("Error from /quiz/from-notes:", msg);
+            encounteredError = msg.error || "Failed to generate quiz";
+            setRunningOcr(false);
+            break;
+
+          default:
+            console.warn("Unknown stage message:", msg);
+        }
+      }
+    }
+
+    if (encounteredError) {
+      throw new Error(encounteredError);
+    }
+
+    if (!quizDataNull) {
+      setRunningOcr(false);
+      throw new Error("Quiz generation did not complete");
+    }
+
+    const quizData: QuizMeta = quizDataNull;
+
+    // ---- update local state caches ----
     const contentMeta: ContentMeta = {
       id: quizData.id,
       last_used_at: quizData.last_taken_at,
@@ -231,7 +306,6 @@ export const DataProvider = ({ children }: DataProviderProps) => {
       type: "quiz",
     };
 
-    // ---- update local state caches ----
     setQuizMetaById((prev) => ({
       ...prev,
       [quizData.id]: quizData,

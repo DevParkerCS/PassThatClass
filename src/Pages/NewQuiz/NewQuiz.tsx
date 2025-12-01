@@ -57,8 +57,6 @@ export const NewQuiz = () => {
     }
 
     setSubmitionState("generating");
-    setRunningOcr(true);
-
     try {
       const qd = await data.AddNewQuiz({
         classId,
@@ -67,9 +65,8 @@ export const NewQuiz = () => {
         input,
         numQuestions,
         genExample,
+        setRunningOcr,
       });
-
-      setRunningOcr(false);
 
       // fix the URL: /class/:className/:classId
       const className = data.classesById[classId].name;

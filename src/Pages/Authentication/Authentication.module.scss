@@ -2,20 +2,34 @@
 
 .authWrapper {
   width: 500px;
-  background-color: var(--first-layer);
+  background: linear-gradient(180deg, #181f29 0%, #111822 100%);
   margin: 0 auto;
   margin-top: 2rem;
   padding: 1rem;
   border-radius: var(--mid-radius);
   box-shadow: $dark-shadow;
-  border: 2px solid var(--light-border);
+
+  &.loading {
+    pointer-events: none;
+  }
 }
 
-.authTitle {
-  font-size: 2rem;
-  color: var(--text-main);
-  text-align: center;
+.titleWrapper {
   margin-bottom: 2rem;
+
+  .authTitle {
+    font-size: 2.5rem;
+    color: var(--text-main);
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-top: 1rem;
+  }
 }
 
 .inputsWrapper {
@@ -25,26 +39,31 @@
 }
 
 .inputWrapper {
-  background-color: var(--sec-layer);
-  padding: 0.5rem;
+  background-color: var(--navy-dark);
+  padding: 1rem;
   border-radius: var(--mid-radius);
   display: flex;
   flex-direction: column;
-  box-shadow: $sm-dark-shadow;
+  border: 2px solid var(--light-border);
+
+  &.loading {
+    background-color: var(--dark-bg);
+    pointer-events: none;
+  }
 
   .inputLabel {
-    font-size: 1.15rem;
+    font-size: 1.25rem;
     color: var(--text-main);
     margin-bottom: 0.25rem;
   }
 
   .input {
-    border: 2px solid var(--light-border);
-    background-color: var(--dark-bg);
+    border: none;
     font-size: 1.25rem;
-    padding: 0.5rem;
-    border-radius: var(--mid-radius);
-    color: var(--text-secondary);
+    color: var(--text-main);
+    background-color: transparent;
+    margin-top: 1rem;
+    outline: none;
 
     &::placeholder {
       color: var(--text-secondary);
@@ -52,59 +71,41 @@
   }
 }
 
-.confirmTxt {
-  font-size: 1.5rem;
-  color: var(--text-main);
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.confirmSub {
-  font-size: 1.25rem;
-  color: var(--text-secondary);
-  text-align: center;
-}
-
 .inputBtn {
   font-size: 1.25rem;
-  padding: 0.5rem;
+  padding: 1rem;
   border-radius: var(--mid-radius);
-  color: var(--text-main);
-  font-weight: bold;
+  color: var(--text-secondary);
   cursor: pointer;
   background-color: var(--cyan-soft);
-  border: 2px solid var(--highlight-border);
+  border: none;
   transition: all 0.1s linear;
   box-shadow: $sm-dark-shadow;
   width: 100%;
   margin: 2rem 0rem 1rem 0rem;
-
-  &.confirmBtn {
-    margin-top: 1rem;
-  }
-
-  &.disabled {
-    background-color: var(--cyan-trans);
-    color: var(--text-muted);
-
-    &:hover {
-      background-color: var(--cyan-trans);
-    }
-  }
+  font-weight: bold;
 
   &:hover {
+    transform: scale(1.01);
+    font-size: 1.26rem;
     background-color: var(--cyan-accent);
+  }
+
+  &.loading {
+    background-color: var(--cyan-trans);
+    transform: scale(1);
+    cursor: pointer;
+    pointer-events: none;
   }
 }
 
 .ctaTxt {
-  color: var(--text-secondary);
+  color: var(--text-main);
   text-align: center;
 
   .cta {
-    color: var(--cyan-accent);
-
     font-weight: bold;
     cursor: pointer;
+    color: var(--cyan-accent);
   }
 }

@@ -21,14 +21,24 @@ export const Authentication = () => {
   return (
     <div>
       <Nav />
-      <div className={styles.authWrapper}>
-        <p className={styles.authTitle}>
-          {auth.needsVerify
-            ? "Check Your Email"
-            : loggingIn
-            ? "Log In"
-            : "Sign Up"}
-        </p>
+      <div
+        className={`${styles.authWrapper} ${auth.loading && styles.loading}`}
+      >
+        {loggingIn ? (
+          <div className={styles.titleWrapper}>
+            <p className={styles.authTitle}>Log In</p>
+            <p className={styles.subtitle}>
+              Welcome back! Let's pass that class.
+            </p>
+          </div>
+        ) : (
+          <div className={styles.titleWrapper}>
+            <p className={styles.authTitle}>Sign Up</p>
+            <p className={styles.subtitle}>
+              New here? Let’s help you pass that class.
+            </p>
+          </div>
+        )}
 
         {auth.needsVerify ? (
           <ConfirmEmail email={email} />
@@ -163,7 +173,11 @@ export const AuthForm = ({
         )}
       </div>
 
-      <button disabled={auth.loading} className={styles.inputBtn} type="submit">
+      <button
+        disabled={auth.loading}
+        className={`${styles.inputBtn} ${auth.loading && styles.loading}`}
+        type="submit"
+      >
         {loggingIn ? "Log In" : "Create Account"}
       </button>
 
@@ -186,12 +200,17 @@ type InputProps = {
 };
 
 const Input = ({ value, setValue, type, title, placeholder }: InputProps) => {
+  const auth = useAuthContext();
+
   return (
-    <div className={styles.inputWrapper}>
-      <label className={styles.inputLabel}>{title}</label>
+    <div className={`${styles.inputWrapper} ${auth.loading && styles.loading}`}>
+      <label className={styles.inputLabel} htmlFor={title}>
+        {title}
+      </label>
       <input
+        id={title}
         type={type}
-        className={styles.input}
+        className={`${styles.input}`}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}

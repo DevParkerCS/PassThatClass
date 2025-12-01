@@ -82,8 +82,6 @@ export const Dashboard = () => {
   const showError = !classesLoading && !!classesError;
   const showList = !classesLoading && !classesError && classes.length > 0;
 
-  console.log(classesLoading);
-
   return (
     <div>
       <Nav />

@@ -2,4 +2,15 @@
   width: var(--app-width);
   margin: 0 auto;
   margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.breadcrumbWrapper {
+  width: 100%;
+}
+
+.quizWrapper {
+  width: 100%;
 }

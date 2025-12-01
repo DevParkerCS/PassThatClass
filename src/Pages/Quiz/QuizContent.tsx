@@ -8,6 +8,7 @@ import { useAuthContext } from "../../context/AuthContext/AuthContext";
 import { useDataContext } from "../../context/DataContext/DataContext";
 import { QuizQuestionType } from "../../context/DataContext/types";
 import { Breadcrumb } from "../../components/Breadcrumb/Breadcrumb";
+import { Spinner } from "../../components/Spinner/Spinner";
 
 export type QuizMode = "answering" | "reviewing" | "results";
 
@@ -16,6 +17,8 @@ export const QuizContent = () => {
   const [numCorrect, setNumCorrect] = useState(0);
   const { classId, quizId } = useParams<{ classId: string; quizId: string }>();
   const [questions, setQuestions] = useState<QuizQuestionType[]>([]);
+  const [timeSeconds, setTimeSeconds] = useState(0);
+  const startTime = useRef(-1);
   const quizzesFetched = useRef(false);
   const auth = useAuthContext();
   const data = useDataContext();
@@ -26,16 +29,24 @@ export const QuizContent = () => {
       quizzesFetched.current = true;
       data.fetchQuizContent(quizId);
     }
-  }, [auth.loading, auth.session]);
+  }, [auth.loading, auth.session, quizId]);
 
   useEffect(() => {
     if (quizId && data.questionsById[quizId]) {
       setQuestions(data.questionsById[quizId]);
     }
-  }, [data.questionsById]);
+  }, [data.questionsById, quizId]);
 
   useEffect(() => {
-    if (mode === "answering") setNumCorrect(0);
+    if (mode === "answering") {
+      setNumCorrect(0);
+      startTime.current = Date.now();
+    } else if (mode === "results" && startTime.current !== -1) {
+      const end = Date.now();
+      const elapsed = end - startTime.current;
+      startTime.current = -1;
+      setTimeSeconds(Math.round(elapsed / 1000));
+    }
   }, [mode]);
 
   useEffect(() => {
@@ -57,8 +68,10 @@ export const QuizContent = () => {
           <Breadcrumb />
         </div>
 
+        {data.quizLoading && <Spinner txt="Loading Quiz..." size="l" />}
+
         {!data.quizLoading && mode !== "results" && (
-          <div className={`${styles.quizWrapper}`}>
+          <div className={styles.quizWrapper}>
             <Quiz
               mode={mode}
               setMode={setMode}
@@ -73,6 +86,8 @@ export const QuizContent = () => {
             numCorrect={numCorrect}
             classId={classId}
             quizId={quizId}
+            time={timeSeconds}
+            quizLength={questions.length}
           />
         )}
       </div>

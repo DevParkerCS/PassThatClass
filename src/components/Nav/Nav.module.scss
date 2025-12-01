@@ -14,6 +14,11 @@
 .navTitle {
   color: var(--text-main);
   cursor: pointer;
+  transition: all 0.1s linear;
+
+  &:hover {
+    color: var(--cyan-accent);
+  }
 }
 
 .navItems {
@@ -24,5 +29,10 @@
     margin: 0rem 1rem;
     font-size: 1.25rem;
     cursor: pointer;
+    transition: all 0.1s linear;
+
+    &:hover {
+      color: var(--cyan-accent);
+    }
   }
 }

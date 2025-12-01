@@ -7,9 +7,8 @@ export const Pricing = () => {
       <div className={shared.sectionContent}>
         <h2 className={shared.title}>Pricing</h2>
         <p className={shared.subtitle}>
-          Sign up today and get an extra{" "}
-          <span className={shared.highlight}>5 free</span> quiz generations on
-          us!
+          Sign up today and get <span className={shared.highlight}>5 free</span>{" "}
+          quiz generations on us!
         </p>
 
         <div className={styles.sectionCardsWrapper}>

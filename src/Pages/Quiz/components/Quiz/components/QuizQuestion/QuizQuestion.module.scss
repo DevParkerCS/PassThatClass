@@ -2,6 +2,7 @@
 
 .questionWrapper {
   flex: 1;
+  min-width: 0;
   &.inactive {
     display: none;
   }
@@ -16,6 +17,9 @@
     color: var(--text-main);
     font-weight: bold;
     text-align: center;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -40,7 +44,9 @@
 .optionWrapper {
   background-color: var(--sec-layer);
   display: flex;
+  align-items: flex-start;
   width: 95%;
+  max-width: 95%;
   padding: 1rem;
   border-radius: 25px;
   cursor: pointer;
@@ -88,10 +94,15 @@
 
   .optionAnswer {
     color: var(--text-secondary);
+    flex: 1;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   .optionID {
     margin-right: 1rem;
     color: var(--cyan-soft);
+    flex-shrink: 0;
   }
 }

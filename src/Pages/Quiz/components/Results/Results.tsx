@@ -12,6 +12,8 @@ type ResultsProps = {
   numCorrect: number;
   quizId: string;
   classId: string;
+  time: number;
+  quizLength: number;
 };
 
 export const Results = ({
@@ -19,13 +21,19 @@ export const Results = ({
   numCorrect,
   classId,
   quizId,
+  time,
+  quizLength,
 }: ResultsProps) => {
-  const data = useDataContext();
-  const [questions, setQuestions] = useState(data.questionsById[quizId]);
+  const formatTime = (seconds: number) => {
+    if (seconds > 60) {
+      const timeMins = Math.floor(seconds / 60);
+      const timeSecs = seconds % 60;
 
-  if (questions.length === 0) {
-    return <div>Error Loading Results</div>;
-  }
+      return `${timeMins}m ${timeSecs}s`;
+    } else {
+      return `${seconds}s`;
+    }
+  };
 
   return (
     <div className={shared.contentWrapper} style={{ width: "fit-content" }}>
@@ -35,14 +43,15 @@ export const Results = ({
       </div>
 
       <div className={styles.resultsWrapper}>
-        <ResultsCircle numCorrect={numCorrect} length={questions.length} />
+        <ResultsCircle numCorrect={numCorrect} length={quizLength} />
 
         <div className={styles.infoTxtWrapper}>
           <p className={styles.infoTitle}>Performance Summary</p>
 
-          <p className={styles.infoTxt}>Time Taken: 4m 32s</p>
-          <p className={styles.infoTxt}>Avg Per Question: 27s</p>
-          <p className={styles.infoTxt}>Overall Avg Score: 75%</p>
+          <p className={styles.infoTxt}>Time Taken: {formatTime(time)}</p>
+          <p className={styles.infoTxt}>
+            Avg Per Question: {formatTime(Math.ceil(time / quizLength))}
+          </p>
         </div>
 
         <ResultButtons setMode={setMode} quizId={quizId} classId={classId} />

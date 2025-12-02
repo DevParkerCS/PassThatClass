@@ -43,7 +43,7 @@ The goal is to provide a focused, opinionated workflow that gets students from �
 
 ## Key Features
 
-### 🎓 Class-Based Organization
+### Class-Based Organization
 
 - Create and manage **classes** (e.g., “CS 405 – Algorithms”).
 - Each class acts as a container for:
@@ -51,7 +51,7 @@ The goal is to provide a focused, opinionated workflow that gets students from �
   - Flashcard decks
 - Dashboard view shows all classes with summary details.
 
-### 📄 Note Uploads (Text + Images)
+### Note Uploads (Text + Images)
 
 - Enter typed notes directly in a text area.
 - Upload files (images / PDFs) of handwritten or printed notes.
@@ -60,7 +60,7 @@ The goal is to provide a focused, opinionated workflow that gets students from �
   - PDFs run through Vision’s PDF support (first few pages, configurable).
   - Extracted text is combined with typed notes up to a character budget.
 
-### 🤖 AI-Generated Quizzes
+### AI-Generated Quizzes
 
 - Generate **multiple-choice quizzes** from combined notes.
 - Uses OpenAI (gpt-5-mini) with a structured prompt to produce:
@@ -71,21 +71,6 @@ The goal is to provide a focused, opinionated workflow that gets students from �
 - Quizzes are stored in Postgres via Supabase with:
   - `quizzes` table (quiz metadata)
   - `quiz_questions` table (one row per question, JSONB options)
-
-### 🧠 Flashcards from Quizzes
-
-- Convert existing quizzes into flashcards.
-- Flashcards can be used for quick review without calling the AI again.
-- Designed to keep flashcards “cheap” (no extra model calls) by reusing generated content.
-
-### 📊 Progress & Stats
-
-- Track high-level stats per quiz and per class:
-  - Number of questions
-  - Last taken date
-- UI is structured to support future expansion into:
-  - Per-quiz accuracy
-  - Aggregated performance by class/topic
 
 ### 💳 Pricing Model (Frontend UX)
 
@@ -100,9 +85,6 @@ The goal is to provide a focused, opinionated workflow that gets students from �
   - Up to 100 AI quiz generations per month
   - Up to 20,000 characters of notes per quiz
   - Up to 5 images per quiz
-
-The frontend surfaces plan limits and communicates when the user is close to or out of generations.
-
 ---
 
 ## Architecture & Data Flow

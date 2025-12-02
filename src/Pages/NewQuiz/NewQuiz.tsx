@@ -1,16 +1,15 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Nav } from "../../components/Nav/Nav";
 import styles from "./NewQuiz.module.scss";
-import { useDataContext } from "../../context/DataContext/DataContext";
 import { Breadcrumb } from "../../components/Breadcrumb/Breadcrumb";
 import { useEffect, useState } from "react";
 import { ErrorModal } from "./ErrorModal/ErrorModal";
 import axios, { AxiosError } from "axios";
 import { Inputs } from "./Inputs/Inputs";
 import { Spinner } from "../../components/Spinner/Spinner";
-import { ContentList } from "../ClassFolder/components/Content/components/ContentModal/ContentModal";
-import { QuizMeta } from "../../context/DataContext/types";
 import { useAuthContext } from "../../context/AuthContext/AuthContext";
+import { useContentContext } from "../../context/DataContext/ContentContext";
+import { useClassesContext } from "../../context/DataContext/ClassesContext";
 
 type SubmitionState = "info" | "generating" | "finished";
 
@@ -18,8 +17,9 @@ export const NewQuiz = () => {
   const { classId } = useParams<{ classId: string }>();
   const [error, setError] = useState("");
   const [submitionState, setSubmitionState] = useState<SubmitionState>("info");
-  const [runningOcr, setRunningOcr] = useState(false);
-  const data = useDataContext();
+  const [loadingState, setLoadingState] = useState("");
+  const contentCtx = useContentContext();
+  const classesCtx = useClassesContext();
   const auth = useAuthContext();
   const nav = useNavigate();
 
@@ -35,7 +35,7 @@ export const NewQuiz = () => {
     return () => clearTimeout(timeoutId);
   }, [error]);
 
-  if (!classId || !data.classesById[classId]) {
+  if (!classId || !classesCtx.classesById[classId]) {
     return <div>Class Not Found</div>;
   }
 
@@ -58,21 +58,21 @@ export const NewQuiz = () => {
 
     setSubmitionState("generating");
     try {
-      const qd = await data.AddNewQuiz({
+      const qd = await contentCtx.AddNewQuiz({
         classId,
         chosenGrade,
         files,
         input,
         numQuestions,
         genExample,
-        setRunningOcr,
+        setLoadingState,
       });
 
       // fix the URL: /class/:className/:classId
-      const className = data.classesById[classId].name;
+      const className = classesCtx.classesById[classId].name;
       nav(`/class/${encodeURIComponent(className)}/${classId}?quizId=${qd.id}`);
     } catch (e) {
-      setRunningOcr(false);
+      setLoadingState("");
       const error = e as AxiosError;
       console.error(error);
       setSubmitionState("info");
@@ -99,10 +99,7 @@ export const NewQuiz = () => {
 
         {submitionState === "generating" && (
           <div>
-            <Spinner
-              txt={`${runningOcr ? "Parsing Images..." : "Generating Quiz..."}`}
-              size="l"
-            />
+            <Spinner txt={loadingState} size="l" />
           </div>
         )}
       </div>

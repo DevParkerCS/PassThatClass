@@ -1,149 +1,48 @@
+// ContentContext.tsx
+
 import axios from "axios";
 import {
   createContext,
+  useContext,
+  useState,
   Dispatch,
   SetStateAction,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
 } from "react";
 import {
-  ClassesById,
-  ClassMeta,
   ContentById,
   ContentMeta,
+  ContentState,
   DataProviderProps,
-  DataState,
   QuestionsById,
   QuizMeta,
   QuizMetaById,
   QuizQuestionType,
 } from "./types";
-import { fetchClasses, fetchContent } from "./utils";
-import { supabase, useAuthContext } from "../AuthContext/AuthContext";
+import { fetchContent } from "./utils";
+import { useAuthContext } from "../AuthContext/AuthContext";
 import { useShallowMemo } from "../../hooks/useShallowMemo";
-
-export const DataContext = createContext<DataState | null>(null);
-
-export const useDataContext = (): DataState => {
-  const ctx = useContext(DataContext);
-  if (!ctx) {
-    throw new Error("useDataContext must be within DataProvider");
-  }
-
-  return ctx;
-};
 
 type QuizContentFetch = {
   questions: QuizQuestionType[];
   quizInfo: QuizMeta;
 };
 
-export const DataProvider = ({ children }: DataProviderProps) => {
-  const [classes, setClasses] = useState<ClassMeta[]>([]);
-  const [classesById, setClassesById] = useState<ClassesById>({});
+export const ContentContext = createContext<ContentState | null>(null);
+
+export const useContentContext = (): ContentState => {
+  const ctx = useContext(ContentContext);
+  if (!ctx) {
+    throw new Error("useContentContext must be within ContentProvider");
+  }
+  return ctx;
+};
+
+export const ContentProvider = ({ children }: DataProviderProps) => {
   const [contentById, setContentById] = useState<ContentById>({});
   const [questionsById, setQuestionsById] = useState<QuestionsById>({});
   const [quizMetaById, setQuizMetaById] = useState<QuizMetaById>({});
-  const [classesLoading, setClassesLoading] = useState(false);
   const [quizLoading, setQuizLoading] = useState(false);
-  const classesFetched = useRef(false);
-  const [classesError, setClassesError] = useState("");
   const auth = useAuthContext();
-
-  useEffect(() => {
-    if (!auth.loading && auth.session && !classesFetched.current) {
-      classesFetched.current = true;
-      callClasses();
-    }
-  }, [auth.loading, auth.session?.user?.id]);
-
-  const callClasses = async () => {
-    // optional guard
-    if (!auth.session?.access_token) {
-      setClassesError("Not authenticated");
-      return;
-    }
-
-    setClassesError("");
-    setClassesLoading(true);
-
-    try {
-      await fetchClasses(setClassesById, setClasses, auth.session.access_token);
-    } catch (err: any) {
-      console.error("Error in fetchClasses", err);
-
-      if (axios.isAxiosError(err) && err.response?.status === 401) {
-        await auth.handleLogout();
-        return;
-      }
-
-      // generic error
-      setClassesError("Error getting classes");
-    } finally {
-      setClassesLoading(false);
-    }
-  };
-
-  const deleteQuiz = async (quizId: string, classId: string) => {
-    try {
-      await axios.delete(
-        `${process.env.REACT_APP_BACKEND_API}/quiz/${quizId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.session?.access_token}`,
-          },
-        }
-      );
-
-      setQuizMetaById((prev) => {
-        const { [quizId]: _removed, ...rest } = prev;
-        return rest;
-      });
-
-      // 3. Remove questions for that quiz
-      setQuestionsById((prev) => {
-        const { [quizId]: _removed, ...rest } = prev;
-        return rest;
-      });
-
-      // 4. Remove it from the content list for that class
-      setContentById((prev) => {
-        const prevContent = prev[classId] ?? [];
-        return {
-          ...prev,
-          [classId]: prevContent.filter(
-            (item) => !(item.type === "quiz" && item.id === quizId)
-          ),
-        };
-      });
-    } catch (e) {
-      throw e;
-    }
-  };
-
-  const AddClass = async (name: string) => {
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_BACKEND_API}/classes`,
-        { name },
-        {
-          headers: {
-            Authorization: auth.session?.access_token
-              ? `Bearer ${auth.session.access_token}`
-              : "",
-          },
-        }
-      );
-      const classData: ClassMeta = res.data;
-
-      setClasses((prev) => [...prev, classData]);
-      setClassesById((prev) => ({ ...prev, [classData.id]: classData }));
-    } catch (e) {
-      throw new Error("Error Adding New Class");
-    }
-  };
 
   const loadContent = (classId: string) => {
     fetchContent(classId, setContentById, auth.session?.access_token);
@@ -176,6 +75,41 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     }
   };
 
+  const deleteQuiz = async (quizId: string, classId: string) => {
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_BACKEND_API}/quiz/${quizId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.session?.access_token}`,
+          },
+        }
+      );
+
+      setQuizMetaById((prev) => {
+        const { [quizId]: _removed, ...rest } = prev;
+        return rest;
+      });
+
+      setQuestionsById((prev) => {
+        const { [quizId]: _removed, ...rest } = prev;
+        return rest;
+      });
+
+      setContentById((prev) => {
+        const prevContent = prev[classId] ?? [];
+        return {
+          ...prev,
+          [classId]: prevContent.filter(
+            (item) => !(item.type === "quiz" && item.id === quizId)
+          ),
+        };
+      });
+    } catch (e) {
+      throw e;
+    }
+  };
+
   const AddNewQuiz = async (params: {
     classId: string;
     chosenGrade: string;
@@ -183,7 +117,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     input: string;
     numQuestions: number;
     genExample: boolean;
-    setRunningOcr: Dispatch<SetStateAction<boolean>>;
+    setLoadingState: Dispatch<SetStateAction<string>>;
   }): Promise<QuizMeta> => {
     const {
       classId,
@@ -192,7 +126,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
       input,
       numQuestions,
       genExample,
-      setRunningOcr,
+      setLoadingState,
     } = params;
 
     if (!auth.session) {
@@ -201,7 +135,6 @@ export const DataProvider = ({ children }: DataProviderProps) => {
 
     const token = auth.session.access_token;
 
-    // Build one FormData for the combined /from-notes endpoint
     const formData = new FormData();
     formData.append("notesText", input);
     formData.append("gradeLevel", chosenGrade);
@@ -213,9 +146,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
       formData.append("images", file);
     });
 
-    // ----- Single streaming request -----
-    // We use fetch here because axios in the browser doesn't handle streaming nicely.
-    setRunningOcr(true);
+    setLoadingState("Parsing Images...");
 
     const response = await fetch(
       `${process.env.REACT_APP_BACKEND_API}/quiz/from-notes`,
@@ -223,14 +154,13 @@ export const DataProvider = ({ children }: DataProviderProps) => {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          // Do NOT set Content-Type here; the browser will handle the multipart boundary.
         },
         body: formData,
       }
     );
 
     if (!response.body) {
-      setRunningOcr(false);
+      setLoadingState("");
       throw new Error("Streaming response not supported by the browser");
     }
 
@@ -242,7 +172,6 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     let questions: QuizQuestionType[] = [];
     let encounteredError: string | null = null;
 
-    // Read the NDJSON stream line-by-line
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
@@ -250,7 +179,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
       buffer += decoder.decode(value, { stream: true });
 
       const lines = buffer.split("\n");
-      buffer = lines.pop() || ""; // keep any partial line for the next chunk
+      buffer = lines.pop() || "";
 
       for (const line of lines) {
         if (!line.trim()) continue;
@@ -265,16 +194,18 @@ export const DataProvider = ({ children }: DataProviderProps) => {
 
         switch (msg.stage) {
           case "ocr_started":
-            // You could also set some local "status" state here if you add it later
-            // e.g., setStatus("Parsing images…");
-            setRunningOcr(true);
+            setLoadingState("Parsing Images...");
             break;
 
           case "ocr_done":
-            setRunningOcr(false);
+            setLoadingState("Generating Quiz...");
             break;
 
           case "quiz_started":
+            break;
+
+          case "cleaning_quiz":
+            setLoadingState("Cleaning Up Quiz...");
             break;
 
           case "quiz_done":
@@ -285,7 +216,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
           case "error":
             console.error("Error from /quiz/from-notes:", msg);
             encounteredError = msg.error || "Failed to generate quiz";
-            setRunningOcr(false);
+            setLoadingState("");
             break;
 
           default:
@@ -299,13 +230,12 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     }
 
     if (!quizDataNull) {
-      setRunningOcr(false);
+      setLoadingState("");
       throw new Error("Quiz generation did not complete");
     }
 
     const quizData: QuizMeta = quizDataNull;
 
-    // ---- update local state caches ----
     const contentMeta: ContentMeta = {
       id: quizData.id,
       last_used_at: quizData.last_taken_at,
@@ -332,24 +262,18 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     return quizData;
   };
 
-  const dataMemo = useShallowMemo({
-    classes,
-    classesById,
+  const value = useShallowMemo<ContentState>({
     contentById,
     loadContent,
     fetchQuizContent,
-    callClasses,
     deleteQuiz,
-    classesLoading,
-    classesError,
+    quizLoading,
     questionsById,
     quizMetaById,
-    quizLoading,
-    AddClass,
     AddNewQuiz,
   });
 
   return (
-    <DataContext.Provider value={dataMemo}>{children}</DataContext.Provider>
+    <ContentContext.Provider value={value}>{children}</ContentContext.Provider>
   );
 };

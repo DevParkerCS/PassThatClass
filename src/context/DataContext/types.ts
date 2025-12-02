@@ -1,17 +1,20 @@
 import { Dispatch, ReactNode, SetStateAction } from "react";
 
-export type DataState = {
+export type ClassesState = {
   classes: ClassMeta[];
   classesById: ClassesById;
+  callClasses: () => void;
+  AddClass: (name: string) => Promise<void>;
+  classesLoading: boolean;
+  classesError: string;
+};
+
+export type ContentState = {
   contentById: ContentById;
   loadContent: (classId: string) => void;
   fetchQuizContent: (quizId: string) => Promise<void>;
-  AddClass: (name: string) => Promise<void>;
-  callClasses: () => void;
   deleteQuiz: (quizId: string, classId: string) => Promise<void>;
   quizLoading: boolean;
-  classesLoading: boolean;
-  classesError: string;
   questionsById: QuestionsById;
   quizMetaById: QuizMetaById;
   AddNewQuiz: (params: {
@@ -21,7 +24,7 @@ export type DataState = {
     input: string;
     numQuestions: number;
     genExample: boolean;
-    setRunningOcr: Dispatch<SetStateAction<boolean>>;
+    setLoadingState: Dispatch<SetStateAction<string>>;
   }) => Promise<QuizMeta>;
 };
 

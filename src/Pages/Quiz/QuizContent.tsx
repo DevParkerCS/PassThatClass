@@ -70,16 +70,19 @@ export const QuizContent = () => {
 
         {data.quizLoading && <Spinner txt="Loading Quiz..." size="l" />}
 
-        {!data.quizLoading && mode !== "results" && (
-          <div className={styles.quizWrapper}>
-            <Quiz
-              mode={mode}
-              setMode={setMode}
-              setNumCorrect={setNumCorrect}
-              questions={questions}
-            />
-          </div>
-        )}
+        <div
+          className={`${styles.quizWrapper} ${
+            !data.quizLoading && mode !== "results" && styles.active
+          }`}
+        >
+          <Quiz
+            mode={mode}
+            setMode={setMode}
+            setNumCorrect={setNumCorrect}
+            questions={questions}
+          />
+        </div>
+
         {mode === "results" && (
           <Results
             setMode={setMode}

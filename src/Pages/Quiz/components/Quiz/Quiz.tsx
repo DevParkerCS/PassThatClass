@@ -5,11 +5,7 @@ import { QuizButtons } from "./components/QuizButtons/QuizButtons";
 import styles from "./Quiz.module.scss";
 import shared from "../../Shared/styles.module.scss";
 import { QuizMode } from "../../QuizContent";
-import { Breadcrumb } from "../../../../components/Breadcrumb/Breadcrumb";
-import { useDataContext } from "../../../../context/DataContext/DataContext";
-import { useParams } from "react-router-dom";
 import { QuizQuestionType } from "../../../../context/DataContext/types";
-import { useAuthContext } from "../../../../context/AuthContext/AuthContext";
 
 type QuizProps = {
   mode: QuizMode;
@@ -27,9 +23,6 @@ export const Quiz = ({
   const [qIndex, setQIndex] = useState(0);
   const [canGoNext, setCanGoNext] = useState(false);
   const [wrongIndexes, setWrongIndexes] = useState<number[]>([]);
-  const auth = useAuthContext();
-
-  const data = useDataContext();
 
   return (
     <div className={shared.contentWrapper}>

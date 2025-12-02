@@ -66,6 +66,7 @@
 
   &.correctAns {
     border: 2px solid lightgreen;
+    transform: scale(1.015);
   }
 
   &.incorrectAns {

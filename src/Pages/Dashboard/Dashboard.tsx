@@ -10,9 +10,9 @@ import { Nav } from "../../components/Nav/Nav";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ClassAddModal } from "./components/ClassAddModal/ClassAddModal";
-import { useDataContext } from "../../context/DataContext/DataContext";
 import { Spinner } from "../../components/Spinner/Spinner";
 import { useAuthContext } from "../../context/AuthContext/AuthContext";
+import { useClassesContext } from "../../context/DataContext/ClassesContext";
 
 export const Dashboard = () => {
   const {
@@ -22,7 +22,7 @@ export const Dashboard = () => {
     classesError,
     AddClass,
     callClasses,
-  } = useDataContext();
+  } = useClassesContext();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);

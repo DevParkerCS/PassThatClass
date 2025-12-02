@@ -38,7 +38,7 @@ export const Pricing = () => {
 
           <div className={`${styles.sectionCard} ${styles.proSection}`}>
             <p className={shared.cardName}>Pro Plan</p>
-            <p className={shared.cardValue}>$5/Month</p>
+            <p className={shared.cardValue}>$5.99/Month</p>
 
             <ul className={shared.cardList}>
               <li className={shared.listItem}>
@@ -47,7 +47,7 @@ export const Pricing = () => {
               </li>
               <li className={shared.listItem}>
                 Generate up to{" "}
-                <span className={shared.itemBold}>100 quizzes</span> every month
+                <span className={shared.itemBold}>50 quizzes</span> every month
               </li>
               <li className={shared.listItem}>
                 Input up to{" "}

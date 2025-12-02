@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./Ctas.module.scss";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useDataContext } from "../../../../context/DataContext/DataContext";
+import { useClassesContext } from "../../../../context/DataContext/ClassesContext";
 
 type CtasProps = {
   classId: string;
@@ -10,14 +10,14 @@ type CtasProps = {
 
 export const Ctas = ({ classId }: CtasProps) => {
   const nav = useNavigate();
-  const data = useDataContext();
+  const classesCtx = useClassesContext();
 
   return (
     <div className={styles.ctasWrapper}>
       <button
         className={styles.newCta}
         onClick={() =>
-          nav(`/quiz/${data.classesById[classId].name}/${classId}/new`)
+          nav(`/quiz/${classesCtx.classesById[classId].name}/${classId}/new`)
         }
       >
         <FontAwesomeIcon icon={faPlus} className={styles.ctaIcon} />

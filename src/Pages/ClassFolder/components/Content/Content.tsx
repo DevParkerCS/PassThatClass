@@ -2,14 +2,13 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import styles from "./Content.module.scss";
 import { useEffect, useState } from "react";
 import { ContentItem, EmptyItem } from "./components/contentItem/ContentItem";
-import {
-  ContentModal,
-  DeleteModal,
-} from "./components/ContentModal/ContentModal";
-import { useDataContext } from "../../../../context/DataContext/DataContext";
+import { ContentModal } from "./components/ContentModal/ContentModal";
 import { ContentMeta } from "../../../../context/DataContext/types";
 import { Ctas } from "../Ctas/Ctas";
-import { Breadcrumb } from "../../../../components/Breadcrumb/Breadcrumb";
+import { DeleteModal } from "./components/ContentModal/DeleteModal";
+import { ReviewModal } from "./components/ContentModal/ReviewModal";
+import { useContentContext } from "../../../../context/DataContext/ContentContext";
+import { useClassesContext } from "../../../../context/DataContext/ClassesContext";
 
 type FilterType = "all" | "quiz" | "card";
 
@@ -18,28 +17,31 @@ type ContentProps = {
 };
 
 export const Content = ({ classId }: ContentProps) => {
-  const data = useDataContext();
+  const content = useContentContext();
+  const classesCtx = useClassesContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const [filter, setFilter] = useState<FilterType>("all");
   const [filtered, setFiltered] = useState<ContentMeta[]>([]);
   const [selectedInfo, setSelectedInfo] = useState<ContentMeta | null>(null);
   const [modalActive, setModalActive] = useState(false);
   const [deleteActive, setDeleteActive] = useState(false);
+  const [reviewActive, setReviewActive] = useState(false);
 
   const quizId = searchParams.get("quizId");
 
   useEffect(() => {
-    if (quizId && data.contentById[classId]) {
+    if (quizId && content.contentById[classId]) {
       setModalActive(true);
       setSelectedInfo(
-        data.contentById[classId].find((d) => d.id === quizId) ?? null
+        content.contentById[classId].find((d) => d.id === quizId) ?? null
       );
     }
-  }, [quizId, data.contentById]);
+  }, [quizId, content.contentById]);
 
   useEffect(() => {
     if (modalActive) {
-      if (selectedInfo?.type === "quiz") data.fetchQuizContent(selectedInfo.id);
+      if (selectedInfo?.type === "quiz")
+        content.fetchQuizContent(selectedInfo.id);
 
       document.body.style.overflow = "hidden";
     } else {
@@ -52,7 +54,7 @@ export const Content = ({ classId }: ContentProps) => {
   }, [modalActive]);
 
   useEffect(() => {
-    const items = data.contentById[classId] ?? [];
+    const items = content.contentById[classId] ?? [];
 
     if (filter === "all") {
       setFiltered(items);
@@ -62,7 +64,7 @@ export const Content = ({ classId }: ContentProps) => {
     setFiltered(
       items.filter((p) => p.type === (filter === "card" ? "card" : "quiz"))
     );
-  }, [filter, data.contentById, classId]);
+  }, [filter, content.contentById, classId]);
 
   return (
     <div
@@ -75,6 +77,7 @@ export const Content = ({ classId }: ContentProps) => {
           classId={classId}
           contentId={selectedInfo.id}
           setModalActive={setModalActive}
+          setReviewActive={setReviewActive}
         />
       )}
 
@@ -87,11 +90,18 @@ export const Content = ({ classId }: ContentProps) => {
         />
       )}
 
+      {reviewActive && selectedInfo && (
+        <ReviewModal
+          setReviewActive={setReviewActive}
+          contentId={selectedInfo.id}
+        />
+      )}
+
       <div style={{ width: "100%" }}>
         <div className={styles.contentTxtWrapper}>
           <div>
             <p className={styles.classTitle}>
-              {data.classesById[classId]?.name}
+              {classesCtx.classesById[classId]?.name}
             </p>
             <p className={styles.contentTitle}>
               {filtered.length} {filtered.length !== 1 ? "Quizzes" : "Quiz"}

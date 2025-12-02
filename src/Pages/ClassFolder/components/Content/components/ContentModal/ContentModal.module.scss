@@ -1,5 +1,6 @@
 @use "../../../../../../styles/mixins.scss" as mixins;
 @import "../../../../../../styles/variables.module.scss";
+
 .modalBackground {
   position: fixed;
   width: 100%;
@@ -222,7 +223,6 @@
     color: var(--text-main);
     text-align: center;
     margin: 0 auto;
-
     width: 80%;
   }
 

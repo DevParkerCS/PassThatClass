@@ -3,9 +3,6 @@ import styles from "./Results.module.scss";
 import shared from "../../Shared/styles.module.scss";
 import { ResultsCircle } from "./components/ResultsCircle/ResultsCircle";
 import { ResultButtons } from "./components/ResultButtons/ResultButtons";
-import { Breadcrumb } from "../../../../components/Breadcrumb/Breadcrumb";
-import { useEffect, useState } from "react";
-import { useDataContext } from "../../../../context/DataContext/DataContext";
 
 type ResultsProps = {
   setMode: React.Dispatch<React.SetStateAction<QuizMode>>;

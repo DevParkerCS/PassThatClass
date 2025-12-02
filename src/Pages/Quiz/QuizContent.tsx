@@ -5,10 +5,10 @@ import { Quiz } from "./components/Quiz/Quiz";
 import { Results } from "./components/Results/Results";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext/AuthContext";
-import { useDataContext } from "../../context/DataContext/DataContext";
 import { QuizQuestionType } from "../../context/DataContext/types";
 import { Breadcrumb } from "../../components/Breadcrumb/Breadcrumb";
 import { Spinner } from "../../components/Spinner/Spinner";
+import { useContentContext } from "../../context/DataContext/ContentContext";
 
 export type QuizMode = "answering" | "reviewing" | "results";
 
@@ -21,21 +21,21 @@ export const QuizContent = () => {
   const startTime = useRef(-1);
   const quizzesFetched = useRef(false);
   const auth = useAuthContext();
-  const data = useDataContext();
+  const contentCtx = useContentContext();
   const nav = useNavigate();
 
   useEffect(() => {
     if (!auth.loading && auth.session && !quizzesFetched.current && quizId) {
       quizzesFetched.current = true;
-      data.fetchQuizContent(quizId);
+      contentCtx.fetchQuizContent(quizId);
     }
   }, [auth.loading, auth.session, quizId]);
 
   useEffect(() => {
-    if (quizId && data.questionsById[quizId]) {
-      setQuestions(data.questionsById[quizId]);
+    if (quizId && contentCtx.questionsById[quizId]) {
+      setQuestions(contentCtx.questionsById[quizId]);
     }
-  }, [data.questionsById, quizId]);
+  }, [contentCtx.questionsById, quizId]);
 
   useEffect(() => {
     if (mode === "answering") {
@@ -68,11 +68,11 @@ export const QuizContent = () => {
           <Breadcrumb />
         </div>
 
-        {data.quizLoading && <Spinner txt="Loading Quiz..." size="l" />}
+        {contentCtx.quizLoading && <Spinner txt="Loading Quiz..." size="l" />}
 
         <div
           className={`${styles.quizWrapper} ${
-            !data.quizLoading && mode !== "results" && styles.active
+            !contentCtx.quizLoading && mode !== "results" && styles.active
           }`}
         >
           <Quiz

@@ -40,7 +40,7 @@ export const Pricing = () => {
 
           <div className={`${styles.sectionCard} ${styles.proSection}`}>
             <p className={shared.cardName}>Pro Student</p>
-            <p className={shared.cardValue}>$5.99/Month</p>
+            <p className={shared.cardValue}>$5.99.99/Month</p>
 
             <ul className={shared.cardList}>
               <li className={shared.listItem}>

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { QuizMode } from "../../../../QuizContent";
 import styles from "./ResultButtons.module.scss";
-import { useDataContext } from "../../../../../../context/DataContext/DataContext";
+import { useClassesContext } from "../../../../../../context/DataContext/ClassesContext";
 
 type ResultButtonsProps = {
   setMode: React.Dispatch<React.SetStateAction<QuizMode>>;
@@ -15,7 +15,7 @@ export const ResultButtons = ({
   quizId,
 }: ResultButtonsProps) => {
   const nav = useNavigate();
-  const data = useDataContext();
+  const classesCtx = useClassesContext();
 
   return (
     <div className={styles.resultsBtns}>
@@ -38,7 +38,7 @@ export const ResultButtons = ({
           className={`${styles.resultsBtn}`}
           onClick={() =>
             nav(
-              `/class/${data.classesById[classId].name}/${classId}?quizId=${quizId}`
+              `/class/${classesCtx.classesById[classId].name}/${classId}?quizId=${quizId}`
             )
           }
         >

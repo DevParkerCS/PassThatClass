@@ -2,9 +2,10 @@ import { useNavigate } from "react-router-dom";
 import styles from "./ContentItem.module.scss";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ContentMeta } from "../../../../../../context/DataContext/types";
-import { useDataContext } from "../../../../../../context/DataContext/DataContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useContentContext } from "../../../../../../context/DataContext/ContentContext";
+import { useClassesContext } from "../../../../../../context/DataContext/ClassesContext";
 
 type ContentItemProps = {
   content: ContentMeta;
@@ -61,13 +62,13 @@ type EmptyItemProps = {
 
 export const EmptyItem = ({ classId }: EmptyItemProps) => {
   const nav = useNavigate();
-  const data = useDataContext();
+  const classesCtx = useClassesContext();
 
   return (
     <div
       className={`${styles.contentItem} ${styles.emptyItem}`}
       onClick={() =>
-        nav(`/quiz/${data.classesById[classId].name}/${classId}/new`)
+        nav(`/quiz/${classesCtx.classesById[classId].name}/${classId}/new`)
       }
     >
       <p className={styles.itemName}>No quizzes yet</p>

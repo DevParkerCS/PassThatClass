@@ -2,7 +2,8 @@
 
 .authWrapper {
   width: 500px;
-  background: linear-gradient(180deg, #181f29 0%, #111822 100%);
+  // background: linear-gradient(180deg, #181f29 0%, #111822 100%);
+  background-color: var(--sec-layer);
   margin: 0 auto;
   margin-top: 2rem;
   padding: 1rem;
@@ -39,7 +40,7 @@
 }
 
 .inputWrapper {
-  background-color: var(--navy-dark);
+  background-color: var(--dark-bg);
   padding: 1rem;
   border-radius: var(--mid-radius);
   display: flex;
@@ -47,7 +48,7 @@
   border: 1px solid var(--light-border);
 
   &.loading {
-    background-color: var(--dark-bg);
+    background-color: var(--bg-trans);
     pointer-events: none;
   }
 

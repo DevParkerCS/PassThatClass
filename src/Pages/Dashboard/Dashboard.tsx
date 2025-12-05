@@ -1,5 +1,7 @@
 import {
+  faEllipsisVertical,
   faFolderOpen,
+  faPenToSquare,
   faPlus,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
@@ -158,6 +160,7 @@ export const Dashboard = () => {
               name="Add Class"
               icon={faPlus}
               onClick={() => setIsModalOpen(true)}
+              editable={false}
             />
           </div>
         </div>
@@ -170,15 +173,26 @@ type ClassCardProps = {
   name: string;
   icon: IconDefinition;
   onClick: () => void;
+  editable?: boolean;
 };
 
-const ClassCard = ({ name, icon, onClick }: ClassCardProps) => {
+const ClassCard = ({
+  name,
+  icon,
+  onClick,
+  editable = true,
+}: ClassCardProps) => {
   return (
-    <button type="button" className={styles.classWrapper} onClick={onClick}>
-      <div className={styles.classTxtWrapper}>
-        <FontAwesomeIcon className={styles.classIcon} icon={icon} />
-        <p className={styles.className}>{name}</p>
-      </div>
-    </button>
+    <div className={styles.cardWrapper}>
+      {editable && (
+        <FontAwesomeIcon className={styles.editBtn} icon={faPenToSquare} />
+      )}
+      <button type="button" className={styles.classWrapper} onClick={onClick}>
+        <div className={styles.classTxtWrapper}>
+          <FontAwesomeIcon className={styles.classIcon} icon={icon} />
+          <p className={styles.className}>{name}</p>
+        </div>
+      </button>
+    </div>
   );
 };

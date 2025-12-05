@@ -14,15 +14,38 @@
   margin-top: 2rem;
 }
 
+.cardWrapper {
+  position: relative;
+  width: calc(100% / 4 - 1rem);
+
+  .editBtn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1.1rem;
+    color: var(--text-main);
+    display: none;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--cyan-accent);
+    }
+  }
+
+  &:hover .editBtn {
+    display: block;
+  }
+}
+
 .classWrapper {
   padding: 2rem 1rem;
   background-color: var(--first-layer);
-  width: calc(100% / 4 - 1rem);
   border-radius: var(--mid-radius);
   border: 1px solid var(--light-border);
   box-shadow: $dark-shadow;
   cursor: pointer;
   transition: all 0.1s linear;
+  width: 100%;
 
   &:hover {
     background-color: var(--third-layer);

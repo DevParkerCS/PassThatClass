@@ -3,31 +3,30 @@ import styles from "./ContentItem.module.scss";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ContentMeta } from "../../../../../../context/DataContext/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useContentContext } from "../../../../../../context/DataContext/ContentContext";
 import { useClassesContext } from "../../../../../../context/DataContext/ClassesContext";
+import { ActiveModal } from "../../Content";
 
 type ContentItemProps = {
   content: ContentMeta;
-  setModalActive: Dispatch<SetStateAction<boolean>>;
   setSelectedInfo: Dispatch<SetStateAction<ContentMeta | null>>;
-  setDeleteActive: Dispatch<SetStateAction<boolean>>;
+  setActiveModal: Dispatch<SetStateAction<ActiveModal>>;
 };
 
 export const ContentItem = ({
   content,
-  setModalActive,
+  setActiveModal,
   setSelectedInfo,
-  setDeleteActive,
 }: ContentItemProps) => {
   const handleClick = () => {
     setSelectedInfo(content);
-    setModalActive(true);
+    setActiveModal("content");
   };
 
   const handleDelClick = () => {
     setSelectedInfo(content);
-    setDeleteActive(true);
+    setActiveModal("delete");
   };
 
   return (

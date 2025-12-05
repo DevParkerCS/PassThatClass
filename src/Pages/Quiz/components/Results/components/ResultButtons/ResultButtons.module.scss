@@ -12,13 +12,13 @@
   box-shadow: $sm-dark-shadow;
   transition: all 0.1s linear;
   background-color: var(--third-layer);
-  border: 2px solid var(--highlight-border);
+  border: 1px solid var(--highlight-border);
 
   &:hover {
     background-color: var(--third-highlight);
     transform: translateY(-1px);
     box-shadow: $dark-shadow;
-    border: 2px solid var(--bright-border);
+    border: 1px solid var(--bright-border);
   }
 }
 
@@ -30,11 +30,11 @@
   .resultsBtn {
     color: var(--text-secondary);
     background-color: var(--sec-layer);
-    border: 2px solid var(--light-border);
+    border: 1px solid var(--light-border);
 
     &:hover {
       background-color: var(--third-layer);
-      border: 2px solid var(--highlight-border);
+      border: 1px solid var(--highlight-border);
     }
   }
 }

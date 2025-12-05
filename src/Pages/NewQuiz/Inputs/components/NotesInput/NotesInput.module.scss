@@ -6,7 +6,7 @@
   .notesInput {
     height: 200px;
     background-color: var(--sec-layer);
-    border: 2px solid var(--light-border);
+    border: 1px solid var(--light-border);
     outline: none;
     color: var(--text-secondary);
     padding: 0.5rem;
@@ -16,7 +16,7 @@
     margin-top: 0.5rem;
 
     &:focus {
-      border: 2px solid var(--highlight-border);
+      border: 1px solid var(--highlight-border);
     }
 
     &::placeholder {

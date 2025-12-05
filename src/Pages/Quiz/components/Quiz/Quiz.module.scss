@@ -1,9 +1,11 @@
+@import "../../../../styles/variables.module.scss";
+
 .quizWrapper {
   width: 100%;
   border-radius: 25px;
   overflow: hidden;
-  box-shadow: 0 5px 10px 2px rgba(black, 0.5);
-  border: 2px solid var(--light-border);
+  box-shadow: $sm-dark-shadow;
+  border: 1px solid var(--light-border);
 }
 
 .quizContent {
@@ -12,7 +14,7 @@
 
 .incorrectWrapper {
   background-color: var(--sec-layer);
-  border-right: 2px solid var(--light-border);
+  border-right: 1px solid var(--light-border);
   max-width: 180px;
   min-width: 180px;
   overflow-y: auto;
@@ -29,7 +31,7 @@
 
   .incorrectItems {
     .incorrectItem {
-      border-bottom: 2px solid var(--light-border);
+      border-bottom: 1px solid var(--light-border);
       text-align: center;
       font-size: 1.25rem;
       color: var(--text-secondary);

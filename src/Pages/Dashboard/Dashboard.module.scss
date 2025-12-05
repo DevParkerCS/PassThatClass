@@ -19,7 +19,7 @@
   background-color: var(--first-layer);
   width: calc(100% / 4 - 1rem);
   border-radius: var(--mid-radius);
-  border: 2px solid var(--light-border);
+  border: 1px solid var(--light-border);
   box-shadow: $dark-shadow;
   cursor: pointer;
   transition: all 0.1s linear;
@@ -67,7 +67,7 @@
   margin: 0 auto;
   margin-top: 1.5rem;
   width: var(--app-width);
-  border-bottom: 2px solid var(--light-border);
+  border-bottom: 1px solid var(--light-border);
   padding-bottom: 1.5rem;
 
   .heading {
@@ -97,7 +97,7 @@
 .retryBtn {
   font-size: 1.25rem;
   background-color: var(--cyan-soft);
-  border: 2px solid var(--light-border);
+  border: 1px solid var(--light-border);
   color: var(--text-main);
   padding: 0.5rem;
   width: 200px;

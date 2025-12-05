@@ -15,7 +15,7 @@
   flex-direction: column;
   padding: 1rem;
   cursor: pointer;
-  border: 2px solid var(--light-border);
+  border: 1px solid var(--light-border);
   transition: all 0.1s linear;
   position: relative;
 
@@ -28,7 +28,7 @@
   }
 
   &:hover {
-    border: 2px solid var(--highlight-border);
+    border-color: var(--highlight-border);
     background-color: var(--sec-layer);
     transform: scale(1.01);
 

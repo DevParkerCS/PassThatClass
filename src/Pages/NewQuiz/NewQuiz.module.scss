@@ -16,11 +16,11 @@
   background-color: var(--first-layer);
   border-radius: var(--mid-radius);
   // margin-top: 2rem;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   transition: all 0.25s linear;
   overflow: hidden;
 
   &.error {
-    border: 2px solid var(--error-red);
+    border: 1px solid var(--error-red);
   }
 }

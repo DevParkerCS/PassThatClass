@@ -76,6 +76,9 @@ const routeTree: RouteConfig[] = [
         getBreadcrumbName: ({ quizName }) => quizName,
         // also non-clickable leaf
       },
+      {
+        path: ":quizName/:quizId/edit",
+      },
     ],
   },
 ];

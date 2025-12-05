@@ -9,12 +9,15 @@ import { DeleteModal } from "./components/ContentModal/DeleteModal";
 import { ReviewModal } from "./components/ContentModal/ReviewModal";
 import { useContentContext } from "../../../../context/DataContext/ContentContext";
 import { useClassesContext } from "../../../../context/DataContext/ClassesContext";
+import { EditModal } from "./components/ContentModal/EditModal";
 
 type FilterType = "all" | "quiz" | "card";
 
 type ContentProps = {
   classId: string;
 };
+
+export type ActiveModal = "content" | "delete" | "review" | "edit" | null;
 
 export const Content = ({ classId }: ContentProps) => {
   const content = useContentContext();
@@ -23,15 +26,13 @@ export const Content = ({ classId }: ContentProps) => {
   const [filter, setFilter] = useState<FilterType>("all");
   const [filtered, setFiltered] = useState<ContentMeta[]>([]);
   const [selectedInfo, setSelectedInfo] = useState<ContentMeta | null>(null);
-  const [modalActive, setModalActive] = useState(false);
-  const [deleteActive, setDeleteActive] = useState(false);
-  const [reviewActive, setReviewActive] = useState(false);
+  const [activeModal, setActiveModal] = useState<ActiveModal>(null);
 
   const quizId = searchParams.get("quizId");
 
   useEffect(() => {
     if (quizId && content.contentById[classId]) {
-      setModalActive(true);
+      setActiveModal("content");
       setSelectedInfo(
         content.contentById[classId].find((d) => d.id === quizId) ?? null
       );
@@ -39,7 +40,7 @@ export const Content = ({ classId }: ContentProps) => {
   }, [quizId, content.contentById]);
 
   useEffect(() => {
-    if (modalActive) {
+    if (activeModal === "content") {
       if (selectedInfo?.type === "quiz")
         content.fetchQuizContent(selectedInfo.id);
 
@@ -51,7 +52,7 @@ export const Content = ({ classId }: ContentProps) => {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [modalActive]);
+  }, [activeModal]);
 
   useEffect(() => {
     const items = content.contentById[classId] ?? [];
@@ -69,30 +70,36 @@ export const Content = ({ classId }: ContentProps) => {
   return (
     <div
       className={`${styles.contentWrapper} ${
-        modalActive && styles.modalActive
+        activeModal && styles.modalActive
       }`}
     >
-      {modalActive && selectedInfo && (
+      {activeModal === "content" && selectedInfo && (
         <ContentModal
           classId={classId}
           contentId={selectedInfo.id}
-          setModalActive={setModalActive}
-          setReviewActive={setReviewActive}
+          setActiveModal={setActiveModal}
         />
       )}
 
-      {deleteActive && selectedInfo && (
+      {activeModal == "delete" && selectedInfo && (
         <DeleteModal
           setSelectedInfo={setSelectedInfo}
           contentId={selectedInfo.id}
           classId={classId}
-          setDeleteActive={setDeleteActive}
+          setActiveModal={setActiveModal}
         />
       )}
 
-      {reviewActive && selectedInfo && (
+      {activeModal === "review" && selectedInfo && (
         <ReviewModal
-          setReviewActive={setReviewActive}
+          setActiveModal={setActiveModal}
+          contentId={selectedInfo.id}
+        />
+      )}
+
+      {activeModal === "edit" && selectedInfo && (
+        <EditModal
+          setActiveModal={setActiveModal}
           contentId={selectedInfo.id}
         />
       )}
@@ -118,9 +125,8 @@ export const Content = ({ classId }: ContentProps) => {
             {filtered.map((q, i) => (
               <ContentItem
                 content={q}
-                setModalActive={setModalActive}
+                setActiveModal={setActiveModal}
                 setSelectedInfo={setSelectedInfo}
-                setDeleteActive={setDeleteActive}
                 key={i}
               />
             ))}

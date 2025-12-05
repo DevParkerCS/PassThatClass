@@ -16,9 +16,13 @@ export const Breadcrumb = () => {
         <React.Fragment key={index}>
           <p
             className={`${styles.breadcrumbItem} ${
-              crumb.to ? styles.breadcrumbClickable : ""
+              crumb.to && index !== crumbs.length - 1
+                ? styles.breadcrumbClickable
+                : ""
             }`}
-            onClick={() => crumb.to && nav(crumb.to)}
+            onClick={() =>
+              crumb.to && index !== crumbs.length - 1 && nav(crumb.to)
+            }
           >
             {crumb.label}
           </p>

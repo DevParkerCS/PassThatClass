@@ -50,12 +50,12 @@
   padding: 1rem;
   border-radius: 25px;
   cursor: pointer;
-  border: 2px solid var(--light-border);
+  border: 1px solid var(--light-border);
   transition: all 0.1s linear;
   box-shadow: $dark-shadow;
 
   &.chosen {
-    border: 2px solid var(--cyan-accent);
+    border: 1px solid var(--cyan-accent);
     box-shadow: $dark-shadow;
     transform: scale(1.015);
 
@@ -65,12 +65,12 @@
   }
 
   &.correctAns {
-    border: 2px solid lightgreen;
+    border: 1px solid var(--green-accent);
     transform: scale(1.015);
   }
 
   &.incorrectAns {
-    border: 2px solid red;
+    border: 1px solid red;
   }
 
   &.isReviewing {
@@ -84,6 +84,10 @@
 
     .optionAnswer {
       color: var(--text-main);
+    }
+
+    .optionID {
+      color: var(--cyan-accent);
     }
   }
 
@@ -105,5 +109,6 @@
     margin-right: 1rem;
     color: var(--cyan-soft);
     flex-shrink: 0;
+    transition: all 0.1s linear;
   }
 }

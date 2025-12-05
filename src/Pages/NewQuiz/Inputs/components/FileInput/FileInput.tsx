@@ -2,17 +2,18 @@ import { Dispatch, SetStateAction, useRef, useState } from "react";
 import styles from "./FileInput.module.scss";
 import shared from "../../../shared/styles.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faFilePdf, faUpload, faX } from "@fortawesome/free-solid-svg-icons";
 
 type FileInputProps = {
   setFiles: Dispatch<SetStateAction<File[]>>;
   files: File[];
 };
 
-export const FileInput = ({ setFiles, files }: FileInputProps) => {
-  const MAX_FILES = 5;
-  const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024;
+const MAX_FILES = 10;
+const MAX_MB = 20;
+const MAX_IMAGE_SIZE_BYTES = MAX_MB * 1024 * 1024;
 
+export const FileInput = ({ setFiles, files }: FileInputProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -84,16 +85,18 @@ export const FileInput = ({ setFiles, files }: FileInputProps) => {
         onDragLeave={handleDragLeave}
         onClick={() => inputRef.current?.click()}
       >
-        <label className={shared.inputLabel}>Upload Notes</label>
+        <label className={shared.inputLabel}>Upload Images</label>
+        <p className={shared.inputNote}>
+          * Each page in a PDF counts as 1 image.
+        </p>
 
         <div className={styles.filesInputBtn}>
           <FontAwesomeIcon icon={faUpload} />
           <p>Drop images here,</p>
           <p>or click to browse</p>
-          <p>(Max 5 Images)</p>
+          <p>{`Max ${MAX_FILES} Images`}</p>
         </div>
 
-        {/* Hidden actual input – still handles normal file selection */}
         <input
           ref={inputRef}
           className={styles.filesInput}
@@ -101,22 +104,31 @@ export const FileInput = ({ setFiles, files }: FileInputProps) => {
           accept=".jpg, .png, .jpeg, .pdf"
           multiple
           onChange={handleFilesChange}
-          // you can keep this visually hidden via CSS as you had before
         />
       </div>
 
       <div className={styles.previewGrid}>
         {files.map((file, i) => (
-          <div
-            key={i}
-            className={styles.previewItem}
-            onClick={() => handleClick(i)}
-          >
-            <img
-              src={URL.createObjectURL(file)}
-              alt={file.name}
-              className={styles.previewImg}
-            />
+          <div key={i} className={styles.previewItem}>
+            <div className={styles.delWrapper}>
+              <FontAwesomeIcon
+                className={styles.itemDel}
+                onClick={() => handleClick(i)}
+                icon={faX}
+              />
+            </div>
+            {file.type === "application/pdf" ? (
+              <div className={styles.pdfWrapper}>
+                <FontAwesomeIcon className={styles.pdfIcon} icon={faFilePdf} />
+                <p className={styles.pdfName}>{file.name}</p>
+              </div>
+            ) : (
+              <img
+                src={URL.createObjectURL(file)}
+                alt={file.name}
+                className={styles.previewImg}
+              />
+            )}
           </div>
         ))}
       </div>

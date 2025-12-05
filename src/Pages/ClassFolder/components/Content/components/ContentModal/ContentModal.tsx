@@ -7,25 +7,24 @@ import {
   QuizQuestionType,
 } from "../../../../../../context/DataContext/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Spinner } from "../../../../../../components/Spinner/Spinner";
 import { ContentList } from "./ContentList";
 import { ModalStats } from "./ModalStats";
 import { useContentContext } from "../../../../../../context/DataContext/ContentContext";
 import { useClassesContext } from "../../../../../../context/DataContext/ClassesContext";
+import { ActiveModal } from "../../Content";
 
 type ContentModalProps = {
   contentId: string;
   classId: string;
-  setModalActive: Dispatch<SetStateAction<boolean>>;
-  setReviewActive: Dispatch<SetStateAction<boolean>>;
+  setActiveModal: Dispatch<SetStateAction<ActiveModal>>;
 };
 
 export const ContentModal = ({
   contentId,
   classId,
-  setModalActive,
-  setReviewActive,
+  setActiveModal,
 }: ContentModalProps) => {
   const nav = useNavigate();
   const contentCtx = useContentContext();
@@ -43,20 +42,19 @@ export const ContentModal = ({
   }, [contentCtx.questionsById, contentCtx.quizMetaById, contentId]);
 
   const handleReviewClick = () => {
-    setReviewActive(true);
-    setModalActive(false);
+    setActiveModal("review");
   };
 
   return (
     <div>
       <div
         className={styles.modalBackground}
-        onClick={() => setModalActive(false)}
+        onClick={() => setActiveModal(null)}
       ></div>
 
       <div className={styles.modalWrapper}>
         <div className={styles.outsideWrapper}>
-          <div className={styles.exitBtn} onClick={() => setModalActive(false)}>
+          <div className={styles.exitBtn} onClick={() => setActiveModal(null)}>
             <FontAwesomeIcon icon={faXmark} />
           </div>
           {!content || !meta ? (
@@ -76,6 +74,14 @@ export const ContentModal = ({
 
                 <div className={styles.infoItem}>
                   <p className={styles.infoTxt}>Last Attempt: 2 days ago</p>
+                </div>
+
+                <div>
+                  <FontAwesomeIcon
+                    className={styles.editCta}
+                    onClick={() => setActiveModal("edit")}
+                    icon={faPenToSquare}
+                  />
                 </div>
               </div>
 

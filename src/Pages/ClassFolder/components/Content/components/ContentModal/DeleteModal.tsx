@@ -5,18 +5,19 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Spinner } from "../../../../../../components/Spinner/Spinner";
 import { ContentMeta } from "../../../../../../context/DataContext/types";
 import { useContentContext } from "../../../../../../context/DataContext/ContentContext";
+import { ActiveModal } from "../../Content";
 
 type DeleteModalProps = {
   contentId: string;
   classId: string;
-  setDeleteActive: Dispatch<SetStateAction<boolean>>;
+  setActiveModal: Dispatch<SetStateAction<ActiveModal>>;
   setSelectedInfo: Dispatch<SetStateAction<ContentMeta | null>>;
 };
 
 export const DeleteModal = ({
   contentId,
   classId,
-  setDeleteActive,
+  setActiveModal,
   setSelectedInfo,
 }: DeleteModalProps) => {
   const contentCtx = useContentContext();
@@ -41,7 +42,7 @@ export const DeleteModal = ({
       setDeleting(true);
       await contentCtx.deleteQuiz(contentId, classId);
       setSelectedInfo(null);
-      setDeleteActive(false);
+      setActiveModal(null);
       setDeleting(false);
     } catch (e) {
       setDeleting(false);
@@ -53,15 +54,12 @@ export const DeleteModal = ({
     <div>
       <div
         className={styles.modalBackground}
-        onClick={() => setDeleteActive(false)}
+        onClick={() => setActiveModal(null)}
       ></div>
 
       <div className={styles.deleteWrapper}>
         <div className={styles.outsideWrapper}>
-          <div
-            className={styles.exitBtn}
-            onClick={() => setDeleteActive(false)}
-          >
+          <div className={styles.exitBtn} onClick={() => setActiveModal(null)}>
             <FontAwesomeIcon icon={faXmark} />
           </div>
 
@@ -75,7 +73,7 @@ export const DeleteModal = ({
               <div className={styles.exitBtns}>
                 <button
                   className={`${styles.exitCta} ${styles.cancel}`}
-                  onClick={() => setDeleteActive(false)}
+                  onClick={() => setActiveModal(null)}
                 >
                   Cancel
                 </button>

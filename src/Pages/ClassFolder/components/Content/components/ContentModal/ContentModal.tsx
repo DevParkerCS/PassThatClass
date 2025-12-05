@@ -59,7 +59,7 @@ export const ContentModal = ({
           </div>
           {!content || !meta ? (
             <div className={styles.loadingWrapper}>
-              <Spinner size="l" />
+              <Spinner size="m" txt="Loading Information..." />
             </div>
           ) : (
             <div>

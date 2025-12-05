@@ -9,7 +9,7 @@ import { DeleteModal } from "./components/ContentModal/DeleteModal";
 import { ReviewModal } from "./components/ContentModal/ReviewModal";
 import { useContentContext } from "../../../../context/DataContext/ContentContext";
 import { useClassesContext } from "../../../../context/DataContext/ClassesContext";
-import { EditModal } from "./components/ContentModal/EditModal";
+import { EditModal } from "./components/ContentModal/EditModal/EditModal";
 
 type FilterType = "all" | "quiz" | "card";
 

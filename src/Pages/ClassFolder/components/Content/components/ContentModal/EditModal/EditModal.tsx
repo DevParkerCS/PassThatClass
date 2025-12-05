@@ -1,5 +1,6 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import styles from "./ContentModal.module.scss";
+import shared from "../ContentModal.module.scss";
+import styles from "./EditModal.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Dispatch,
@@ -9,14 +10,14 @@ import {
   useRef,
   useState,
 } from "react";
-import { ActiveModal } from "../../Content";
+import { ActiveModal } from "../../../Content";
 import {
   QuizMeta,
   QuizQuestionType,
-} from "../../../../../../context/DataContext/types";
-import { useContentContext } from "../../../../../../context/DataContext/ContentContext";
-import { Spinner } from "../../../../../../components/Spinner/Spinner";
-import { AutoResizeTextarea } from "../../../../../../components/AutoResizeTextArea/AutoResizeTextArea";
+} from "../../../../../../../context/DataContext/types";
+import { useContentContext } from "../../../../../../../context/DataContext/ContentContext";
+import { Spinner } from "../../../../../../../components/Spinner/Spinner";
+import { AutoResizeTextarea } from "../../../../../../../components/AutoResizeTextArea/AutoResizeTextArea";
 
 type EditModalProps = {
   contentId: string;
@@ -25,27 +26,20 @@ type EditModalProps = {
 
 export const EditModal = ({ contentId, setActiveModal }: EditModalProps) => {
   const contentCtx = useContentContext();
-  const [editedContent, setEditedContent] = useState<
-    QuizQuestionType[] | undefined
-  >(contentCtx.questionsById[contentId]);
   const [editedMeta, setEditedMeta] = useState<QuizMeta>(
     contentCtx.quizMetaById[contentId]
   );
-  const [loading, setLoading] = useState(editedContent !== undefined);
   const [changed, setChanged] = useState(false);
-  const [questionsHeight, setQuestionsHeight] = useState(0);
-  const questionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setEditedContent(contentCtx.questionsById[contentId]);
     setEditedMeta(contentCtx.quizMetaById[contentId]);
-  }, [contentCtx.contentById, contentCtx.quizMetaById]);
+  }, [contentCtx.quizMetaById]);
 
   useEffect(() => {
     if (changed === true) return;
 
     setChanged(true);
-  }, [editedContent, editedMeta]);
+  }, [editedMeta]);
 
   // useLayoutEffect(() => {
   //   console.log("CHANGING");
@@ -57,23 +51,23 @@ export const EditModal = ({ contentId, setActiveModal }: EditModalProps) => {
   return (
     <div>
       <div
-        className={styles.modalBackground}
+        className={shared.modalBackground}
         onClick={() => setActiveModal("content")}
       ></div>
 
-      <div className={styles.modalWrapper}>
-        <div className={styles.outsideWrapper}>
+      <div className={`${shared.modalWrapper} ${styles.editModalWrapper}`}>
+        <div className={shared.outsideWrapper}>
           <div
-            className={styles.exitBtn}
+            className={shared.exitBtn}
             onClick={() => setActiveModal("content")}
           >
             <FontAwesomeIcon icon={faXmark} />
           </div>
 
-          <p className={styles.modalTitle}>Quick Edit</p>
+          <p className={shared.modalTitle}>Quick Edit</p>
 
-          {!editedContent ? (
-            <div className={styles.loadingWrapper}>
+          {!editedMeta ? (
+            <div className={shared.loadingWrapper}>
               <Spinner size="l" />
             </div>
           ) : (
@@ -93,9 +87,9 @@ export const EditModal = ({ contentId, setActiveModal }: EditModalProps) => {
               </div>
 
               <div className={styles.inputWrapper}>
-                <label className={styles.inputLabel}>Questions</label>
-                <div className={styles.contentWrapper}>
-                  <div className={styles.questionsWrapper}>
+                {/* <label className={shared.inputLabel}>Questions</label> */}
+                <div className={shared.contentWrapper}>
+                  {/* <div className={shared.questionsWrapper}>
                     {editedContent.map((e, ei) => {
                       return (
                         <EditQuestion
@@ -106,7 +100,7 @@ export const EditModal = ({ contentId, setActiveModal }: EditModalProps) => {
                         />
                       );
                     })}
-                  </div>
+                  </div> */}
 
                   <div className={styles.editBtns}>
                     <button
@@ -124,11 +118,11 @@ export const EditModal = ({ contentId, setActiveModal }: EditModalProps) => {
                   </div>
                   {/* <div ref={questionRef} style={{ height: "fit-content" }}>
                     <div>
-                      <p className={styles.inputLabel}>
+                      <p className={shared.inputLabel}>
                         Question {activeIndex + 1}
                       </p>
                       <AutoResizeTextarea
-                        className={styles.input}
+                        className={shared.input}
                         value={editedContent[activeIndex].question}
                         onChange={(e) =>
                           setEditedContent((prev) => {
@@ -152,10 +146,10 @@ export const EditModal = ({ contentId, setActiveModal }: EditModalProps) => {
                         index={activeIndex}
                         activeIndex={activeIndex}
                       />
-                      <div className={styles.explanationWrapper}>
-                        <p className={styles.inputLabel}>Explanation</p>
+                      <div className={shared.explanationWrapper}>
+                        <p className={shared.inputLabel}>Explanation</p>
                         <AutoResizeTextarea
-                          className={styles.input}
+                          className={shared.input}
                           value={editedContent[activeIndex].explanation}
                           onChange={(e) =>
                             setEditedContent((prev) => {
@@ -194,10 +188,10 @@ export const EditQuestion = ({
   setEditedContent,
 }: EditQuestionProps) => {
   return (
-    <div className={`${styles.question}`}>
-      <p className={styles.questionIndex}>{index + 1}</p>
+    <div className={`${shared.question}`}>
+      <p className={shared.questionIndex}>{index + 1}</p>
       <AutoResizeTextarea
-        className={styles.input}
+        className={shared.input}
         value={editedContent[index].question}
         onChange={(e) =>
           setEditedContent((prev) => {
@@ -237,10 +231,10 @@ export const EditQuestion = ({
 
 //   return (
 //     <div>
-//       <p className={styles.inputLabel}>Correct Option</p>
+//       <p className={shared.inputLabel}>Correct Option</p>
 
 //       <AutoResizeTextarea
-//         className={`${styles.option} ${styles.correct}`}
+//         className={`${shared.option} ${shared.correct}`}
 //         value={correctOption.text}
 //         onChange={(e) =>
 //           setEditedContent((prev) => {
@@ -258,15 +252,15 @@ export const EditQuestion = ({
 //         }
 //       />
 
-//       <p className={styles.inputLabel}>Incorrect Options</p>
+//       <p className={shared.inputLabel}>Incorrect Options</p>
 //       {editedContent[index].options.map((o, i) => {
 //         if (i === correctIndex) return <div></div>;
 
 //         return (
 //           <AutoResizeTextarea
 //             key={i}
-//             className={`${styles.option} ${
-//               i === editedContent[index].correct_index && styles.correct
+//             className={`${shared.option} ${
+//               i === editedContent[index].correct_index && shared.correct
 //             }`}
 //             value={o.text}
 //             onChange={(e) =>

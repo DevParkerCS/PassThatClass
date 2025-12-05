@@ -52,7 +52,7 @@ export const ClassFolder = () => {
 
         {auth.loading || !content.contentById[classId] ? (
           <div>
-            <Spinner size="l" />
+            <Spinner size="l" txt="Loading Quizzes..." />
           </div>
         ) : (
           <Content classId={classId || ""} />

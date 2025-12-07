@@ -58,19 +58,21 @@ export const NewQuiz = () => {
 
     setSubmitionState("generating");
     try {
-      const qd = await contentCtx.AddNewQuiz({
+      const qd = await contentCtx.callAddNewQuiz(
         classId,
         chosenGrade,
         files,
         input,
         numQuestions,
         genExample,
-        setLoadingState,
-      });
+        setLoadingState
+      );
 
       // fix the URL: /class/:className/:classId
       const className = classesCtx.classesById[classId].name;
-      nav(`/class/${encodeURIComponent(className)}/${classId}?quizId=${qd.id}`);
+      nav(
+        `/class/${encodeURIComponent(className)}/${classId}?quizId=${qd?.id}`
+      );
     } catch (e) {
       setLoadingState("");
       const error = e as AxiosError;

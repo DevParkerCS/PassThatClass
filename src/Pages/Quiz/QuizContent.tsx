@@ -27,7 +27,7 @@ export const QuizContent = () => {
   useEffect(() => {
     if (!auth.loading && auth.session && !quizzesFetched.current && quizId) {
       quizzesFetched.current = true;
-      contentCtx.fetchQuizContent(quizId);
+      contentCtx.callQuizContent(quizId);
     }
   }, [auth.loading, auth.session, quizId]);
 

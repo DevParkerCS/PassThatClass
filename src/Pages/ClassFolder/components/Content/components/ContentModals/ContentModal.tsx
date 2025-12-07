@@ -7,7 +7,11 @@ import {
   QuizQuestionType,
 } from "../../../../../../context/DataContext/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPenToSquare,
+  faTrash,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { Spinner } from "../../../../../../components/Spinner/Spinner";
 import { ContentList } from "./ContentList";
 import { ModalStats } from "./ModalStats";
@@ -81,6 +85,13 @@ export const ContentModal = ({
                     className={styles.editCta}
                     onClick={() => setActiveModal("edit")}
                     icon={faPenToSquare}
+                  />
+                </div>
+                <div>
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    onClick={(e) => setActiveModal("delete")}
+                    className={`${styles.editCta}`}
                   />
                 </div>
               </div>

@@ -1,10 +1,11 @@
 .contentWrapper {
-  width: var(--app-width);
-  margin: 0 auto;
+  width: min(var(--app-width), 1200px);
   margin-top: 2rem;
   flex-direction: column;
   align-items: center;
   display: flex;
+  margin: 0 auto;
+  margin-top: 1rem;
 }
 
 .breadcrumbWrapper {
@@ -12,7 +13,6 @@
 }
 
 .quizWrapper {
-  width: 100%;
   display: none;
 
   &.active {

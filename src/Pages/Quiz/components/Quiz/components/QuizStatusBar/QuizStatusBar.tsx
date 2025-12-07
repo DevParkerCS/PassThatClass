@@ -12,7 +12,7 @@ export const QuizStatusBar = ({ qIndex, questions }: QuizStatusBarProps) => {
   return (
     <div className={styles.statusInfoWrapper}>
       <p className={styles.indexTxt}>
-        {qIndex + 1} of {questions.length}
+        Question {qIndex + 1} of {questions.length}
       </p>
 
       <div className={styles.statusBarWrapper}>

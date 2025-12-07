@@ -18,22 +18,28 @@
   position: relative;
   width: calc(100% / 4 - 1rem);
 
-  .editBtn {
+  .editWrapper {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    font-size: 1.1rem;
-    color: var(--text-main);
-    display: none;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
     cursor: pointer;
+    border: 1px solid var(--highlight-border);
+    border-radius: 100%;
+    padding: 0.5rem;
 
     &:hover {
-      color: var(--cyan-accent);
+      border-color: var(--cyan-accent);
+
+      .editBtn {
+        color: var(--cyan-accent);
+      }
     }
   }
 
-  &:hover .editBtn {
-    display: block;
+  .editBtn {
+    font-size: 1.1rem;
+    color: var(--text-main);
   }
 }
 
@@ -48,7 +54,7 @@
   width: 100%;
 
   &:hover {
-    background-color: var(--third-layer);
+    background-color: var(--sec-layer);
   }
 }
 
@@ -132,5 +138,63 @@
 
   &:hover {
     background-color: var(--cyan-accent);
+  }
+}
+
+@media (max-width: 1024px) {
+  .cardWrapper {
+    width: calc(100% / 3 - 1rem);
+
+    .editWrapper {
+      padding: 0.25rem;
+    }
+
+    .editBtn {
+      font-size: 1rem;
+      color: var(--text-main);
+    }
+  }
+
+  .classWrapper {
+    padding: 1.5rem 1rem;
+  }
+
+  .classTxtWrapper {
+    .classIcon {
+      font-size: 1.5rem;
+    }
+
+    .className {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .cardWrapper {
+    width: calc(100% / 2 - 1rem);
+
+    .editWrapper {
+      padding: 0.25rem;
+    }
+
+    .editBtn {
+      font-size: 1rem;
+      color: var(--text-main);
+    }
+  }
+
+  .classWrapper {
+    padding: 1.5rem 1rem;
+  }
+
+  .classTxtWrapper {
+    .classIcon {
+      font-size: 1.5rem;
+    }
+
+    .className {
+      font-size: 1.5rem;
+    }
   }
 }

@@ -8,6 +8,7 @@
   box-shadow: $sm-dark-shadow;
   border-radius: var(--mid-radius);
   overflow: hidden;
+  border: 1px solid var(--light-border);
 }
 
 .sectionContent {

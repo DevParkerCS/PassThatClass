@@ -23,6 +23,7 @@
       background-color: var(--bg-trans);
       cursor: default;
       border: 1px solid transparent;
+      color: var(--text-secondary);
     }
 
     &:not(.inactive):hover {

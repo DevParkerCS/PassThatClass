@@ -7,8 +7,9 @@
 }
 
 .contentItem {
-  flex: 1 1 calc(50% - 0.5rem);
-  max-width: calc(50% - 0.5rem);
+  width: calc(100% / 3 - 1rem);
+  min-width: calc(100% / 3 - 1rem);
+  flex: 1;
   background-color: var(--first-layer);
   border-radius: var(--mid-radius);
   display: flex;

@@ -47,7 +47,7 @@
   align-items: flex-start;
   width: 95%;
   max-width: 95%;
-  padding: 1rem;
+  padding: 1.25rem 1rem;
   border-radius: 25px;
   cursor: pointer;
   border: 1px solid var(--light-border);
@@ -62,15 +62,38 @@
     .optionAnswer {
       color: var(--text-main);
     }
+
+    .optionID {
+      color: var(--text-main);
+      background-color: var(--cyan-accent);
+    }
   }
 
   &.correctAns {
     border: 1px solid var(--green-accent);
     transform: scale(1.015);
+
+    .optionTxt {
+      color: var(--text-main);
+    }
+
+    .optionID {
+      color: var(--text-main);
+      background-color: var(--cyan-accent);
+    }
   }
 
   &.incorrectAns {
     border: 1px solid red;
+
+    .optionID {
+      color: var(--text-main);
+      background-color: var(--cyan-accent);
+    }
+
+    .optionTxt {
+      color: var(--text-secondary);
+    }
   }
 
   &.isReviewing {
@@ -87,7 +110,8 @@
     }
 
     .optionID {
-      color: var(--cyan-accent);
+      color: var(--text-main);
+      background-color: var(--cyan-accent);
     }
   }
 
@@ -107,8 +131,15 @@
 
   .optionID {
     margin-right: 1rem;
-    color: var(--cyan-soft);
+    background-color: var(--cyan-soft);
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
     flex-shrink: 0;
     transition: all 0.1s linear;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
   }
 }

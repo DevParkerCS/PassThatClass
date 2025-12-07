@@ -1,3 +1,10 @@
+@import "../../../../../../../styles/variables.module.scss";
+.modalContainer {
+  &.saving {
+    pointer-events: none;
+  }
+}
+
 .editModalWrapper {
   width: min(600px, 80vw);
 }
@@ -34,87 +41,6 @@
     border-color: var(--highlight-border);
     border-radius: var(--mid-radius);
   }
-}
-
-.optionsWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.questionTxtWrapper {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: center;
-}
-
-.questionsWrapper {
-  overflow: auto;
-  max-height: 400px;
-  .question {
-    display: flex;
-    padding: 1rem 0.5rem;
-    border-radius: var(--mid-radius);
-  }
-
-  .questionIndex {
-    margin-right: 1rem;
-    color: var(--cyan-accent);
-    font-weight: bold;
-    font-size: 1.1rem;
-  }
-
-  .questionTxt {
-    font-size: 1.15rem;
-    color: var(--text-secondary);
-  }
-}
-
-.option {
-  font-size: 1.1rem;
-  resize: vertical;
-  border: 1px solid var(--error-red-dark);
-  background-color: var(--sec-layer);
-  color: var(--text-secondary);
-  outline: none;
-  padding: 0.5rem;
-  border-radius: var(--mid-radius);
-  cursor: text;
-  width: 100%;
-
-  &.correct {
-    border-color: var(--green-accent);
-  }
-}
-
-.optionsDropdown {
-  max-height: 0px;
-  overflow: hidden;
-
-  &.active {
-    max-height: 100%;
-  }
-}
-
-.questionLabel {
-  font-size: 1.15rem;
-  color: var(--text-secondary);
-  margin-bottom: 0.5rem;
-}
-
-.questionTitle {
-  color: var(--text-secondary);
-  border: 1px solid var(--highlight-border);
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  cursor: text;
-  font-size: 1.15rem;
-  border-radius: var(--mid-radius);
-}
-
-.explanationWrapper {
-  margin-top: 1rem;
 }
 
 .editBtns {
@@ -157,4 +83,59 @@
       }
     }
   }
+}
+
+.closeWrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  background-color: var(--third-layer);
+  box-shadow: $sm-dark-shadow;
+  padding: 0.5rem;
+  border-radius: var(--mid-radius);
+  width: 400px;
+
+  .closeTxt {
+    font-size: 1.25rem;
+    text-align: center;
+    margin-top: 0.5rem;
+    color: var(--text-main);
+    margin-bottom: 2rem;
+    font-weight: bold;
+  }
+
+  .closeBtn {
+    font-size: 1.25rem;
+    width: 150px;
+    padding: 0.5rem;
+    color: var(--text-secondary);
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.1s linear;
+    border-radius: var(--mid-radius);
+
+    &.cnclBtn {
+      border: 1px solid var(--cyan-soft);
+      background-color: transparent;
+
+      &:hover {
+        background-color: var(--cyan-soft);
+      }
+    }
+
+    &.clsBtn {
+      border: 1px solid var(--error-red);
+
+      &:hover {
+        background-color: var(--error-red);
+      }
+    }
+  }
+}
+
+.closeBackground {
+  z-index: 90;
+  cursor: default;
 }

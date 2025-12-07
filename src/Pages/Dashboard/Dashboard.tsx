@@ -185,7 +185,12 @@ const ClassCard = ({
   return (
     <div className={styles.cardWrapper}>
       {editable && (
-        <FontAwesomeIcon className={styles.editBtn} icon={faPenToSquare} />
+        <div className={styles.editWrapper}>
+          <FontAwesomeIcon
+            className={styles.editBtn}
+            icon={faEllipsisVertical}
+          />
+        </div>
       )}
       <button type="button" className={styles.classWrapper} onClick={onClick}>
         <div className={styles.classTxtWrapper}>

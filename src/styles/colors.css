@@ -2,10 +2,11 @@
   /* Page + shells */
   --dark-bg: rgb(18, 18, 18);
   --bg-trans: rgba(18, 18, 18, 0.55);
-  --first-layer: rgb(33, 33, 33);
-  --sec-layer: rgb(44, 44, 44);
-  --third-layer: rgb(60, 60, 60);
-  --third-highlight: rgb(80, 80, 80);
+  /* --first-layer: rgb(33, 33, 33); */
+  --first-layer: #171717;
+  --sec-layer: #252525;
+  --third-layer: #353535;
+  --third-highlight: #404040;
 
   --cyan-accent: #22d3ee;
   --cyan-soft: #0891b2;

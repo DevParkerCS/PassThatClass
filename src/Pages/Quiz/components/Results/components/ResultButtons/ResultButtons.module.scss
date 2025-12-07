@@ -11,14 +11,13 @@
   cursor: pointer;
   box-shadow: $sm-dark-shadow;
   transition: all 0.1s linear;
-  background-color: var(--third-layer);
-  border: 1px solid var(--highlight-border);
+  background-color: transparent;
+  border: 1px solid var(--cyan-soft);
 
   &:hover {
-    background-color: var(--third-highlight);
+    border-color: var(--cyan-accent);
     transform: translateY(-1px);
     box-shadow: $dark-shadow;
-    border: 1px solid var(--bright-border);
   }
 }
 
@@ -29,11 +28,10 @@
 
   .resultsBtn {
     color: var(--text-secondary);
-    background-color: var(--sec-layer);
+    background-color: transparent;
     border: 1px solid var(--light-border);
 
     &:hover {
-      background-color: var(--third-layer);
       border: 1px solid var(--highlight-border);
     }
   }

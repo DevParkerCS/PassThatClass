@@ -12,20 +12,25 @@ export type ClassesState = {
 export type ContentState = {
   contentById: ContentById;
   loadContent: (classId: string) => void;
-  fetchQuizContent: (quizId: string) => Promise<void>;
-  deleteQuiz: (quizId: string, classId: string) => Promise<void>;
+  callQuizContent: (quizId: string) => Promise<void>;
+  callDeleteQuiz: (quizId: string, classId: string) => Promise<void>;
   quizLoading: boolean;
   questionsById: QuestionsById;
   quizMetaById: QuizMetaById;
-  AddNewQuiz: (params: {
-    classId: string;
-    chosenGrade: string;
-    files: File[];
-    input: string;
-    numQuestions: number;
-    genExample: boolean;
-    setLoadingState: Dispatch<SetStateAction<string>>;
-  }) => Promise<QuizMeta>;
+  callAddNewQuiz: (
+    classId: string,
+    chosenGrade: string,
+    files: File[],
+    input: string,
+    numQuestions: number,
+    genExample: boolean,
+    setLoadingState: Dispatch<SetStateAction<string>>
+  ) => Promise<QuizMeta | undefined>;
+  updateTitle: (
+    quizId: string,
+    classId: string,
+    title: string
+  ) => Promise<void>;
 };
 
 export type DataProviderProps = {

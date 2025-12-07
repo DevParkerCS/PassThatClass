@@ -24,21 +24,8 @@ export const ContentItem = ({
     setActiveModal("content");
   };
 
-  const handleDelClick = () => {
-    setSelectedInfo(content);
-    setActiveModal("delete");
-  };
-
   return (
     <div className={styles.contentItem} onClick={handleClick}>
-      <FontAwesomeIcon
-        icon={faTrash}
-        onClick={(e) => {
-          e.stopPropagation();
-          handleDelClick();
-        }}
-        className={`${styles.deleteIcon}`}
-      />
       <div className={styles.contentFlex}>
         <div className={styles.itemLabel}>
           {content.type === "quiz" ? "QUIZ" : "CARD"}

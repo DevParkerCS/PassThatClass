@@ -1,9 +1,9 @@
 .statusInfoWrapper {
-  display: flex;
+  // display: flex;
   background-color: var(--sec-layer);
   padding: 0.75rem 2rem;
   align-items: center;
-  border-bottom: 2px solid var(--light-border);
+  border-bottom: 1px solid var(--light-border);
 
   .indexTxt {
     font-size: 1.5rem;
@@ -13,10 +13,11 @@
 }
 
 .statusBarWrapper {
-  height: 15px;
+  height: 10px;
   background-color: var(--cyan-soft);
   flex-grow: 1;
-  margin: 0rem 2rem;
+  // margin: 0rem 2rem;
+  margin-top: 1rem;
   border-radius: 25px;
   position: relative;
   overflow: hidden;

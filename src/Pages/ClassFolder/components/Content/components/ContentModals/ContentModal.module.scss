@@ -27,6 +27,7 @@
   cursor: default;
   z-index: 10;
   overflow: hidden;
+  border: 1px solid var(--light-border);
 
   .modalTitle {
     font-size: 2.5rem;
@@ -144,10 +145,11 @@
 }
 
 .statWrapper {
-  background-color: var(--third-layer);
+  background-color: var(--sec-layer);
   height: fit-content;
   padding: 1rem;
   border-radius: var(--content-radius);
+  border: 1px solid var(--light-border);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -155,7 +157,7 @@
 
   .statTitle {
     font-size: 2rem;
-    color: var(--text-secondary);
+    color: var(--text-main);
     font-weight: bold;
     margin-bottom: 0.5rem;
   }
@@ -204,71 +206,6 @@
   }
 }
 
-.deleteWrapper {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-color: var(--sec-layer);
-  z-index: 10;
-  width: min(500px, 80vw);
-  border-radius: var(--mid-radius);
-  min-height: 180px;
-
-  .outsideWrapper {
-    min-height: 180px;
-  }
-
-  .exitTxt {
-    font-size: calc(1.5rem - 1px);
-    color: var(--text-main);
-    text-align: center;
-    margin: 0 auto;
-    width: 80%;
-  }
-
-  .exitName {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-top: 0rem;
-  }
-
-  .exitBtns {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2.5rem;
-  }
-
-  .exitCta {
-    font-size: 1.25rem;
-    padding: 0.5rem;
-    width: 175px;
-    border-radius: var(--mid-radius);
-    cursor: pointer;
-    color: var(--text-main);
-    border: 1px solid var(--light-border);
-    transition: all 0.1s linear;
-    box-shadow: $sm-dark-shadow;
-
-    &.delete {
-      background-color: var(--error-red-dark);
-      font-weight: bold;
-
-      &:hover {
-        background-color: var(--error-red);
-      }
-    }
-
-    &.cancel {
-      background-color: var(--cyan-soft);
-
-      &:hover {
-        background-color: var(--cyan-accent);
-      }
-    }
-  }
-}
-
 .editCta {
   font-size: 1.3rem;
   color: var(--cyan-soft);
@@ -276,7 +213,6 @@
   cursor: pointer;
 
   &:hover {
-    font-size: 1.35rem;
     color: var(--cyan-accent);
   }
 }

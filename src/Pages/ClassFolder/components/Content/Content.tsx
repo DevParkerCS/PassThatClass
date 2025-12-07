@@ -2,14 +2,14 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import styles from "./Content.module.scss";
 import { useEffect, useState } from "react";
 import { ContentItem, EmptyItem } from "./components/contentItem/ContentItem";
-import { ContentModal } from "./components/ContentModal/ContentModal";
+import { ContentModal } from "./components/ContentModals/ContentModal";
 import { ContentMeta } from "../../../../context/DataContext/types";
 import { Ctas } from "../Ctas/Ctas";
-import { DeleteModal } from "./components/ContentModal/DeleteModal";
-import { ReviewModal } from "./components/ContentModal/ReviewModal";
+import { DeleteModal } from "./components/ContentModals/DeleteModal/DeleteModal";
+import { ReviewModal } from "./components/ContentModals/ReviewModal";
 import { useContentContext } from "../../../../context/DataContext/ContentContext";
 import { useClassesContext } from "../../../../context/DataContext/ClassesContext";
-import { EditModal } from "./components/ContentModal/EditModal/EditModal";
+import { EditModal } from "./components/ContentModals/EditModal/EditModal";
 
 type FilterType = "all" | "quiz" | "card";
 
@@ -42,7 +42,7 @@ export const Content = ({ classId }: ContentProps) => {
   useEffect(() => {
     if (activeModal === "content") {
       if (selectedInfo?.type === "quiz")
-        content.fetchQuizContent(selectedInfo.id);
+        content.callQuizContent(selectedInfo.id);
 
       document.body.style.overflow = "hidden";
     } else {
@@ -99,6 +99,7 @@ export const Content = ({ classId }: ContentProps) => {
 
       {activeModal === "edit" && selectedInfo && (
         <EditModal
+          classId={classId}
           setActiveModal={setActiveModal}
           contentId={selectedInfo.id}
         />

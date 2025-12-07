@@ -1,11 +1,12 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import styles from "./ContentModal.module.scss";
+import shared from "../ContentModal.module.scss";
+import styles from "./DeleteModal.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { Spinner } from "../../../../../../components/Spinner/Spinner";
-import { ContentMeta } from "../../../../../../context/DataContext/types";
-import { useContentContext } from "../../../../../../context/DataContext/ContentContext";
-import { ActiveModal } from "../../Content";
+import { Spinner } from "../../../../../../../components/Spinner/Spinner";
+import { ContentMeta } from "../../../../../../../context/DataContext/types";
+import { useContentContext } from "../../../../../../../context/DataContext/ContentContext";
+import { ActiveModal } from "../../../Content";
 
 type DeleteModalProps = {
   contentId: string;
@@ -40,7 +41,7 @@ export const DeleteModal = ({
   const handleDelete = async () => {
     try {
       setDeleting(true);
-      await contentCtx.deleteQuiz(contentId, classId);
+      await contentCtx.callDeleteQuiz(contentId, classId);
       setSelectedInfo(null);
       setActiveModal(null);
       setDeleting(false);
@@ -53,13 +54,16 @@ export const DeleteModal = ({
   return (
     <div>
       <div
-        className={styles.modalBackground}
-        onClick={() => setActiveModal(null)}
+        className={shared.modalBackground}
+        onClick={() => setActiveModal("content")}
       ></div>
 
-      <div className={styles.deleteWrapper}>
-        <div className={styles.outsideWrapper}>
-          <div className={styles.exitBtn} onClick={() => setActiveModal(null)}>
+      <div className={`${styles.deleteWrapper} ${loading && styles.loading}`}>
+        <div className={` ${styles.outsideWrapper} ${shared.outsideWrapper}`}>
+          <div
+            className={shared.exitBtn}
+            onClick={() => setActiveModal("content")}
+          >
             <FontAwesomeIcon icon={faXmark} />
           </div>
 
@@ -69,11 +73,11 @@ export const DeleteModal = ({
           {!loading && !deleting && (
             <div>
               <p className={styles.exitTxt}>Are you sure you want to delete </p>
-              <p className={`${styles.exitTxt} ${styles.exitName}`}>{title}</p>
+              <p className={`${styles.exitTxt} ${styles.exitName}`}>{title}?</p>
               <div className={styles.exitBtns}>
                 <button
                   className={`${styles.exitCta} ${styles.cancel}`}
-                  onClick={() => setActiveModal(null)}
+                  onClick={() => setActiveModal("content")}
                 >
                   Cancel
                 </button>

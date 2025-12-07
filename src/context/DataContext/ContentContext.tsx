@@ -110,6 +110,29 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
     }
   };
 
+  const addAttempt = async (
+    numCorrect: number,
+    seconds: number,
+    incorrectIndexes: number[],
+    quizId: string
+  ) => {
+    try {
+      const params = { numCorrect, seconds, incorrectIndexes };
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_API}/quiz/${quizId}/attempt`,
+        params,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${auth.session?.access_token}`,
+          },
+        }
+      );
+    } catch (e) {
+      throw new Error("Error adding new attempt data");
+    }
+  };
+
   const callAddNewQuiz = async (
     classId: string,
     chosenGrade: string,
@@ -153,6 +176,7 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
     questionsById,
     quizMetaById,
     callAddNewQuiz,
+    addAttempt,
   });
 
   return (

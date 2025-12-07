@@ -31,6 +31,12 @@ export type ContentState = {
     classId: string,
     title: string
   ) => Promise<void>;
+  addAttempt: (
+    numCorrect: number,
+    seconds: number,
+    incorrectIndexes: number[],
+    quizId: string
+  ) => void;
 };
 
 export type DataProviderProps = {

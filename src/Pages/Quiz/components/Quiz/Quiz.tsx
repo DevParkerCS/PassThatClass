@@ -1,9 +1,8 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { QuizStatusBar } from "./components/QuizStatusBar/QuizStatusBar";
 import { QuizQuestion } from "./components/QuizQuestion/QuizQuestion";
 import { QuizButtons } from "./components/QuizButtons/QuizButtons";
 import styles from "./Quiz.module.scss";
-import shared from "../../Shared/styles.module.scss";
 import { QuizMode } from "../../QuizContent";
 import { QuizQuestionType } from "../../../../context/DataContext/types";
 
@@ -12,6 +11,10 @@ type QuizProps = {
   setMode: React.Dispatch<React.SetStateAction<QuizMode>>;
   setNumCorrect: React.Dispatch<React.SetStateAction<number>>;
   questions: QuizQuestionType[];
+  numCorrect: number;
+  quizId: string;
+  startTime: React.RefObject<number>;
+  setTimeSeconds: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const Quiz = ({
@@ -19,6 +22,10 @@ export const Quiz = ({
   setMode,
   setNumCorrect,
   questions,
+  numCorrect,
+  startTime,
+  setTimeSeconds,
+  quizId,
 }: QuizProps) => {
   const [qIndex, setQIndex] = useState(0);
   const [canGoNext, setCanGoNext] = useState(false);
@@ -32,66 +39,66 @@ export const Quiz = ({
     }
   }, [questions.length, mode, qIndex]);
 
-  console.log(questionsHeight);
-
   return (
-    <div className={shared.contentWrapper}>
-      <div className={styles.quizWrapper}>
-        <QuizStatusBar qIndex={qIndex} questions={questions} />
+    <div className={styles.quizWrapper}>
+      <QuizStatusBar qIndex={qIndex} questions={questions} />
 
-        <div
-          className={`${styles.quizContent} ${
-            mode === "reviewing" ? styles.quizContentReviewing : ""
-          }`}
-        >
-          {mode === "reviewing" && (
-            <div
-              className={styles.incorrectWrapper}
-              style={{ maxHeight: `${questionsHeight}px` }}
-            >
-              <p className={styles.incorrectTitle}>Incorrect Questions</p>
+      <div
+        className={`${styles.quizContent} ${
+          mode === "reviewing" ? styles.quizContentReviewing : ""
+        }`}
+      >
+        {mode === "reviewing" && (
+          <div
+            className={styles.incorrectWrapper}
+            style={{ maxHeight: questionsHeight ?? undefined }}
+          >
+            <p className={styles.incorrectTitle}>Incorrect Questions</p>
 
-              <div className={styles.incorrectItems}>
-                {wrongIndexes.map((w) => (
-                  <div
-                    className={styles.incorrectItem}
-                    onClick={() => setQIndex(w)}
-                  >
-                    <p>Question {w + 1}</p>
-                  </div>
-                ))}
-              </div>
+            <div className={styles.incorrectItems}>
+              {wrongIndexes.map((w) => (
+                <div
+                  key={w}
+                  className={styles.incorrectItem}
+                  onClick={() => setQIndex(w)}
+                >
+                  <p>Question {w + 1}</p>
+                </div>
+              ))}
             </div>
-          )}
-
-          <div className={styles.questionsWrapper} ref={questionsRef}>
-            {questions.map((q, i) => {
-              return (
-                <QuizQuestion
-                  key={q.id}
-                  question={q}
-                  index={i}
-                  qIndex={qIndex}
-                  setCanGoNext={setCanGoNext}
-                  mode={mode}
-                  setNumCorrect={setNumCorrect}
-                  setWrongIndexes={setWrongIndexes}
-                />
-              );
-            })}
           </div>
-        </div>
+        )}
 
-        <QuizButtons
-          qIndex={qIndex}
-          setQIndex={setQIndex}
-          canGoNext={canGoNext}
-          setCanGoNext={setCanGoNext}
-          mode={mode}
-          setMode={setMode}
-          questions={questions}
-        />
+        <div className={styles.questionsWrapper} ref={questionsRef}>
+          {questions.map((q, i) => (
+            <QuizQuestion
+              key={q.id}
+              question={q}
+              index={i}
+              qIndex={qIndex}
+              setCanGoNext={setCanGoNext}
+              mode={mode}
+              setNumCorrect={setNumCorrect}
+              setWrongIndexes={setWrongIndexes}
+            />
+          ))}
+        </div>
       </div>
+
+      <QuizButtons
+        qIndex={qIndex}
+        setQIndex={setQIndex}
+        canGoNext={canGoNext}
+        setCanGoNext={setCanGoNext}
+        mode={mode}
+        setMode={setMode}
+        questions={questions}
+        numCorrect={numCorrect}
+        setTimeSeconds={setTimeSeconds}
+        startTime={startTime}
+        quizId={quizId}
+        incorrectIndexes={wrongIndexes}
+      />
     </div>
   );
 };

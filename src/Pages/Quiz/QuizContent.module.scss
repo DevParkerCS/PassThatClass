@@ -1,9 +1,11 @@
 .contentWrapper {
-  width: min(var(--app-width), 1200px);
-  margin-top: 2rem;
+  min-width: min(var(--app-width), 1200px);
+  max-width: min(var(--app-width), 1200px);
+
+  display: flex;
   flex-direction: column;
   align-items: center;
-  display: flex;
+
   margin: 0 auto;
   margin-top: 1rem;
 }
@@ -12,10 +14,13 @@
   width: 100%;
 }
 
+/* Wrapper that holds the <Quiz /> component */
 .quizWrapper {
-  display: none;
+  width: 100%;
+  display: none; /* hidden by default so we can show spinner/results instead */
+}
 
-  &.active {
-    display: block;
-  }
+/* When active, make it flex so inner content can stretch */
+.quizWrapper.active {
+  display: flex;
 }

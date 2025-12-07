@@ -13,6 +13,13 @@ type ResultsProps = {
   quizLength: number;
 };
 
+export const formatTime = (seconds: number) => {
+  const timeMins = Math.floor(seconds / 60);
+  const timeSecs = seconds % 60;
+
+  return `${timeMins}:${timeSecs < 10 ? `0${timeSecs}` : timeSecs}`;
+};
+
 export const Results = ({
   setMode,
   numCorrect,
@@ -21,13 +28,6 @@ export const Results = ({
   time,
   quizLength,
 }: ResultsProps) => {
-  const formatTime = (seconds: number) => {
-    const timeMins = Math.floor(seconds / 60);
-    const timeSecs = seconds % 60;
-
-    return `${timeMins}:${timeSecs < 10 ? `0${timeSecs}` : timeSecs}`;
-  };
-
   return (
     <div className={shared.contentWrapper} style={{ width: "fit-content" }}>
       <div>

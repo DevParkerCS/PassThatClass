@@ -34,8 +34,7 @@ export const ContentItem = ({
       </div>
       <div>
         <p className={styles.itemInfoTxt}>
-          <span>{content.num_items}</span> &bull;{" "}
-          <span>Last reviewed 2 days ago</span>
+          <span>{content.num_items}</span> &bull; <span>2d ago</span>
         </p>
       </div>
     </div>

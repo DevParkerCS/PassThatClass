@@ -7,10 +7,16 @@
   box-shadow: $sm-dark-shadow;
   border: 1px solid var(--light-border);
   margin-top: 1rem;
+  flex: 1;
 }
 
 .quizContent {
   display: flex;
+}
+
+/* Optional modifier if you ever need extra styles in reviewing mode */
+.quizContentReviewing {
+  /* add reviewing-specific styles here if you want */
 }
 
 .incorrectWrapper {

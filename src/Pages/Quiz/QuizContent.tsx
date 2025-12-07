@@ -24,40 +24,41 @@ export const QuizContent = () => {
   const contentCtx = useContentContext();
   const nav = useNavigate();
 
+  // Fetch quiz questions once per mount
   useEffect(() => {
     if (!auth.loading && auth.session && !quizzesFetched.current && quizId) {
       quizzesFetched.current = true;
       contentCtx.callQuizContent(quizId);
     }
-  }, [auth.loading, auth.session, quizId]);
+  }, [auth.loading, auth.session, quizId, contentCtx]);
 
+  // Sync questions from context
   useEffect(() => {
     if (quizId && contentCtx.questionsById[quizId]) {
       setQuestions(contentCtx.questionsById[quizId]);
     }
   }, [contentCtx.questionsById, quizId]);
 
+  // Track timer for answering/results
   useEffect(() => {
     if (mode === "answering") {
       setNumCorrect(0);
       startTime.current = Date.now();
-    } else if (mode === "results" && startTime.current !== -1) {
-      const end = Date.now();
-      const elapsed = end - startTime.current;
-      startTime.current = -1;
-      setTimeSeconds(Math.round(elapsed / 1000));
     }
   }, [mode]);
 
+  // Redirect if not logged in
   useEffect(() => {
     if (!auth.loading && !auth.session) {
       nav("/login");
     }
-  }, [auth.session, auth.loading]);
+  }, [auth.session, auth.loading, nav]);
 
   if (!classId || !quizId) {
     return <div>Quiz Not Found</div>;
   }
+
+  const showQuiz = !contentCtx.quizLoading && mode !== "results";
 
   return (
     <div>
@@ -71,15 +72,17 @@ export const QuizContent = () => {
         {contentCtx.quizLoading && <Spinner txt="Loading Quiz..." size="l" />}
 
         <div
-          className={`${styles.quizWrapper} ${
-            !contentCtx.quizLoading && mode !== "results" && styles.active
-          }`}
+          className={`${styles.quizWrapper} ${showQuiz ? styles.active : ""}`}
         >
           <Quiz
             mode={mode}
             setMode={setMode}
             setNumCorrect={setNumCorrect}
             questions={questions}
+            numCorrect={numCorrect}
+            quizId={quizId}
+            setTimeSeconds={setTimeSeconds}
+            startTime={startTime}
           />
         </div>
 

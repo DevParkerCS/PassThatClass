@@ -4,11 +4,12 @@
 .contentFlex {
   display: flex;
   gap: 0.5rem;
+  align-items: center;
 }
 
 .contentItem {
-  width: calc(100% / 3 - 1rem);
-  min-width: calc(100% / 3 - 1rem);
+  width: calc(100% / 2 - 1rem);
+  min-width: calc(100% / 2 - 1rem);
   flex: 1;
   background-color: var(--first-layer);
   border-radius: var(--mid-radius);

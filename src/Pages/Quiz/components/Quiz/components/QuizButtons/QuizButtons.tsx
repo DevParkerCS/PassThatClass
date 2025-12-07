@@ -1,3 +1,4 @@
+import { useContentContext } from "../../../../../../context/DataContext/ContentContext";
 import { QuizQuestionType } from "../../../../../../context/DataContext/types";
 import { QuizMode } from "../../../../QuizContent";
 import styles from "./QuizButtons.module.scss";
@@ -10,6 +11,11 @@ type QuizButtonsProps = {
   setMode: React.Dispatch<React.SetStateAction<QuizMode>>;
   mode: QuizMode;
   questions: QuizQuestionType[];
+  numCorrect: number;
+  quizId: string;
+  incorrectIndexes: number[];
+  startTime: React.RefObject<number>;
+  setTimeSeconds: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const QuizButtons = ({
@@ -20,7 +26,14 @@ export const QuizButtons = ({
   setMode,
   mode,
   questions,
+  numCorrect,
+  startTime,
+  setTimeSeconds,
+  quizId,
+  incorrectIndexes,
 }: QuizButtonsProps) => {
+  const contentCtx = useContentContext();
+
   const handleNextClick = () => {
     if (mode !== "reviewing" && !canGoNext) return;
 
@@ -28,6 +41,14 @@ export const QuizButtons = ({
       setQIndex(qIndex + 1);
       setCanGoNext(false);
     } else if (qIndex === questions.length - 1) {
+      if (mode === "answering") {
+        const end = Date.now();
+        const elapsed = end - startTime.current;
+        const seconds = Math.round(elapsed / 1000);
+        startTime.current = -1;
+        setTimeSeconds(seconds);
+        contentCtx.addAttempt(numCorrect, seconds, incorrectIndexes, quizId);
+      }
       setMode("results");
       setQIndex(0);
     }

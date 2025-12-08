@@ -16,6 +16,7 @@ import {
   QuestionsById,
   QuizAttempts,
   QuizAttemptsById,
+  QuizAttemptType,
   QuizMeta,
   QuizMetaById,
   QuizQuestionType,
@@ -121,7 +122,7 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
   ) => {
     try {
       const params = { numCorrect, seconds, incorrectIndexes };
-      await axios.post(
+      const res = await axios.post(
         `${process.env.REACT_APP_BACKEND_API}/quiz/${quizId}/attempt`,
         params,
         {
@@ -131,6 +132,34 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
           },
         }
       );
+
+      const data = res.data;
+      const quizData: QuizMeta = data.quiz;
+      const attemptData: QuizAttemptType = data.attempt;
+
+      setQuizMetaById((prev) => ({ ...prev, [quizId]: quizData }));
+      setContentById((prev) => {
+        const prevContent = prev[quizData.class_id];
+
+        if (!prevContent) return prev;
+
+        return {
+          ...prev,
+          [quizData.class_id]: prevContent.map((p) =>
+            p.id === quizId ? { ...p, last_used_at: quizData.last_taken_at } : p
+          ),
+        };
+      });
+
+      setAttemptsById((prev) => {
+        const prevAttempts = prev[quizId];
+        if (!prevAttempts) return prev;
+
+        return {
+          ...prev,
+          [quizId]: [attemptData, ...prevAttempts],
+        };
+      });
     } catch (e) {
       throw new Error("Error adding new attempt data");
     }

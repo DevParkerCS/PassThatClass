@@ -7,6 +7,7 @@ import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useContentContext } from "../../../../../../context/DataContext/ContentContext";
 import { useClassesContext } from "../../../../../../context/DataContext/ClassesContext";
 import { ActiveModal } from "../../Content";
+import { formatRelativeTime } from "../../../../../../utils/DateUtils";
 
 type ContentItemProps = {
   content: ContentMeta;
@@ -34,7 +35,8 @@ export const ContentItem = ({
       </div>
       <div>
         <p className={styles.itemInfoTxt}>
-          <span>{content.num_items} Questions</span> &bull; <span>2d ago</span>
+          <span>{content.num_items} Questions</span> &bull;{" "}
+          <span>{formatRelativeTime(content.last_used_at)}</span>
         </p>
       </div>
     </div>

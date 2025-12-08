@@ -18,17 +18,20 @@ import { ModalStats } from "./ModalStats";
 import { useContentContext } from "../../../../../../context/DataContext/ContentContext";
 import { useClassesContext } from "../../../../../../context/DataContext/ClassesContext";
 import { ActiveModal } from "../../Content";
+import { formatRelativeTime } from "../../../../../../utils/DateUtils";
 
 type ContentModalProps = {
   contentId: string;
   classId: string;
   setActiveModal: Dispatch<SetStateAction<ActiveModal>>;
+  selectedInfo: ContentMeta;
 };
 
 export const ContentModal = ({
   contentId,
   classId,
   setActiveModal,
+  selectedInfo,
 }: ContentModalProps) => {
   const nav = useNavigate();
   const contentCtx = useContentContext();
@@ -77,7 +80,10 @@ export const ContentModal = ({
                 </div>
 
                 <div className={styles.infoItem}>
-                  <p className={styles.infoTxt}>Last Attempt: 2 days ago</p>
+                  <p className={styles.infoTxt}>
+                    Last Attempt:{" "}
+                    {formatRelativeTime(selectedInfo.last_used_at)}
+                  </p>
                 </div>
 
                 <div>

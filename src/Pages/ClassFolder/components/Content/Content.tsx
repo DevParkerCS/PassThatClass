@@ -78,6 +78,7 @@ export const Content = ({ classId }: ContentProps) => {
           classId={classId}
           contentId={selectedInfo.id}
           setActiveModal={setActiveModal}
+          selectedInfo={selectedInfo}
         />
       )}
 

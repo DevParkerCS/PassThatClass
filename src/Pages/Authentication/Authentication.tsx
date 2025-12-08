@@ -21,38 +21,58 @@ export const Authentication = () => {
   return (
     <div>
       <Nav />
-      <div
-        className={`${styles.authWrapper} ${auth.loading && styles.loading}`}
-      >
-        {loggingIn ? (
-          <div className={styles.titleWrapper}>
-            <p className={styles.authTitle}>Log In</p>
-            <p className={styles.subtitle}>
-              Welcome back! Let's pass that class.
-            </p>
-          </div>
-        ) : (
-          <div className={styles.titleWrapper}>
-            <p className={styles.authTitle}>Sign Up</p>
-            <p className={styles.subtitle}>
-              New here? Let’s help you pass that class.
-            </p>
-          </div>
-        )}
 
-        {auth.needsVerify ? (
-          <ConfirmEmail email={email} />
-        ) : (
-          <AuthForm
-            loggingIn={loggingIn}
-            setLoggingIn={setLoggingIn}
-            email={email}
-            password={password}
-            setEmail={setEmail}
-            setPassword={setPassword}
-          />
-        )}
-      </div>
+      {loggingIn ? (
+        <div
+          className={`${styles.authWrapper} ${auth.loading && styles.loading}`}
+        >
+          {loggingIn ? (
+            <div className={styles.titleWrapper}>
+              <p className={styles.authTitle}>Log In</p>
+              <p className={styles.subtitle}>
+                Welcome back! Let's pass that class.
+              </p>
+            </div>
+          ) : (
+            <div className={styles.titleWrapper}>
+              <p className={styles.authTitle}>Sign Up</p>
+              <p className={styles.subtitle}>
+                New here? Let’s help you pass that class.
+              </p>
+            </div>
+          )}
+
+          {auth.needsVerify ? (
+            <ConfirmEmail email={email} />
+          ) : (
+            <AuthForm
+              loggingIn={loggingIn}
+              setLoggingIn={setLoggingIn}
+              email={email}
+              password={password}
+              setEmail={setEmail}
+              setPassword={setPassword}
+            />
+          )}
+        </div>
+      ) : (
+        <div className={styles.authWrapper}>
+          <div className={styles.titleWrapper}>
+            <p className={styles.authTitle}>Currently In Private Beta</p>
+            <p className={styles.subtitle}>Come Back Soon To PassThatClass</p>
+
+            <p className={styles.ctaTxt}>
+              Have An Account?{" "}
+              <span
+                className={styles.cta}
+                onClick={() => setLoggingIn(!loggingIn)}
+              >
+                Log In
+              </span>
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

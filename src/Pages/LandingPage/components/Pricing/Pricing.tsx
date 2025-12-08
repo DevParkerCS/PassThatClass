@@ -1,5 +1,7 @@
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import shared from "../../shared/styles.module.scss";
 import styles from "./Pricing.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const Pricing = () => {
   return (
@@ -13,54 +15,98 @@ export const Pricing = () => {
 
         <div className={styles.sectionCardsWrapper}>
           <div className={styles.sectionCard}>
-            <p className={shared.cardName}>Free Starter</p>
-            <p className={shared.cardValue}>Free</p>
+            <p className={styles.priceName}>Free Starter</p>
+            <p className={styles.priceSub}>
+              Get a feel for PassThatClass-no card, no commitment.
+            </p>
+            <p className={styles.price}>
+              $0<span className={styles.priceMonth}> / month</span>
+            </p>
 
-            <ul className={shared.cardList}>
-              <li className={shared.listItem}>
-                Generate{" "}
-                <span className={shared.itemBold}>7 AI-powered quizzes</span>{" "}
-                from your notes.
-              </li>
-              <li className={shared.listItem}>
-                Use up to{" "}
-                <span className={shared.itemBold}>5,000 characters</span> of
-                text per quiz.
-              </li>
-              <li className={shared.listItem}>
-                Upload <span className={shared.itemBold}>1 image</span> of notes
-                per quiz.
-              </li>
-              <li className={shared.listItem}>
-                <span className={shared.itemBold}>Track your quiz stats</span>{" "}
-                as you study.
-              </li>
-            </ul>
+            <button className={styles.cta}>Start For Free</button>
+
+            <div className={styles.cardList}>
+              <div className={styles.priceItem}>
+                <FontAwesomeIcon className={styles.itemIcon} icon={faCheck} />
+                <p className={styles.listItem}>
+                  Generate{" "}
+                  <span className={styles.itemBold}>5 AI-powered quizzes</span>{" "}
+                  from your notes.
+                </p>
+              </div>
+              <div className={styles.priceItem}>
+                <FontAwesomeIcon className={styles.itemIcon} icon={faCheck} />
+                <p className={styles.listItem}>
+                  Use up to{" "}
+                  <span className={styles.itemBold}>5,000 characters</span> of
+                  text per quiz.
+                </p>
+              </div>
+              <div className={styles.priceItem}>
+                <FontAwesomeIcon className={styles.itemIcon} icon={faCheck} />
+                <p className={styles.listItem}>
+                  Upload <span className={styles.itemBold}>1 image</span> of
+                  notes per quiz.
+                </p>
+              </div>
+              <div className={styles.priceItem}>
+                <FontAwesomeIcon className={styles.itemIcon} icon={faCheck} />
+                <p className={styles.listItem}>
+                  <span className={styles.itemBold}>Track your quiz stats</span>{" "}
+                  as you study.
+                </p>
+              </div>
+            </div>
           </div>
 
           <div className={`${styles.sectionCard} ${styles.proSection}`}>
-            <p className={shared.cardName}>Pro Student</p>
-            <p className={shared.cardValue}>$5.99.99/Month</p>
+            <p className={styles.priceName}>Pro Student</p>
+            <p className={styles.priceSub}>
+              Smarter practice, better grades, everything PassThatClass has to
+              offer.
+            </p>
+            <p className={styles.price}>
+              $5.99<span className={styles.priceMonth}> / month</span>
+            </p>
 
-            <ul className={shared.cardList}>
-              <li className={shared.listItem}>
-                <span className={shared.itemBold}>Everything in Basic</span>,
-                plus:
-              </li>
-              <li className={shared.listItem}>
-                Generate up to{" "}
-                <span className={shared.itemBold}>100 quizzes per month</span>.
-              </li>
-              <li className={shared.listItem}>
-                Use up to{" "}
-                <span className={shared.itemBold}>20,000 characters</span> of
-                notes per quiz.
-              </li>
-              <li className={shared.listItem}>
-                Upload up to <span className={shared.itemBold}>5 images</span>{" "}
-                of notes per quiz.
-              </li>
-            </ul>
+            <button className={styles.cta}>Upgrade Now</button>
+
+            <div className={styles.cardList}>
+              <div className={styles.priceItem}>
+                <FontAwesomeIcon className={styles.itemIcon} icon={faCheck} />
+                <p className={styles.listItem}>Everything in Basic, plus:</p>
+              </div>
+              <div className={styles.priceItem}>
+                <FontAwesomeIcon className={styles.itemIcon} icon={faCheck} />
+                <p className={styles.listItem}>
+                  Generate up to{" "}
+                  <span className={styles.itemBold}>100 quizzes per month</span>
+                  .
+                </p>
+              </div>
+              <div className={styles.priceItem}>
+                <FontAwesomeIcon className={styles.itemIcon} icon={faCheck} />
+                <p className={styles.listItem}>
+                  Use up to{" "}
+                  <span className={styles.itemBold}>20,000 characters</span> of
+                  notes per quiz.
+                </p>
+              </div>
+              <div className={styles.priceItem}>
+                <FontAwesomeIcon className={styles.itemIcon} icon={faCheck} />
+                <p className={styles.listItem}>
+                  Upload up to <span className={styles.itemBold}>5 images</span>{" "}
+                  of notes per quiz.
+                </p>
+              </div>
+              <div className={styles.priceItem}>
+                <FontAwesomeIcon className={styles.itemIcon} icon={faCheck} />
+                <p className={styles.listItem}>
+                  <span className={styles.itemBold}>Full attempt history</span>{" "}
+                  so you can see your progress over time.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -6,7 +6,7 @@ import { ContentModal } from "./components/ContentModals/ContentModal";
 import { ContentMeta } from "../../../../context/DataContext/types";
 import { Ctas } from "../Ctas/Ctas";
 import { DeleteModal } from "./components/ContentModals/DeleteModal/DeleteModal";
-import { ReviewModal } from "./components/ContentModals/ReviewModal";
+import { ReviewModal } from "./components/ContentModals/ReviewModal/ReviewModal";
 import { useContentContext } from "../../../../context/DataContext/ContentContext";
 import { useClassesContext } from "../../../../context/DataContext/ClassesContext";
 import { EditModal } from "./components/ContentModals/EditModal/EditModal";
@@ -92,8 +92,10 @@ export const Content = ({ classId }: ContentProps) => {
 
       {activeModal === "review" && selectedInfo && (
         <ReviewModal
+          selectedInfo={selectedInfo}
           setActiveModal={setActiveModal}
           contentId={selectedInfo.id}
+          classId={classId}
         />
       )}
 

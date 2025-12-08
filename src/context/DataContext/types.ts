@@ -37,6 +37,7 @@ export type ContentState = {
     incorrectIndexes: number[],
     quizId: string
   ) => void;
+  getPastAttempts: (quizId: string) => Promise<QuizAttempts>;
 };
 
 export type DataProviderProps = {
@@ -84,7 +85,19 @@ export type QuizAnswerType = {
   text: string;
 };
 
+export type QuizAttemptType = {
+  id: string;
+  quiz_id: string;
+  num_correct: number;
+  incorrect_indexes: number[];
+  seconds: number;
+  completed_at: string;
+};
+
+export type QuizAttempts = QuizAttemptType[];
+
 export type ClassesById = Record<string, ClassMeta>;
 export type ContentById = Record<string, ContentMeta[]>;
 export type QuestionsById = Record<string, QuizQuestionType[]>;
 export type QuizMetaById = Record<string, QuizMeta>;
+export type QuizAttemptsById = Record<string, QuizAttempts>;

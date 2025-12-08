@@ -69,23 +69,6 @@
   text-align: center;
 }
 
-.cardList {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.listItem {
-  font-size: 1.25rem;
-  color: var(--text-secondary);
-
-  .itemBold {
-    font-weight: bold;
-    color: var(--text-main);
-  }
-}
-
 .highlight {
   color: var(--cyan-accent);
   font-weight: bold;

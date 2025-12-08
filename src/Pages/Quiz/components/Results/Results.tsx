@@ -17,7 +17,7 @@ export const formatTime = (seconds: number) => {
   const timeMins = Math.floor(seconds / 60);
   const timeSecs = seconds % 60;
 
-  return `${timeMins}:${timeSecs < 10 ? `0${timeSecs}` : timeSecs}`;
+  return `${timeMins}m ${timeSecs}s`;
 };
 
 export const Results = ({

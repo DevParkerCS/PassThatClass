@@ -11,7 +11,7 @@ type QuizQuestionProps = {
   chosenAnswer?: number;
   mode: QuizMode;
   setNumCorrect: React.Dispatch<React.SetStateAction<number>>;
-  setWrongIndexes: React.Dispatch<React.SetStateAction<number[]>>;
+  setIncorrectIndexes: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
 export const QuizQuestion = ({
@@ -22,7 +22,7 @@ export const QuizQuestion = ({
   chosenAnswer,
   mode,
   setNumCorrect,
-  setWrongIndexes,
+  setIncorrectIndexes,
 }: QuizQuestionProps) => {
   const [chosenAns, setChosenAns] = useState(chosenAnswer || -1);
   const [isReviewing, setIsReviewing] = useState(mode === "reviewing");
@@ -59,7 +59,7 @@ export const QuizQuestion = ({
     }
 
     // update wrong indexes
-    setWrongIndexes((prev) => {
+    setIncorrectIndexes((prev) => {
       const withoutThis = prev.filter((idx) => idx !== index);
 
       if (newChosen === correctAns || newChosen === -1) {

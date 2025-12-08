@@ -101,22 +101,24 @@ export const ContentModal = ({
                 <div className={styles.contentRight}>
                   <ModalStats info={meta} />
 
-                  <button
-                    className={`${styles.modalCta} ${styles.startBtn}`}
-                    onClick={() =>
-                      nav(
-                        `/quiz/${classesCtx.classesById[classId].name}/${classId}/${contentCtx.quizMetaById[contentId].title}/${contentId}`
-                      )
-                    }
-                  >
-                    Start Quiz
-                  </button>
-                  <button
-                    className={`${styles.modalCta} ${styles.editBtn}`}
-                    onClick={handleReviewClick}
-                  >
-                    Review Attempts
-                  </button>
+                  <div className={styles.ctasWrapper}>
+                    <button
+                      className={`${styles.modalCta} ${styles.startBtn}`}
+                      onClick={() =>
+                        nav(
+                          `/quiz/${classesCtx.classesById[classId].name}/${classId}/${contentCtx.quizMetaById[contentId].title}/${contentId}`
+                        )
+                      }
+                    >
+                      Start Quiz
+                    </button>
+                    <button
+                      className={`${styles.modalCta} ${styles.editBtn}`}
+                      onClick={handleReviewClick}
+                    >
+                      Review Attempts
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

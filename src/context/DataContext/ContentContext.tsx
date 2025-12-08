@@ -14,6 +14,8 @@ import {
   ContentState,
   DataProviderProps,
   QuestionsById,
+  QuizAttempts,
+  QuizAttemptsById,
   QuizMeta,
   QuizMetaById,
   QuizQuestionType,
@@ -42,6 +44,7 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
   const [contentById, setContentById] = useState<ContentById>({});
   const [questionsById, setQuestionsById] = useState<QuestionsById>({});
   const [quizMetaById, setQuizMetaById] = useState<QuizMetaById>({});
+  const [attemptsById, setAttemptsById] = useState<QuizAttemptsById>({});
   const [quizLoading, setQuizLoading] = useState(false);
   const auth = useAuthContext();
 
@@ -133,6 +136,29 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
     }
   };
 
+  const getPastAttempts = async (quizId: string) => {
+    if (attemptsById[quizId]) return attemptsById[quizId];
+
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_BACKEND_API}/quiz/${quizId}/attempts`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${auth.session?.access_token}`,
+          },
+        }
+      );
+
+      const data: QuizAttempts = res.data;
+      console.log(data);
+      attemptsById[quizId] = data;
+      return data;
+    } catch (e) {
+      throw new Error("Error Getting attempt data");
+    }
+  };
+
   const callAddNewQuiz = async (
     classId: string,
     chosenGrade: string,
@@ -177,6 +203,7 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
     quizMetaById,
     callAddNewQuiz,
     addAttempt,
+    getPastAttempts,
   });
 
   return (

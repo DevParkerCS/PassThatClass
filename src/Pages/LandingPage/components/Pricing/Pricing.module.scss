@@ -4,14 +4,89 @@
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
+  align-items: center;
 }
 
 .sectionCard {
   background-color: var(--sec-layer);
-  padding: 1rem;
+  padding: 1.5rem;
   border-radius: var(--mid-radius);
   box-shadow: $sm-dark-shadow;
   border: 1px solid var(--light-border);
   color: var(--text-secondary);
-  width: 500px;
+  width: 400px;
+  height: 450px;
+
+  &.proSection {
+    height: calc(450px + 3rem);
+
+    .priceSub {
+      margin-bottom: calc(3rem / 1.25);
+    }
+  }
+}
+
+.cta {
+  width: 100%;
+  font-size: 1.25rem;
+  padding: 0.5rem;
+  border-radius: var(--mid-radius);
+  border: 1px solid var(--cyan-soft);
+  cursor: pointer;
+  background-color: var(--cyan-trans);
+  color: var(--text-main);
+  transition: all 0.1s linear;
+
+  &:hover {
+    background-color: var(--cyan-soft);
+    border-color: var(--cyan-accent);
+  }
+}
+
+.priceName {
+  font-size: 1.75rem;
+  color: var(--text-main);
+}
+
+.price {
+  font-size: 2.5rem;
+  color: var(--text-main);
+  margin: 1rem 0rem;
+
+  .priceMonth {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+}
+
+.priceSub {
+  margin-top: 0.5rem;
+}
+
+.cardList {
+  border-top: 1px solid var(--light-border);
+  padding-top: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.listItem {
+  font-size: 1rem;
+  color: var(--text-secondary);
+
+  .itemBold {
+    font-weight: bold;
+    color: var(--text-main);
+  }
+}
+
+.priceItem {
+  display: flex;
+  gap: 0.5rem;
+
+  .itemIcon {
+    color: var(--cyan-accent);
+  }
 }

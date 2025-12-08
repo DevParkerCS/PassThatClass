@@ -14,7 +14,9 @@ export const ModalStats = ({ info }: ModalStatsProps) => {
       <p className={styles.statTxt}>
         <span className={styles.statName}>Average Percent</span>
         <span className={styles.statValue}>
-          {Math.round((info.average_score / info.num_questions) * 100)}%
+          {info.num_questions
+            ? `${Math.round((info.average_score / info.num_questions) * 100)}%`
+            : "—"}
         </span>
       </p>
 

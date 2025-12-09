@@ -1,10 +1,10 @@
 export const formatRelativeTime = (
   isoString: string | null | undefined
 ): string => {
-  if (!isoString) return "—";
+  if (!isoString) return "N/A";
 
   const then = new Date(isoString);
-  if (Number.isNaN(then.getTime())) return "—";
+  if (Number.isNaN(then.getTime())) return "N/A";
 
   const now = Date.now();
   let diffMs = now - then.getTime();

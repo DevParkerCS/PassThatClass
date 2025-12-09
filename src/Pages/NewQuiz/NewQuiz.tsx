@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Nav } from "../../components/Nav/Nav";
 import styles from "./NewQuiz.module.scss";
 import { Breadcrumb } from "../../components/Breadcrumb/Breadcrumb";
@@ -10,14 +10,13 @@ import { Spinner } from "../../components/Spinner/Spinner";
 import { useAuthContext } from "../../context/AuthContext/AuthContext";
 import { useContentContext } from "../../context/DataContext/ContentContext";
 import { useClassesContext } from "../../context/DataContext/ClassesContext";
+import { Difficulty } from "../../context/DataContext/types";
 
 type SubmitionState = "info" | "generating" | "finished";
 
 export const NewQuiz = () => {
   const { classId } = useParams<{ classId: string }>();
   const [error, setError] = useState("");
-  const [submitionState, setSubmitionState] = useState<SubmitionState>("info");
-  const [loadingState, setLoadingState] = useState("");
   const contentCtx = useContentContext();
   const classesCtx = useClassesContext();
   const auth = useAuthContext();
@@ -41,7 +40,8 @@ export const NewQuiz = () => {
 
   // Runs when quiz form is submitted
   const handleSubmit = async (
-    chosenGrade: string,
+    newId: string,
+    chosenGrade: Difficulty,
     files: File[],
     input: string,
     numQuestions: number,
@@ -56,28 +56,22 @@ export const NewQuiz = () => {
       return;
     }
 
-    setSubmitionState("generating");
     try {
-      const qd = await contentCtx.callAddNewQuiz(
+      contentCtx.callAddNewQuiz(
+        newId,
         classId,
         chosenGrade,
         files,
         input,
         numQuestions,
-        genExample,
-        setLoadingState
+        genExample
       );
 
-      // fix the URL: /class/:className/:classId
       const className = classesCtx.classesById[classId].name;
-      nav(
-        `/class/${encodeURIComponent(className)}/${classId}?quizId=${qd?.id}`
-      );
+      nav(`/class/${encodeURIComponent(className)}/${classId}`);
     } catch (e) {
-      setLoadingState("");
       const error = e as AxiosError;
       console.error(error);
-      setSubmitionState("info");
       setError(error.message);
     }
   };
@@ -86,24 +80,16 @@ export const NewQuiz = () => {
     <div>
       <Nav />
       <div className={styles.contentWrapper}>
-        {submitionState === "info" && (
-          <div>
-            <Breadcrumb />
-            <p className={styles.title}>New Quiz</p>
+        <div>
+          <Breadcrumb />
+          <p className={styles.title}>New Quiz</p>
 
-            <div className={`${styles.infoWrapper} ${error && styles.error}`}>
-              <ErrorModal error={error} isActive={!!error} />
+          <div className={`${styles.infoWrapper} ${error && styles.error}`}>
+            <ErrorModal error={error} isActive={!!error} />
 
-              <Inputs submitCb={handleSubmit} />
-            </div>
+            <Inputs classId={classId} submitCb={handleSubmit} />
           </div>
-        )}
-
-        {submitionState === "generating" && (
-          <div>
-            <Spinner txt={loadingState} size="l" />
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

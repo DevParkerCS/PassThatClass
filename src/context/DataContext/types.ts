@@ -11,21 +11,21 @@ export type ClassesState = {
 
 export type ContentState = {
   contentById: ContentById;
-  loadContent: (classId: string) => void;
+  loadContent: (classId: string) => Promise<void>;
   callQuizContent: (quizId: string) => Promise<void>;
   callDeleteQuiz: (quizId: string, classId: string) => Promise<void>;
   quizLoading: boolean;
   questionsById: QuestionsById;
   quizMetaById: QuizMetaById;
   callAddNewQuiz: (
+    newId: string,
     classId: string,
-    chosenGrade: string,
+    chosenGrade: Difficulty,
     files: File[],
     input: string,
     numQuestions: number,
-    genExample: boolean,
-    setLoadingState: Dispatch<SetStateAction<string>>
-  ) => Promise<QuizMeta | undefined>;
+    genExample: boolean
+  ) => Promise<void>;
   updateTitle: (
     quizId: string,
     classId: string,
@@ -38,6 +38,9 @@ export type ContentState = {
     quizId: string
   ) => void;
   getPastAttempts: (quizId: string) => Promise<QuizAttempts>;
+  startPolling: (classId: string) => void;
+  lastUploaded: LastUploaded;
+  contentLoadStatus: Record<string, boolean>;
 };
 
 export type DataProviderProps = {
@@ -54,9 +57,19 @@ export type ContentMeta = {
   id: string;
   type: string;
   title: string;
-  num_items: string;
+  num_items: number;
   last_used_at: string | null;
+  status: "generating" | "ready" | "error";
+  difficulty: Difficulty;
 };
+
+export type Difficulty =
+  | "Elementary School"
+  | "Middle School"
+  | "High School"
+  | "College/University"
+  | "Postgrad"
+  | "Select Grade";
 
 export type QuizMeta = {
   id: string;
@@ -68,6 +81,7 @@ export type QuizMeta = {
   last_taken_at: string | null;
   num_questions: number;
   title: string;
+  difficulty: Difficulty;
 };
 
 export type QuizQuestionType = {
@@ -101,3 +115,4 @@ export type ContentById = Record<string, ContentMeta[]>;
 export type QuestionsById = Record<string, QuizQuestionType[]>;
 export type QuizMetaById = Record<string, QuizMeta>;
 export type QuizAttemptsById = Record<string, QuizAttempts>;
+export type LastUploaded = Record<string, [File[], string]>;

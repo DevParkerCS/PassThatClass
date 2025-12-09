@@ -132,6 +132,7 @@ export const Content = ({ classId }: ContentProps) => {
                 setActiveModal={setActiveModal}
                 setSelectedInfo={setSelectedInfo}
                 key={i}
+                classId={classId}
               />
             ))}
           </div>

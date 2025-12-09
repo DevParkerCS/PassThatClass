@@ -7,12 +7,15 @@ import {
   useState,
   Dispatch,
   SetStateAction,
+  useEffect,
+  useRef,
 } from "react";
 import {
   ContentById,
   ContentMeta,
   ContentState,
   DataProviderProps,
+  Difficulty,
   QuestionsById,
   QuizAttempts,
   QuizAttemptsById,
@@ -43,14 +46,61 @@ export const useContentContext = (): ContentState => {
 
 export const ContentProvider = ({ children }: DataProviderProps) => {
   const [contentById, setContentById] = useState<ContentById>({});
+  const [contentLoadStatus, setContentLoadStatus] = useState<
+    Record<string, boolean>
+  >({});
   const [questionsById, setQuestionsById] = useState<QuestionsById>({});
   const [quizMetaById, setQuizMetaById] = useState<QuizMetaById>({});
   const [attemptsById, setAttemptsById] = useState<QuizAttemptsById>({});
   const [quizLoading, setQuizLoading] = useState(false);
+  const [lastUploaded, setLastUploaded] = useState({});
   const auth = useAuthContext();
+  const contentRef = useRef<ContentById>({});
+  const contentIds = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    contentRef.current = contentById;
+  }, [contentById]);
+  const pollingRef = useRef<Record<string, boolean>>({});
 
-  const loadContent = (classId: string) => {
-    fetchContent(classId, setContentById, auth.session?.access_token);
+  const hasGenerating = (classId: string) => {
+    const content = contentRef.current;
+    return content[classId]?.some((c) => c.status === "generating");
+  };
+
+  const startPolling = (classId: string) => {
+    if (pollingRef.current[classId]) return;
+    pollingRef.current[classId] = true;
+
+    const poll = async () => {
+      if (hasGenerating(classId)) {
+        // still generating → schedule next check
+        setTimeout(async () => {
+          await fetchContent(
+            classId,
+            setContentById,
+            auth.session?.access_token
+          );
+          poll();
+        }, 10000);
+      } else {
+        pollingRef.current[classId] = false;
+      }
+    };
+
+    // kick off the loop
+    poll();
+  };
+
+  const loadContent = async (classId: string) => {
+    try {
+      await fetchContent(classId, setContentById, auth.session?.access_token);
+      setContentLoadStatus((prev) => ({
+        ...prev,
+        [classId]: true,
+      }));
+    } catch (e) {
+      throw e;
+    }
   };
 
   const callQuizContent = async (quizId: string) => {
@@ -189,40 +239,70 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
   };
 
   const callAddNewQuiz = async (
+    newId: string,
     classId: string,
-    chosenGrade: string,
+    chosenGrade: Difficulty,
     files: File[],
     input: string,
     numQuestions: number,
-    genExample: boolean,
-    setLoadingState: Dispatch<SetStateAction<string>>
+    genExample: boolean
   ) => {
-    if (!auth.session) return;
+    if (!auth.session) {
+      console.error("Not Logged In");
+      return;
+    }
+    console.log(contentIds.current.has(newId));
+    if (contentIds.current.has(newId)) {
+      console.error("Duplicate Attempts Detected");
+      return;
+    }
+
+    contentIds.current.add(newId);
+
+    const generatingClass: ContentMeta = {
+      id: newId,
+      last_used_at: null,
+      num_items: numQuestions,
+      status: "generating",
+      title: "Generating...",
+      type: "quiz",
+      difficulty: chosenGrade,
+    };
+
+    setLastUploaded((prev) => ({
+      ...prev,
+      [classId]: [files, input],
+    }));
+
+    setContentById((prev) => ({
+      ...prev,
+      [classId]: [generatingClass, ...(prev[classId] ?? [])],
+    }));
 
     const params = {
       classId,
+      quizId: newId,
       chosenGrade,
       files,
       input,
       numQuestions,
       genExample,
       token: auth.session?.access_token,
-      setLoadingState,
       setQuizMetaById,
       setContentById,
       setQuestionsById,
     };
 
     try {
-      const res = await addNewQuiz(params);
-      return res;
+      await addNewQuiz(params);
     } catch (e) {
-      throw new Error("Error adding quiz");
+      console.error("Error adding quiz");
     }
   };
 
   const value = useShallowMemo<ContentState>({
     contentById,
+    contentLoadStatus,
     loadContent,
     callQuizContent,
     callDeleteQuiz,
@@ -233,6 +313,8 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
     callAddNewQuiz,
     addAttempt,
     getPastAttempts,
+    startPolling,
+    lastUploaded,
   });
 
   return (

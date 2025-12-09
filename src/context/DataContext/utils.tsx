@@ -52,14 +52,15 @@ export const fetchContent = async (
     );
     const data = res.data.map((item: ContentMeta) => ({
       ...item,
-      last_used_at: item.last_used_at,
     }));
+
+    console.log(data);
 
     setContentById((prev) => ({
       ...prev,
       [classId]: data,
     }));
   } catch (e) {
-    console.log("Error fetching content");
+    throw new Error("Error loading content");
   }
 };

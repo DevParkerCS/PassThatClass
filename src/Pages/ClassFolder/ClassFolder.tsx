@@ -16,29 +16,36 @@ export const ClassFolder = () => {
   const auth = useAuthContext();
   const nav = useNavigate();
 
-  const hasContentForClass = !!(classId && content.contentById[classId]);
-
   useEffect(() => {
     if (!classId) return;
 
-    // 1) Auth redirect
     if (!auth.loading && !auth.session) {
       nav("/login");
       return;
     }
 
-    // 2) Load content once per class (only when authenticated and not yet loaded)
-    if (!auth.loading && auth.session && !hasContentForClass) {
-      content.loadContent(classId);
+    if (!auth.loading && auth.session && !content.contentLoadStatus[classId]) {
+      // first load
+      getContent(classId);
     }
-  }, [
-    auth.loading,
-    auth.session,
-    classId,
-    hasContentForClass,
-    content.loadContent,
-    nav,
-  ]);
+
+    if (!auth.loading && auth.session && content.contentLoadStatus[classId]) {
+      // only start polling once; startPolling will keep going while needed
+      if (
+        content.contentById[classId]?.some((c) => c.status === "generating")
+      ) {
+        content.startPolling(classId);
+      }
+    }
+  }, [auth.loading, auth.session, classId, content]);
+
+  const getContent = async (classId: string) => {
+    try {
+      await content.loadContent(classId);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   if (!classId) {
     return <div>Class not found</div>;
@@ -50,7 +57,7 @@ export const ClassFolder = () => {
       <div className={styles.folderWrapper}>
         <Breadcrumb />
 
-        {auth.loading || !content.contentById[classId] ? (
+        {auth.loading || !content.contentLoadStatus[classId] ? (
           <div>
             <Spinner size="l" txt="Loading Quizzes..." />
           </div>

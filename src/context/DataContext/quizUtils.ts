@@ -121,36 +121,35 @@ export const deleteQuiz = async (params: {
   }
 };
 
-/* ------------ AddNewQuiz (streaming) ------------ */
-
 export const addNewQuiz = async (params: {
   classId: string;
+  quizId: string;
   chosenGrade: string;
   files: File[];
   input: string;
   numQuestions: number;
   genExample: boolean;
   token: string;
-  setLoadingState: Dispatch<SetStateAction<string>>;
   setQuizMetaById: Dispatch<SetStateAction<QuizMetaById>>;
   setContentById: Dispatch<SetStateAction<ContentById>>;
   setQuestionsById: Dispatch<SetStateAction<QuestionsById>>;
-}): Promise<QuizMeta> => {
+}): Promise<void> => {
   const {
     classId,
+    quizId,
     chosenGrade,
     files,
     input,
     numQuestions,
     genExample,
     token,
-    setLoadingState,
     setQuizMetaById,
     setContentById,
     setQuestionsById,
   } = params;
 
   const formData = new FormData();
+  formData.append("newQuizId", quizId);
   formData.append("notesText", input);
   formData.append("gradeLevel", chosenGrade);
   formData.append("numQuestions", String(numQuestions));
@@ -161,118 +160,14 @@ export const addNewQuiz = async (params: {
     formData.append("images", file);
   });
 
-  setLoadingState("Parsing Images...");
-
-  const response = await fetch(
+  const res = await axios.post(
     `${process.env.REACT_APP_BACKEND_API}/quiz/from-notes`,
+    formData,
     {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      body: formData,
     }
   );
-
-  if (!response.body) {
-    setLoadingState("");
-    throw new Error("Streaming response not supported by the browser");
-  }
-
-  const reader = response.body.getReader();
-  const decoder = new TextDecoder();
-
-  let buffer = "";
-  let quizDataNull: QuizMeta | null = null;
-  let questions: QuizQuestionType[] = [];
-  let encounteredError: string | null = null;
-
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-
-    buffer += decoder.decode(value, { stream: true });
-
-    const lines = buffer.split("\n");
-    buffer = lines.pop() || "";
-
-    for (const line of lines) {
-      if (!line.trim()) continue;
-
-      let msg: any;
-      try {
-        msg = JSON.parse(line);
-      } catch (e) {
-        console.error("Failed to parse streaming line:", line, e);
-        continue;
-      }
-
-      switch (msg.stage) {
-        case "ocr_started":
-          setLoadingState("Parsing Images...");
-          break;
-
-        case "ocr_done":
-          setLoadingState("Generating Quiz...");
-          break;
-
-        case "quiz_started":
-          break;
-
-        case "cleaning_quiz":
-          setLoadingState("Cleaning Up Quiz...");
-          break;
-
-        case "quiz_done":
-          quizDataNull = msg.quiz as QuizMeta;
-          questions = msg.questions as QuizQuestionType[];
-          break;
-
-        case "error":
-          console.error("Error from /quiz/from-notes:", msg);
-          encounteredError = msg.error || "Failed to generate quiz";
-          setLoadingState("");
-          break;
-
-        default:
-          console.warn("Unknown stage message:", msg);
-      }
-    }
-  }
-
-  if (encounteredError) {
-    throw new Error(encounteredError);
-  }
-
-  if (!quizDataNull) {
-    setLoadingState("");
-    throw new Error("Quiz generation did not complete");
-  }
-
-  const quizData: QuizMeta = quizDataNull;
-
-  const contentMeta: ContentMeta = {
-    id: quizData.id,
-    last_used_at: quizData.last_taken_at,
-    num_items: `${quizData.num_questions} Questions`,
-    title: quizData.title,
-    type: "quiz",
-  };
-
-  setQuizMetaById((prev) => ({
-    ...prev,
-    [quizData.id]: quizData,
-  }));
-
-  setContentById((prev) => ({
-    ...prev,
-    [classId]: [contentMeta, ...(prev[classId] ?? [])],
-  }));
-
-  setQuestionsById((prev) => ({
-    ...prev,
-    [quizData.id]: questions,
-  }));
-
-  return quizData;
 };

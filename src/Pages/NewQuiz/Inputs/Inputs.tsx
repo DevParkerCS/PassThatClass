@@ -14,6 +14,7 @@ type InputsProps = {
   classId: string;
   submitCb: (
     newId: string,
+    existingQuiz: boolean,
     chosenGrade: Difficulty,
     files: File[],
     input: string,
@@ -29,8 +30,10 @@ export const Inputs = ({ submitCb, classId }: InputsProps) => {
   const [input, setInput] = useState<string>("");
   const [genExamples, setGenExamples] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [newId, setNewId] = useState(() => crypto.randomUUID());
   const contentId = searchParams.get("quizId");
+  const [newId, setNewId] = useState(
+    contentId ? contentId : crypto.randomUUID()
+  );
   const contentCtx = useContentContext();
 
   useEffect(() => {
@@ -57,7 +60,15 @@ export const Inputs = ({ submitCb, classId }: InputsProps) => {
   // Prevent Refresh and call cb function
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    submitCb(newId, chosenGrade, files, input, numQuestions, genExamples);
+    submitCb(
+      newId,
+      !!contentId,
+      chosenGrade,
+      files,
+      input,
+      numQuestions,
+      genExamples
+    );
   };
 
   return (

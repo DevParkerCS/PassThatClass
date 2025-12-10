@@ -41,6 +41,7 @@ export const NewQuiz = () => {
   // Runs when quiz form is submitted
   const handleSubmit = async (
     newId: string,
+    existingQuiz: boolean,
     chosenGrade: Difficulty,
     files: File[],
     input: string,
@@ -59,6 +60,7 @@ export const NewQuiz = () => {
     try {
       contentCtx.callAddNewQuiz(
         newId,
+        existingQuiz,
         classId,
         chosenGrade,
         files,

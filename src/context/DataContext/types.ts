@@ -19,6 +19,7 @@ export type ContentState = {
   quizMetaById: QuizMetaById;
   callAddNewQuiz: (
     newId: string,
+    existingQuiz: boolean,
     classId: string,
     chosenGrade: Difficulty,
     files: File[],
@@ -59,9 +60,12 @@ export type ContentMeta = {
   title: string;
   num_items: number;
   last_used_at: string | null;
-  status: "generating" | "ready" | "error";
+  created_at: string;
+  status: Status;
   difficulty: Difficulty;
 };
+
+export type Status = "generating" | "ready" | "error";
 
 export type Difficulty =
   | "Elementary School"

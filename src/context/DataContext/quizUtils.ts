@@ -123,6 +123,7 @@ export const deleteQuiz = async (params: {
 
 export const addNewQuiz = async (params: {
   classId: string;
+  existingQuiz: boolean;
   quizId: string;
   chosenGrade: string;
   files: File[];
@@ -136,6 +137,7 @@ export const addNewQuiz = async (params: {
 }): Promise<void> => {
   const {
     classId,
+    existingQuiz,
     quizId,
     chosenGrade,
     files,
@@ -149,6 +151,7 @@ export const addNewQuiz = async (params: {
   } = params;
 
   const formData = new FormData();
+  formData.append("existingQuiz", String(existingQuiz));
   formData.append("newQuizId", quizId);
   formData.append("notesText", input);
   formData.append("gradeLevel", chosenGrade);
@@ -160,7 +163,7 @@ export const addNewQuiz = async (params: {
     formData.append("images", file);
   });
 
-  const res = await axios.post(
+  await axios.post(
     `${process.env.REACT_APP_BACKEND_API}/quiz/from-notes`,
     formData,
     {

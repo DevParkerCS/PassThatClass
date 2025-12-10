@@ -23,6 +23,7 @@ import {
   QuizMeta,
   QuizMetaById,
   QuizQuestionType,
+  Status,
 } from "./types";
 import { fetchContent } from "./utils";
 import { useAuthContext } from "../AuthContext/AuthContext";
@@ -62,9 +63,68 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
   }, [contentById]);
   const pollingRef = useRef<Record<string, boolean>>({});
 
+  const STALE_GENERATION_MS = 0.5 * 60 * 1000; // 5 minutes
+
   const hasGenerating = (classId: string) => {
     const content = contentRef.current;
-    return content[classId]?.some((c) => c.status === "generating");
+    const items = content[classId];
+    if (!items) return false;
+
+    const now = Date.now();
+    let changed = false;
+
+    const updatedItems = items.map((c) => {
+      if (c.status === "error") {
+        contentIds.current.delete(c.id);
+      }
+      if (c.status !== "generating") return c;
+
+      // If you don't have created_at yet, add it to ContentMeta & fetch it from Supabase
+      if (!c.created_at) {
+        // no timestamp → just treat as still generating
+        return c;
+      }
+
+      const createdTime = new Date(c.created_at).getTime();
+      const age = now - createdTime;
+
+      if (age > STALE_GENERATION_MS) {
+        // mark as failed
+        contentIds.current.delete(c.id);
+        changed = true;
+        const errorState: Status = "error";
+        axios.patch(
+          `${process.env.REACT_APP_BACKEND_API}/quiz/${c.id}/setError`,
+          {},
+          {
+            headers: {
+              Authorization: auth.session?.access_token
+                ? `Bearer ${auth.session.access_token}`
+                : "",
+            },
+          }
+        );
+        return {
+          ...c,
+          status: errorState,
+          title: "Error Generating",
+        };
+      }
+
+      // still within 5 minutes → keep as generating
+      return c;
+    });
+
+    // If we converted anything to error, push the updated array back into state
+    if (changed) {
+      setContentById((prev) => ({
+        ...prev,
+        [classId]: updatedItems,
+      }));
+    }
+
+    // Only report "has generating" for non-stale ones
+    return updatedItems.some((c) => c.status === "generating");
   };
 
   const startPolling = (classId: string) => {
@@ -240,6 +300,7 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
 
   const callAddNewQuiz = async (
     newId: string,
+    existingQuiz: boolean,
     classId: string,
     chosenGrade: Difficulty,
     files: File[],
@@ -251,7 +312,7 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
       console.error("Not Logged In");
       return;
     }
-    console.log(contentIds.current.has(newId));
+
     if (contentIds.current.has(newId)) {
       console.error("Duplicate Attempts Detected");
       return;
@@ -259,28 +320,49 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
 
     contentIds.current.add(newId);
 
-    const generatingClass: ContentMeta = {
-      id: newId,
-      last_used_at: null,
-      num_items: numQuestions,
-      status: "generating",
-      title: "Generating...",
-      type: "quiz",
-      difficulty: chosenGrade,
-    };
+    if (!existingQuiz) {
+      const generatingClass: ContentMeta = {
+        id: newId,
+        created_at: new Date().toISOString(),
+        last_used_at: null,
+        num_items: numQuestions,
+        status: "generating",
+        title: "Generating...",
+        type: "quiz",
+        difficulty: chosenGrade,
+      };
+
+      setContentById((prev) => ({
+        ...prev,
+        [classId]: [generatingClass, ...(prev[classId] ?? [])],
+      }));
+    } else {
+      setContentById((prev) => ({
+        ...prev,
+        [classId]: prev[classId]?.map((p) => {
+          if (p.id === newId) {
+            console.log(p);
+            p = {
+              ...p,
+              created_at: new Date().toISOString(),
+              num_items: numQuestions,
+              title: "Generating...",
+              status: "generating",
+            };
+          }
+          return p;
+        }),
+      }));
+    }
 
     setLastUploaded((prev) => ({
       ...prev,
       [classId]: [files, input],
     }));
 
-    setContentById((prev) => ({
-      ...prev,
-      [classId]: [generatingClass, ...(prev[classId] ?? [])],
-    }));
-
     const params = {
       classId,
+      existingQuiz,
       quizId: newId,
       chosenGrade,
       files,
@@ -296,6 +378,7 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
     try {
       await addNewQuiz(params);
     } catch (e) {
+      contentIds.current.delete(newId);
       console.error("Error adding quiz");
     }
   };

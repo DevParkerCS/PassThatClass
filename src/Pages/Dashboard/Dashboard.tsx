@@ -88,6 +88,14 @@ export const Dashboard = () => {
   const showError = !classesLoading && !!classesError;
   const showList = !classesLoading && !classesError && classes.length > 0;
 
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [isModalOpen]);
+
   return (
     <div className={styles.pageWrapper}>
       <Nav />
@@ -124,11 +132,7 @@ export const Dashboard = () => {
 
           <div className={styles.classesWrapper}>
             <div className={styles.classesSizeWrapper}>
-              <ClassCard
-                name="Add Class"
-                icon={faPlus}
-                onClick={() => setIsModalOpen(true)}
-              />
+              <ClassCard icon={faPlus} onClick={() => setIsModalOpen(true)} />
             </div>
           </div>
         </div>
@@ -152,7 +156,7 @@ export const Dashboard = () => {
           <div className={styles.classesSizeWrapper}>
             {classes.map((cls) => (
               <ClassCard
-                name={cls.name}
+                key={cls.id}
                 icon={faFolderOpen}
                 classId={cls.id}
                 onClick={() => handleClassClick(cls.id)}
@@ -160,7 +164,6 @@ export const Dashboard = () => {
             ))}
 
             <ClassCard
-              name="Add Class"
               icon={faPlus}
               onClick={() => setIsModalOpen(true)}
               editable={false}
@@ -173,7 +176,6 @@ export const Dashboard = () => {
 };
 
 type ClassCardProps = {
-  name: string;
   icon: IconDefinition;
   onClick: () => void;
   editable?: boolean;
@@ -181,13 +183,17 @@ type ClassCardProps = {
 };
 
 const ClassCard = ({
-  name,
   icon,
   onClick,
   editable = true,
   classId,
 }: ClassCardProps) => {
   const [editActive, setEditActive] = useState(false);
+  const classesCtx = useClassesContext();
+
+  useEffect(() => {
+    document.body.style.overflow = editActive ? "hidden" : "";
+  }, [editActive]);
 
   return (
     <div
@@ -202,7 +208,9 @@ const ClassCard = ({
       <div className={styles.classWrapper} onClick={onClick}>
         <div className={styles.classTxtWrapper}>
           <FontAwesomeIcon className={styles.classIcon} icon={icon} />
-          <p className={styles.className}>{name}</p>
+          <p className={styles.className}>
+            {classId ? classesCtx.classesById[classId]?.name : "Add Class"}
+          </p>
         </div>
         {editable && (
           <div

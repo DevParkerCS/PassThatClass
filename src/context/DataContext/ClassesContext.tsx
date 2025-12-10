@@ -85,11 +85,57 @@ export const ClassesProvider = ({ children }: DataProviderProps) => {
     }
   };
 
+  const editClass = async (classId: string, newTitle: string) => {
+    try {
+      const res = await axios.patch(
+        `${process.env.REACT_APP_BACKEND_API}/classes/${classId}/edit`,
+        { newTitle },
+        {
+          headers: {
+            Authorization: auth.session?.access_token
+              ? `Bearer ${auth.session.access_token}`
+              : "",
+          },
+        }
+      );
+      setClassesById((prev) => ({
+        ...prev,
+        [classId]: { ...prev[classId], name: newTitle },
+      }));
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  const deleteClass = async (classId: string) => {
+    try {
+      const res = await axios.delete(
+        `${process.env.REACT_APP_BACKEND_API}/classes/${classId}`,
+        {
+          headers: {
+            Authorization: auth.session?.access_token
+              ? `Bearer ${auth.session.access_token}`
+              : "",
+          },
+        }
+      );
+      setClasses((prev) => prev.filter((p) => p.id !== classId));
+      setClassesById((prev) => {
+        const { [classId]: _removed, ...rest } = prev;
+        return rest;
+      });
+    } catch (e) {
+      throw e;
+    }
+  };
+
   const value = useShallowMemo<ClassesState>({
     classes,
     classesById,
     callClasses,
     AddClass,
+    editClass,
+    deleteClass,
     classesLoading,
     classesError,
   });

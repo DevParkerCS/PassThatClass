@@ -17,24 +17,28 @@ type ClassEditProps = {
 };
 
 export const ClassEditModal = ({ setEditActive, classId }: ClassEditProps) => {
-  const [input, setInput] = useState("");
   const [inputError, setInputError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const classesCtx = useClassesContext();
-
-  useEffect(() => {
-    setInput(classesCtx.classesById[classId].name);
-  }, [classesCtx, classId]);
+  const [editedTitle, setEditedTitle] = useState(
+    classesCtx.classesById[classId]?.name
+  );
+  const original = classesCtx.classesById[classId]?.name;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputError(false);
-    setInput(e.target.value);
+    setEditedTitle(e.target.value);
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    console.log("SUBMITTED");
+  const handleSave = async (e: FormEvent<HTMLFormElement>) => {
+    if (loading || deleting) return;
+
+    if (editedTitle === original) {
+      setEditActive(false);
+    }
+
     e.preventDefault();
     setLoading(true);
 
@@ -46,17 +50,38 @@ export const ClassEditModal = ({ setEditActive, classId }: ClassEditProps) => {
       return;
     }
 
-    setLoading(false);
+    try {
+      await classesCtx.editClass(classId, editedTitle);
+
+      setLoading(false);
+      setEditActive(false);
+    } catch (e) {
+      setLoading(false);
+      console.log(e);
+    }
   };
 
-  const handleDelete = () => {};
+  const handleClose = () => {
+    if (!deleting && !loading) setVerifying(false);
+  };
+
+  const handleDelete = async () => {
+    if (deleting) return;
+
+    try {
+      setDeleting(true);
+      await classesCtx.deleteClass(classId);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <div>
       {verifying && (
         <VerifyDelete
-          closeCb={() => setVerifying(false)}
+          closeCb={handleClose}
           deleteCb={handleDelete}
-          title={input}
+          title={editedTitle}
           deleting={deleting}
           type="Class"
         />
@@ -77,14 +102,14 @@ export const ClassEditModal = ({ setEditActive, classId }: ClassEditProps) => {
             <div>
               <p className={styles.modalTitle}>Edit Class</p>
 
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSave}>
                 <div className={styles.modalInputWrapper}>
                   <label className={styles.inputLabel}>Class Name</label>
                   <input
                     className={`${styles.input} ${inputError && styles.error}`}
                     type="text"
                     placeholder="e.g., Biology 201"
-                    value={input}
+                    value={editedTitle}
                     onChange={handleChange}
                   />
                 </div>
@@ -96,7 +121,7 @@ export const ClassEditModal = ({ setEditActive, classId }: ClassEditProps) => {
                       className={`${styles.modalBtn} ${styles.deleteBtn}`}
                       onClick={() => setVerifying(true)}
                     >
-                      Delete Class
+                      Delete
                     </button>
                   </div>
                   <div className={`${styles.modalBtns} ${styles.editBtns}`}>

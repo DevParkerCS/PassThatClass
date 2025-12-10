@@ -7,6 +7,8 @@ export type ClassesState = {
   AddClass: (name: string) => Promise<void>;
   classesLoading: boolean;
   classesError: string;
+  editClass: (classId: string, newTitle: string) => Promise<void>;
+  deleteClass: (classId: string) => Promise<void>;
 };
 
 export type ContentState = {

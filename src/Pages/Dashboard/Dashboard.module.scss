@@ -195,3 +195,15 @@
     }
   }
 }
+
+@media (max-width: 578px) {
+  .dashboardTitle {
+    font-size: 2.5rem;
+  }
+
+  .headingWrapper {
+    .heading {
+      font-size: 1.75rem;
+    }
+  }
+}

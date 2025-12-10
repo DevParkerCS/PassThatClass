@@ -3,7 +3,7 @@
 PassThatClass is a web-based study companion that turns your class notes into AI-generated quizzes and flashcards. It’s designed to help students study smarter by centralizing course content, extracting text from images/PDFs, and generating practice questions in seconds.
 
 - **Backend Repository:** [PassThatClass Backend](https://github.com/DevParkerCS/PTC-Server)
-- **Live Site: (In Progress)** [PassThatClass](https://main.ddqp7bpjh9q19.amplifyapp.com/)
+- **Live Site: (In Progress)** [PassThatClass](https://passthatclass.com)
 
 
 ---

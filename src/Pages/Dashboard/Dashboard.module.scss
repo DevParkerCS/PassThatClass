@@ -151,15 +151,6 @@
 @media (max-width: 1024px) {
   .cardWrapper {
     width: calc(100% / 2 - 1rem);
-
-    .editWrapper {
-      padding: 0.25rem;
-    }
-
-    .editBtn {
-      font-size: 1rem;
-      color: var(--text-main);
-    }
   }
 
   .classWrapper {
@@ -187,15 +178,6 @@
 
     &.addCard {
       order: 1;
-    }
-
-    .editWrapper {
-      padding: 0.25rem;
-    }
-
-    .editBtn {
-      font-size: 1rem;
-      color: var(--text-main);
     }
   }
 

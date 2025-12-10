@@ -51,25 +51,51 @@ export const DeleteModal = ({
     }
   };
 
+  const handleVerifyClose = () => {
+    setActiveModal("content");
+  };
+
+  return (
+    <VerifyDelete
+      closeCb={handleVerifyClose}
+      deleteCb={handleDelete}
+      title={title}
+      deleting={deleting}
+      loading={loading}
+      type="Quiz"
+    />
+  );
+};
+
+type VerifyDeleteProps = {
+  deleteCb: () => void;
+  closeCb: () => void;
+  title: string;
+  loading?: boolean;
+  deleting: boolean;
+  type: "Quiz" | "Class";
+};
+
+export const VerifyDelete = ({
+  closeCb,
+  deleteCb,
+  title,
+  loading = false,
+  deleting,
+  type,
+}: VerifyDeleteProps) => {
   return (
     <div>
-      <div
-        className={shared.modalBackground}
-        onClick={() => setActiveModal("content")}
-      ></div>
+      <div className={shared.modalBackground} onClick={closeCb}></div>
 
       <div className={`${styles.deleteWrapper} ${loading && styles.loading}`}>
         <div className={` ${styles.outsideWrapper} ${shared.outsideWrapper}`}>
-          <div
-            className={shared.exitBtn}
-            onClick={() => setActiveModal("content")}
-          >
+          <div className={shared.exitBtn} onClick={closeCb}>
             <FontAwesomeIcon icon={faXmark} />
           </div>
 
           {loading && <Spinner size="m" />}
-          {deleting && <Spinner size="m" txt="Deleting Quiz..." />}
-
+          {deleting && <Spinner size="m" txt={`Deleting ${type}...`} />}
           {!loading && !deleting && (
             <div>
               <p className={styles.exitTxt}>Are you sure you want to delete </p>
@@ -77,13 +103,13 @@ export const DeleteModal = ({
               <div className={styles.exitBtns}>
                 <button
                   className={`${styles.exitCta} ${styles.cancel}`}
-                  onClick={() => setActiveModal("content")}
+                  onClick={closeCb}
                 >
                   Cancel
                 </button>
                 <button
                   className={`${styles.exitCta} ${styles.delete}`}
-                  onClick={handleDelete}
+                  onClick={deleteCb}
                 >
                   Delete
                 </button>

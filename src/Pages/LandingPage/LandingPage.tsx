@@ -14,8 +14,13 @@ import { Hero } from "./components/Hero/Hero";
 import { Upload } from "./components/Upload/Upload";
 import { Works } from "./components/Works/Works";
 import { Pricing } from "./components/Pricing/Pricing";
+import { useEffect } from "react";
 
 export const LandingPage = () => {
+  useEffect(() => {
+    document.title = "PassThatClass – Turn Your Notes Into AI Practice Quizzes";
+  }, []);
+
   return (
     <div>
       <Nav />

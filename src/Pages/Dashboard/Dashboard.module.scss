@@ -15,14 +15,17 @@
 }
 
 .cardWrapper {
-  position: relative;
   width: calc(100% / 3 - 1rem);
 
+  &.classCard {
+    order: 1;
+  }
+
+  &.addCard {
+    order: 2;
+  }
+
   .editWrapper {
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
     cursor: pointer;
     border: 1px solid var(--highlight-border);
     border-radius: 100%;
@@ -45,6 +48,7 @@
 
 .classWrapper {
   padding: 2rem 1rem;
+  padding-right: 2rem;
   background-color: var(--first-layer);
   border-radius: var(--mid-radius);
   border: 1px solid var(--light-border);
@@ -52,6 +56,9 @@
   cursor: pointer;
   transition: all 0.1s linear;
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   &:hover {
     background-color: var(--sec-layer);
@@ -173,6 +180,14 @@
 @media (max-width: 768px) {
   .cardWrapper {
     width: calc(100% - 1rem);
+
+    &.classCard {
+      order: 2;
+    }
+
+    &.addCard {
+      order: 1;
+    }
 
     .editWrapper {
       padding: 0.25rem;

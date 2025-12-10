@@ -9,12 +9,21 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "../../context/AuthContext/AuthContext";
 import { Spinner } from "../../components/Spinner/Spinner";
 import { useContentContext } from "../../context/DataContext/ContentContext";
+import { useClassesContext } from "../../context/DataContext/ClassesContext";
 
 export const ClassFolder = () => {
-  const { classId } = useParams<{ classId: string }>();
+  const { classId, className } = useParams<{
+    classId: string;
+    className: string;
+  }>();
   const content = useContentContext();
+  const classesCtx = useClassesContext();
   const auth = useAuthContext();
   const nav = useNavigate();
+
+  useEffect(() => {
+    document.title = `${className} - PassThatClass`;
+  }, []);
 
   useEffect(() => {
     if (!classId) return;

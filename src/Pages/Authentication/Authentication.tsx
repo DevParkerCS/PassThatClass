@@ -13,6 +13,10 @@ export const Authentication = () => {
   const nav = useNavigate();
 
   useEffect(() => {
+    document.title = `${loggingIn ? "LogIn" : "SignUp"} - PassThatClass`;
+  }, [loggingIn]);
+
+  useEffect(() => {
     if (!auth.loading && auth.session) {
       nav("/dashboard");
     }

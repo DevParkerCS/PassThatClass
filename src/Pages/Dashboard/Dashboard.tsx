@@ -15,6 +15,7 @@ import { ClassAddModal } from "./components/ClassAddModal/ClassAddModal";
 import { Spinner } from "../../components/Spinner/Spinner";
 import { useAuthContext } from "../../context/AuthContext/AuthContext";
 import { useClassesContext } from "../../context/DataContext/ClassesContext";
+import { ClassEditModal } from "./components/ClassAddModal/ClassEditModal";
 
 export const Dashboard = () => {
   const {
@@ -25,11 +26,14 @@ export const Dashboard = () => {
     AddClass,
     callClasses,
   } = useClassesContext();
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const nav = useNavigate();
   const auth = useAuthContext();
+
+  useEffect(() => {
+    document.title = "Dashboard - PassThatClass";
+  }, []);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -85,7 +89,7 @@ export const Dashboard = () => {
   const showList = !classesLoading && !classesError && classes.length > 0;
 
   return (
-    <div>
+    <div className={styles.pageWrapper}>
       <Nav />
 
       {isModalOpen && (
@@ -148,14 +152,13 @@ export const Dashboard = () => {
           <div className={styles.classesSizeWrapper}>
             {classes.map((cls) => (
               <ClassCard
-                key={cls.id}
                 name={cls.name}
                 icon={faFolderOpen}
+                classId={cls.id}
                 onClick={() => handleClassClick(cls.id)}
               />
             ))}
 
-            {/* Add Class card */}
             <ClassCard
               name="Add Class"
               icon={faPlus}
@@ -174,6 +177,7 @@ type ClassCardProps = {
   icon: IconDefinition;
   onClick: () => void;
   editable?: boolean;
+  classId?: string;
 };
 
 const ClassCard = ({
@@ -181,23 +185,40 @@ const ClassCard = ({
   icon,
   onClick,
   editable = true,
+  classId,
 }: ClassCardProps) => {
+  const [editActive, setEditActive] = useState(false);
+
   return (
-    <div className={styles.cardWrapper}>
-      {editable && (
-        <div className={styles.editWrapper}>
-          <FontAwesomeIcon
-            className={styles.editBtn}
-            icon={faEllipsisVertical}
-          />
-        </div>
+    <div
+      className={`${styles.cardWrapper} ${
+        editable ? styles.classCard : styles.addCard
+      }`}
+    >
+      {editable && editActive && classId && (
+        <ClassEditModal classId={classId} setEditActive={setEditActive} />
       )}
-      <button type="button" className={styles.classWrapper} onClick={onClick}>
+
+      <div className={styles.classWrapper} onClick={onClick}>
         <div className={styles.classTxtWrapper}>
           <FontAwesomeIcon className={styles.classIcon} icon={icon} />
           <p className={styles.className}>{name}</p>
         </div>
-      </button>
+        {editable && (
+          <div
+            className={styles.editWrapper}
+            onClick={(e) => {
+              e.stopPropagation();
+              setEditActive(true);
+            }}
+          >
+            <FontAwesomeIcon
+              className={styles.editBtn}
+              icon={faEllipsisVertical}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

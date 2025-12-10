@@ -63,7 +63,7 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
   }, [contentById]);
   const pollingRef = useRef<Record<string, boolean>>({});
 
-  const STALE_GENERATION_MS = 0.5 * 60 * 1000; // 5 minutes
+  const STALE_GENERATION_MS = 5 * 60 * 1000; // 5 minutes
 
   const hasGenerating = (classId: string) => {
     const content = contentRef.current;

@@ -16,6 +16,7 @@ type QuizButtonsProps = {
   incorrectIndexes: number[];
   startTime: React.RefObject<number>;
   setTimeSeconds: React.Dispatch<React.SetStateAction<number>>;
+  guessedIndexes: number[];
 };
 
 export const QuizButtons = ({
@@ -31,6 +32,7 @@ export const QuizButtons = ({
   setTimeSeconds,
   quizId,
   incorrectIndexes,
+  guessedIndexes,
 }: QuizButtonsProps) => {
   const contentCtx = useContentContext();
 
@@ -47,7 +49,13 @@ export const QuizButtons = ({
         const seconds = Math.round(elapsed / 1000);
         startTime.current = -1;
         setTimeSeconds(seconds);
-        contentCtx.addAttempt(numCorrect, seconds, incorrectIndexes, quizId);
+        contentCtx.addAttempt(
+          numCorrect,
+          seconds,
+          incorrectIndexes,
+          guessedIndexes,
+          quizId
+        );
       }
       setMode("results");
       setQIndex(0);

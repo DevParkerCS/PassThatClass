@@ -38,6 +38,7 @@ export const Quiz = ({
   const [qIndex, setQIndex] = useState(0);
   const [canGoNext, setCanGoNext] = useState(false);
   const [incorrectIndexes, setIncorrectIndexes] = useState<number[]>([]);
+  const [guessedIndexes, setGuessedIndexes] = useState<number[]>([]);
   const questionsRef = useRef<HTMLDivElement>(null);
   const [questionsHeight, setQuestionsHeight] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
@@ -53,6 +54,12 @@ export const Quiz = ({
     loadReviewData(queryIndex);
   }, []);
 
+  useEffect(() => {
+    if (mode === "answering") {
+      setGuessedIndexes([]);
+    }
+  }, [mode]);
+
   const loadReviewData = async (queryIndex: string) => {
     setLoading(true);
     try {
@@ -62,6 +69,7 @@ export const Quiz = ({
       setNumCorrect(attempt.num_correct);
       setIncorrectIndexes(attempt.incorrect_indexes);
       setTimeSeconds(attempt.seconds);
+      setGuessedIndexes(attempt.guessed_indexes);
       setMode("reviewing");
       setLoading(false);
     } catch (e) {
@@ -121,6 +129,8 @@ export const Quiz = ({
                   mode={mode}
                   setNumCorrect={setNumCorrect}
                   setIncorrectIndexes={setIncorrectIndexes}
+                  setGuessedIndexes={setGuessedIndexes}
+                  guessedIndexes={guessedIndexes}
                 />
               ))}
             </div>
@@ -139,6 +149,7 @@ export const Quiz = ({
             startTime={startTime}
             quizId={quizId}
             incorrectIndexes={incorrectIndexes}
+            guessedIndexes={guessedIndexes}
           />
         </div>
       )}

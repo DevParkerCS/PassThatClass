@@ -5,13 +5,14 @@ import { QuizQuestionType } from "../../../../../../context/DataContext/types";
 
 type QuizQuestionProps = {
   question: QuizQuestionType;
-  index: number;
-  qIndex: number;
+  index: number; // question index in the quiz
+  qIndex: number; // currently active question index
   setCanGoNext: React.Dispatch<React.SetStateAction<boolean>>;
-  chosenAnswer?: number;
   mode: QuizMode;
   setNumCorrect: React.Dispatch<React.SetStateAction<number>>;
   setIncorrectIndexes: React.Dispatch<React.SetStateAction<number[]>>;
+  guessedIndexes: number[]; // 👈 NEW: full guessed array
+  setGuessedIndexes: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
 export const QuizQuestion = ({
@@ -19,46 +20,40 @@ export const QuizQuestion = ({
   index,
   qIndex,
   setCanGoNext,
-  chosenAnswer,
   mode,
   setNumCorrect,
   setIncorrectIndexes,
+  guessedIndexes,
+  setGuessedIndexes,
 }: QuizQuestionProps) => {
-  const [chosenAns, setChosenAns] = useState(chosenAnswer || -1);
   const [isReviewing, setIsReviewing] = useState(mode === "reviewing");
   const correctAns = question.correct_index;
+  const chosenAns = guessedIndexes[index] ?? -1;
 
   useEffect(() => {
     setIsReviewing(mode === "reviewing");
-
-    if (mode === "answering") {
-      setChosenAns(-1);
-    }
   }, [mode]);
 
   useEffect(() => {
     if (qIndex === index) {
       setCanGoNext(chosenAns !== -1);
     }
-  }, [chosenAns, qIndex]);
+  }, [chosenAns, qIndex, index, setCanGoNext]);
 
   const handleClick = (i: number) => {
     if (isReviewing) return;
 
-    // remove effect of previous answer if it was correct
-    if (chosenAns === correctAns) {
+    const prevChosen = chosenAns;
+    const newChosen = prevChosen === i ? -1 : i;
+
+    // adjust num correct based on change
+    if (prevChosen === correctAns) {
       setNumCorrect((prev) => prev - 1);
     }
-
-    // compute new selection (toggle if same)
-    const newChosen = chosenAns === i ? -1 : i;
-
-    // add effect of new answer if it is correct
     if (newChosen === correctAns) {
       setNumCorrect((prev) => prev + 1);
     }
 
-    // update wrong indexes
     setIncorrectIndexes((prev) => {
       const withoutThis = prev.filter((idx) => idx !== index);
 
@@ -69,7 +64,12 @@ export const QuizQuestion = ({
       return [...withoutThis, index];
     });
 
-    setChosenAns(newChosen);
+    // update global guessedIndexes for this question index
+    setGuessedIndexes((prev) => {
+      const next = [...prev];
+      next[index] = newChosen;
+      return next;
+    });
   };
 
   return (
@@ -84,24 +84,25 @@ export const QuizQuestion = ({
 
       <div className={styles.optionsWrapper}>
         {question.options.map((o, i) => {
+          const isChosen = chosenAns === i;
+
           return (
             <div
               key={o.id}
               className={`${styles.optionWrapper} ${
-                chosenAns === i && styles.chosen
-              } ${isReviewing && styles.isReviewing} ${
-                isReviewing && i === correctAns && styles.correctAns
+                isChosen ? styles.chosen : ""
+              } ${isReviewing ? styles.isReviewing : ""} ${
+                isReviewing && i === correctAns ? styles.correctAns : ""
               } ${
-                isReviewing &&
-                chosenAns !== correctAns &&
-                i === chosenAns &&
-                styles.incorrectAns
+                isReviewing && chosenAns !== correctAns && i === chosenAns
+                  ? styles.incorrectAns
+                  : ""
               }`}
               onClick={() => handleClick(i)}
             >
               <p className={`${styles.optionTxt} ${styles.optionID}`}>
                 {String.fromCharCode(65 + i)}
-              </p>{" "}
+              </p>
               <p className={`${styles.optionTxt} ${styles.optionAnswer}`}>
                 {o.text}
               </p>

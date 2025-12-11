@@ -9,8 +9,8 @@ import { ExamplesInput } from "./components/ExamplesInput/ExamplesInput";
 import { Difficulty } from "../../../context/DataContext/types";
 import { useSearchParams } from "react-router-dom";
 import { useContentContext } from "../../../context/DataContext/ContentContext";
-import { useAuthContext } from "../../../context/AuthContext/AuthContext";
 import { ProfileResponse } from "../../../context/AuthContext/types";
+import { v4 as uuidv4 } from "uuid";
 
 type InputsProps = {
   classId: string;
@@ -34,9 +34,7 @@ export const Inputs = ({ submitCb, classId, profile }: InputsProps) => {
   const [genExamples, setGenExamples] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const contentId = searchParams.get("quizId");
-  const [newId, setNewId] = useState(
-    contentId ? contentId : crypto.randomUUID()
-  );
+  const [newId, setNewId] = useState(contentId ? contentId : uuidv4());
   const contentCtx = useContentContext();
 
   useEffect(() => {

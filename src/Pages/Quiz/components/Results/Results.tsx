@@ -3,6 +3,7 @@ import styles from "./Results.module.scss";
 import shared from "../../Shared/styles.module.scss";
 import { ResultsCircle } from "./components/ResultsCircle/ResultsCircle";
 import { ResultButtons } from "./components/ResultButtons/ResultButtons";
+import { useRef } from "react";
 
 type ResultsProps = {
   setMode: React.Dispatch<React.SetStateAction<QuizMode>>;
@@ -82,13 +83,13 @@ export const Results = ({
   time,
   quizLength,
 }: ResultsProps) => {
+  const scoreMsg = useRef(getScoreMessage(numCorrect / quizLength));
+
   return (
     <div className={shared.contentWrapper} style={{ width: "fit-content" }}>
       <div>
         <h2 className={shared.quizTitle}>Quiz Results</h2>
-        <p className={styles.resultTxt}>
-          {getScoreMessage(numCorrect / quizLength)}
-        </p>
+        <p className={styles.resultTxt}>{scoreMsg.current}</p>
       </div>
 
       <div className={styles.contentWrapper}>

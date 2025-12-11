@@ -9,9 +9,12 @@ import { ExamplesInput } from "./components/ExamplesInput/ExamplesInput";
 import { Difficulty } from "../../../context/DataContext/types";
 import { useSearchParams } from "react-router-dom";
 import { useContentContext } from "../../../context/DataContext/ContentContext";
+import { useAuthContext } from "../../../context/AuthContext/AuthContext";
+import { ProfileResponse } from "../../../context/AuthContext/types";
 
 type InputsProps = {
   classId: string;
+  profile: ProfileResponse;
   submitCb: (
     newId: string,
     existingQuiz: boolean,
@@ -23,7 +26,7 @@ type InputsProps = {
   ) => Promise<void>;
 };
 
-export const Inputs = ({ submitCb, classId }: InputsProps) => {
+export const Inputs = ({ submitCb, classId, profile }: InputsProps) => {
   const [numQuestions, setNumQuestions] = useState(10);
   const [chosenGrade, setChosenGrade] = useState<Difficulty>("Select Grade");
   const [files, setFiles] = useState<File[]>([]);
@@ -90,7 +93,9 @@ export const Inputs = ({ submitCb, classId }: InputsProps) => {
         <div className={styles.submitWrapper}>
           <p className={styles.genInfo}>
             <span>1 Generation </span>&bull;{" "}
-            <span>7 Generations Left This Month</span>
+            <span>
+              {profile.generations_remaining_this_period} Generations Remaining
+            </span>
           </p>
           <button className={styles.submitBtn} type="submit">
             Generate

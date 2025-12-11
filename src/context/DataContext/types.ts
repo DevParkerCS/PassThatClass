@@ -9,6 +9,7 @@ export type ClassesState = {
   classesError: string;
   editClass: (classId: string, newTitle: string) => Promise<void>;
   deleteClass: (classId: string) => Promise<void>;
+  resetClassesState: () => void;
 };
 
 export type ContentState = {
@@ -44,6 +45,7 @@ export type ContentState = {
   startPolling: (classId: string) => void;
   lastUploaded: LastUploaded;
   contentLoadStatus: Record<string, boolean>;
+  resetContentState: () => void;
 };
 
 export type DataProviderProps = {

@@ -34,6 +34,12 @@ export const NewQuiz = () => {
     return () => clearTimeout(timeoutId);
   }, [error]);
 
+  useEffect(() => {
+    if (!auth.loading && !auth.session) {
+      nav("/login");
+    }
+  }, [auth]);
+
   if (!classId || !classesCtx.classesById[classId]) {
     return <div>Class Not Found</div>;
   }
@@ -48,6 +54,8 @@ export const NewQuiz = () => {
     numQuestions: number,
     genExample: boolean
   ) => {
+    if (!auth.profile) return;
+
     // Ensure all fields are filled out
     if (chosenGrade === "Select Grade") {
       setError("Grade Isn't Chosen");
@@ -55,8 +63,10 @@ export const NewQuiz = () => {
     } else if (files.length === 0 && input.length === 0) {
       setError("No Files Or Text Was Inputted");
       return;
+    } else if (auth.profile?.generations_remaining_this_period <= 0) {
+      setError("You Are Out Of Generations");
+      return;
     }
-
     try {
       contentCtx.callAddNewQuiz(
         newId,
@@ -86,11 +96,19 @@ export const NewQuiz = () => {
           <Breadcrumb />
           <p className={styles.title}>New Quiz</p>
 
-          <div className={`${styles.infoWrapper} ${error && styles.error}`}>
-            <ErrorModal error={error} isActive={!!error} />
+          {auth.loading || !auth.profile ? (
+            <Spinner size="l" txt="Loading Profile Info" />
+          ) : (
+            <div className={`${styles.infoWrapper} ${error && styles.error}`}>
+              <ErrorModal error={error} isActive={!!error} />
 
-            <Inputs classId={classId} submitCb={handleSubmit} />
-          </div>
+              <Inputs
+                profile={auth.profile}
+                classId={classId}
+                submitCb={handleSubmit}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

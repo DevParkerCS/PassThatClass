@@ -1,13 +1,16 @@
+.topContent {
+  top: 0;
+  left: 0;
+  position: sticky;
+  background-color: var(--dark-bg);
+  z-index: 100;
+}
+
 .navWrapper {
   display: flex;
   justify-content: space-between;
-  background-color: var(--dark-bg);
-  position: sticky;
   align-items: center;
   padding: 0.5rem 1rem;
-  top: 0;
-  left: 0;
-  z-index: 100;
   border-bottom: 1px solid var(--light-border);
 }
 
@@ -33,6 +36,47 @@
 
     &:hover {
       color: var(--cyan-accent);
+    }
+  }
+}
+
+.upgradeBanner {
+  background-color: var(--cyan-soft);
+  padding: 0.5rem;
+  display: none;
+  position: relative;
+
+  &.active {
+    display: block;
+  }
+
+  .bannerTitle {
+    font-size: 1.5rem;
+    text-align: center;
+    color: var(--text-main);
+  }
+
+  .bannerCta {
+    color: var(--text-main);
+    font-weight: bold;
+    font-size: 1.3rem;
+    text-align: center;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+
+  .bannerClose {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1.5rem;
+    color: var(--text-main);
+    transition: color 0.1s linear;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--error-red);
     }
   }
 }

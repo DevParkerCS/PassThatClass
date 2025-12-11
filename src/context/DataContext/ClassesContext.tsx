@@ -38,6 +38,20 @@ export const ClassesProvider = ({ children }: DataProviderProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth.loading, auth.session?.user?.id]);
 
+  const resetClassesState = () => {
+    setClasses([]);
+    setClassesById({});
+    setClassesLoading(false);
+    setClassesError("");
+    classesFetched.current = false;
+  };
+
+  useEffect(() => {
+    if (!auth.session) {
+      resetClassesState();
+    }
+  }, [auth.session]);
+
   const callClasses = async () => {
     if (!auth.session?.access_token) {
       setClassesError("Not authenticated");
@@ -138,6 +152,7 @@ export const ClassesProvider = ({ children }: DataProviderProps) => {
     deleteClass,
     classesLoading,
     classesError,
+    resetClassesState,
   });
 
   return (

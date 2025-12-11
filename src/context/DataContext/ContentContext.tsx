@@ -58,6 +58,7 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
   const auth = useAuthContext();
   const contentRef = useRef<ContentById>({});
   const contentIds = useRef<Set<string>>(new Set());
+
   useEffect(() => {
     contentRef.current = contentById;
   }, [contentById]);
@@ -126,6 +127,25 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
     // Only report "has generating" for non-stale ones
     return updatedItems.some((c) => c.status === "generating");
   };
+
+  const resetContentState = () => {
+    setContentById({});
+    setContentLoadStatus({});
+    setQuestionsById({});
+    setQuizMetaById({});
+    setAttemptsById({});
+    setQuizLoading(false);
+    setLastUploaded({});
+
+    contentRef.current = {};
+    contentIds.current = new Set<string>();
+  };
+
+  useEffect(() => {
+    if (!auth.session) {
+      resetContentState();
+    }
+  }, [auth.session]);
 
   const startPolling = (classId: string) => {
     if (pollingRef.current[classId]) return;
@@ -376,10 +396,12 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
     };
 
     try {
+      auth.decrementGenerations();
       await addNewQuiz(params);
     } catch (e) {
+      auth.incrementGenerations();
       contentIds.current.delete(newId);
-      console.error("Error adding quiz");
+      console.error(e);
     }
   };
 
@@ -398,6 +420,7 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
     getPastAttempts,
     startPolling,
     lastUploaded,
+    resetContentState,
   });
 
   return (

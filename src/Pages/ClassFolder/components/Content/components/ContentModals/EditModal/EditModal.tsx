@@ -116,9 +116,9 @@ export const EditModal = ({
                 >
                   Cancel
                 </button>
-                <button className={`${styles.editBtn} ${styles.fullBtn}`}>
+                {/* <button className={`${styles.editBtn} ${styles.fullBtn}`}>
                   Open Full Editor
-                </button>
+                </button> */}
                 <button
                   onClick={handleSave}
                   className={`${styles.editBtn} ${styles.saveBtn}`}

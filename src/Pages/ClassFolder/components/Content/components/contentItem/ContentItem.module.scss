@@ -1,4 +1,4 @@
-@use "../../../../../../styles/mixins.scss" as mixins;
+@use "../../../../../../styles/mixins.scss" as *;
 @import "../../../../../../styles/variables.module.scss";
 
 .contentFlex {
@@ -21,6 +21,11 @@
   transition: all 0.1s linear;
   position: relative;
   overflow: hidden;
+
+  @include respond($bp-md) {
+    width: 100%;
+    min-width: 100%;
+  }
 
   &.generating {
     // optional: visually de-emphasize while generating
@@ -94,20 +99,6 @@
     margin-top: 1rem;
   }
 
-  .deleteIcon {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    font-size: 1.5rem;
-    color: var(--error-red-trans);
-    opacity: 0;
-    transition: color 0.1s linear;
-
-    &:hover {
-      color: var(--error-red);
-    }
-  }
-
   .itemLabel {
     background-color: var(--sec-layer);
     color: var(--cyan-accent);
@@ -117,18 +108,30 @@
     border-radius: var(--mid-radius);
     height: fit-content;
     transition: all 0.1s linear;
+
+    @include respond($bp-sm) {
+      font-size: 0.75rem;
+    }
   }
 
   .itemName {
     font-size: 1.5rem;
     color: white;
-    @include mixins.ellipsis;
+    @include ellipsis;
+
+    @include respond($bp-sm) {
+      font-size: 1.3rem;
+    }
   }
 
   .itemInfoTxt {
     font-size: 1.25rem;
     margin-top: 0.25rem;
     color: var(--text-muted);
+
+    @include respond($bp-sm) {
+      font-size: 1.15rem;
+    }
   }
 }
 

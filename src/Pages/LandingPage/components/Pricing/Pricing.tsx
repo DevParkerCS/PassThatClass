@@ -2,8 +2,11 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import shared from "../../shared/styles.module.scss";
 import styles from "./Pricing.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 
 export const Pricing = () => {
+  const nav = useNavigate();
+
   return (
     <div className={shared.section} id="pricing">
       <div className={shared.sectionContent}>
@@ -23,7 +26,9 @@ export const Pricing = () => {
               $0<span className={styles.priceMonth}> / month</span>
             </p>
 
-            <button className={styles.cta}>Start For Free</button>
+            <button className={styles.cta} onClick={() => nav("/login")}>
+              Start For Free
+            </button>
 
             <div className={styles.cardList}>
               <div className={styles.priceItem}>

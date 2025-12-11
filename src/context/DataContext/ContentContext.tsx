@@ -248,10 +248,11 @@ export const ContentProvider = ({ children }: DataProviderProps) => {
     numCorrect: number,
     seconds: number,
     incorrectIndexes: number[],
+    guessedIndexes: number[],
     quizId: string
   ) => {
     try {
-      const params = { numCorrect, seconds, incorrectIndexes };
+      const params = { numCorrect, seconds, incorrectIndexes, guessedIndexes };
       const res = await axios.post(
         `${process.env.REACT_APP_BACKEND_API}/quiz/${quizId}/attempt`,
         params,

@@ -39,6 +39,7 @@ export type ContentState = {
     numCorrect: number,
     seconds: number,
     incorrectIndexes: number[],
+    guessedIndexes: number[],
     quizId: string
   ) => void;
   getPastAttempts: (quizId: string) => Promise<QuizAttempts>;
@@ -112,6 +113,7 @@ export type QuizAttemptType = {
   quiz_id: string;
   num_correct: number;
   incorrect_indexes: number[];
+  guessed_indexes: number[];
   seconds: number;
   completed_at: string;
 };

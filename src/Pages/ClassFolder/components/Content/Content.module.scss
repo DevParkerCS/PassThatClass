@@ -1,4 +1,4 @@
-@use "../../../../styles/mixins.scss" as mixins;
+@use "../../../../styles/mixins.scss" as *;
 @import "../../../../styles/variables.module.scss";
 
 .contentWrapper {
@@ -12,13 +12,21 @@
   width: 100%;
   z-index: 5;
   margin-bottom: 0.5rem;
+
+  @include respond($bp-sm) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .classTitle {
   font-size: 3rem;
   color: var(--text-main);
   font-weight: bold;
-  // text-align: center;
+
+  @include respond($bp-sm) {
+    font-size: 2rem;
+  }
 }
 
 .contentTitle {
@@ -26,20 +34,14 @@
   font-weight: bold;
   color: var(--text-secondary);
 
+  @include respond($bp-sm) {
+    font-size: 1.5rem;
+  }
+
   .contentAmt {
     color: var(--text-muted);
     margin-left: 0.25rem;
     font-weight: normal;
-  }
-}
-
-.contentFilter {
-  font-size: 1.5rem;
-  color: var(--text-muted);
-  cursor: pointer;
-
-  &.active {
-    color: var(--text-main);
   }
 }
 
@@ -53,5 +55,5 @@
   gap: 1rem;
 
   padding-bottom: 1rem;
-  @include mixins.scrollbar;
+  @include scrollbar;
 }

@@ -72,33 +72,37 @@ export const ContentModal = ({
             <div>
               <h2 className={styles.modalTitle}>{meta.title}</h2>
 
-              <div className={styles.infoWrapper}>
-                <div className={styles.infoItem}>
-                  <p className={styles.infoTxt}>
-                    {meta.num_questions} Questions
-                  </p>
+              <div className={styles.infoCtaWrapper}>
+                <div className={styles.infoWrapper}>
+                  <div className={styles.infoItem}>
+                    <p className={styles.infoTxt}>
+                      {meta.num_questions} Questions
+                    </p>
+                  </div>
+
+                  <div className={styles.infoItem}>
+                    <p className={styles.infoTxt}>
+                      Last Attempt:{" "}
+                      {formatRelativeTime(selectedInfo.last_used_at)}
+                    </p>
+                  </div>
                 </div>
 
-                <div className={styles.infoItem}>
-                  <p className={styles.infoTxt}>
-                    Last Attempt:{" "}
-                    {formatRelativeTime(selectedInfo.last_used_at)}
-                  </p>
-                </div>
-
-                <div>
-                  <FontAwesomeIcon
-                    className={styles.editCta}
-                    onClick={() => setActiveModal("edit")}
-                    icon={faPenToSquare}
-                  />
-                </div>
-                <div>
-                  <FontAwesomeIcon
-                    icon={faTrash}
-                    onClick={(e) => setActiveModal("delete")}
-                    className={`${styles.editCta}`}
-                  />
+                <div className={styles.editCtas}>
+                  <div>
+                    <FontAwesomeIcon
+                      className={styles.editCta}
+                      onClick={() => setActiveModal("edit")}
+                      icon={faPenToSquare}
+                    />
+                  </div>
+                  <div>
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      onClick={(e) => setActiveModal("delete")}
+                      className={`${styles.editCta} ${styles.delCta}`}
+                    />
+                  </div>
                 </div>
               </div>
 

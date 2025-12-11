@@ -1,8 +1,14 @@
+@use "../../styles/mixins.scss" as *;
+
 .folderWrapper {
   width: var(--app-width);
   overflow: visible;
   margin: 0 auto;
   margin-top: 2rem;
+
+  @include respond($bp-sm) {
+    margin-top: 1rem;
+  }
 }
 
 .searchWrapper {

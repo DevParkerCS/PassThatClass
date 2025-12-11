@@ -1,4 +1,4 @@
-@use "../../../../styles/mixins.scss" as mixins;
+@use "../../../../styles/mixins.scss" as *;
 @import "../../../../styles/variables.module.scss";
 
 .ctasWrapper {
@@ -30,5 +30,14 @@
   .ctaTxt {
     color: var(--text-main);
     font-size: 1.25rem;
+  }
+
+  @include respond($bp-sm) {
+    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
+
+    .ctaTxt {
+      font-size: 1rem;
+    }
   }
 }

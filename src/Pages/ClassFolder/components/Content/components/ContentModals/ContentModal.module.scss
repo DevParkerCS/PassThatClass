@@ -1,4 +1,4 @@
-@use "../../../../../../styles/mixins.scss" as mixins;
+@use "../../../../../../styles/mixins.scss" as *;
 @import "../../../../../../styles/variables.module.scss";
 
 .modalBackground {
@@ -23,17 +23,26 @@
   transform: translate(-50%, -50%);
   background-color: var(--first-layer);
   border-radius: var(--mid-radius);
-  width: min(900px, 80vw);
+  width: min(900px, var(--app-width));
   cursor: default;
   z-index: 100;
   overflow: hidden;
   border: 1px solid var(--light-border);
+
+  @include respond($bp-md) {
+    max-height: 70%;
+    overflow: auto;
+  }
 
   .modalTitle {
     font-size: 2.5rem;
     color: white;
     width: fit-content;
     margin-bottom: 1rem;
+
+    @include respond($bp-sm) {
+      font-size: 2rem;
+    }
   }
 }
 
@@ -59,10 +68,30 @@
   }
 }
 
-.infoWrapper {
+.infoCtaWrapper {
   display: flex;
   align-items: center;
   gap: 1rem;
+
+  @include respond($bp-md) {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+.infoWrapper {
+  display: flex;
+  gap: 1rem;
+
+  @include respond($bp-md) {
+    gap: 0.5rem;
+  }
+
+  @include respond($bp-sm) {
+    flex-direction: column;
+    width: 100%;
+  }
 
   .infoItem {
     background-color: var(--sec-layer);
@@ -77,10 +106,23 @@
   }
 }
 
+.editCtas {
+  display: flex;
+  gap: 1rem;
+
+  @include respond($bp-md) {
+    gap: 0.5rem;
+  }
+}
+
 .modalContent {
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
+
+  @include respond($bp-md) {
+    flex-direction: column;
+  }
 }
 
 .modalListWrapper {
@@ -97,11 +139,11 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 1rem;
-  max-height: 380px;
+  max-height: 180px;
   height: 100%;
   overflow-y: auto;
 
-  @include mixins.scrollbar;
+  @include scrollbar;
 }
 
 .listItem {
@@ -109,7 +151,7 @@
   position: relative;
 
   .itemTxt {
-    @include mixins.ellipsis;
+    @include ellipsis;
     color: var(--text-secondary);
   }
 
@@ -186,7 +228,8 @@
 .ctasWrapper {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
 
 .modalCta {
@@ -216,12 +259,20 @@
 }
 
 .editCta {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   color: var(--cyan-soft);
   transition: all 0.1s linear;
   cursor: pointer;
 
   &:hover {
     color: var(--cyan-accent);
+  }
+
+  &.delCta {
+    color: var(--error-red-dark);
+
+    &:hover {
+      color: var(--error-red);
+    }
   }
 }

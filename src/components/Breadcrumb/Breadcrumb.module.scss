@@ -1,8 +1,14 @@
+@use "../../styles/mixins.scss" as *;
+
 .breadcrumb {
   display: flex;
   color: var(--cyan-soft);
   font-size: 1.3rem;
   gap: 5px;
+
+  @include respond($bp-sm) {
+    font-size: 1.15rem;
+  }
 
   .breadcrumbItem {
     cursor: default;

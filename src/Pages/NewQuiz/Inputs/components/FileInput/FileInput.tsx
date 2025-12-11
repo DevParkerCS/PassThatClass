@@ -3,23 +3,24 @@ import styles from "./FileInput.module.scss";
 import shared from "../../../shared/styles.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePdf, faUpload, faX } from "@fortawesome/free-solid-svg-icons";
+import { useAuthContext } from "../../../../../context/AuthContext/AuthContext";
 
 type FileInputProps = {
   setFiles: Dispatch<SetStateAction<File[]>>;
   files: File[];
 };
 
-const MAX_FILES = 10;
 const MAX_MB = 20;
 const MAX_IMAGE_SIZE_BYTES = MAX_MB * 1024 * 1024;
 
 export const FileInput = ({ setFiles, files }: FileInputProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const authCtx = useAuthContext();
 
   // shared logic for both normal file input + drag-n-drop
   const processIncomingFiles = (incomingFiles: File[]) => {
-    if (incomingFiles.length === 0) return;
+    if (incomingFiles.length === 0 || !authCtx.profile) return;
 
     const valid = incomingFiles.filter(
       (file) => file.size <= MAX_IMAGE_SIZE_BYTES
@@ -29,11 +30,12 @@ export const FileInput = ({ setFiles, files }: FileInputProps) => {
     );
 
     const curFiles = [...files, ...valid];
-    const limited = curFiles.slice(0, MAX_FILES);
+    const limited = curFiles.slice(0, authCtx.profile?.plan.image_limit);
 
-    if (curFiles.length > MAX_FILES) {
-      // TODO: surface this to user
-      console.log(`Too many files. Max is ${MAX_FILES}.`);
+    if (curFiles.length > authCtx.profile?.plan.image_limit) {
+      console.log(
+        `Too many files. Max for your subscription is ${authCtx.profile?.plan.image_limit}.`
+      );
     } else if (rejected.length > 0) {
       console.log("Some files were too big. Max size is 10MB.");
     }
@@ -94,7 +96,7 @@ export const FileInput = ({ setFiles, files }: FileInputProps) => {
           <FontAwesomeIcon icon={faUpload} />
           <p>Drop images here,</p>
           <p>or click to browse</p>
-          <p>{`Max ${MAX_FILES} Images`}</p>
+          <p>{`Max ${authCtx.profile?.plan.image_limit} Images`}</p>
         </div>
 
         <input

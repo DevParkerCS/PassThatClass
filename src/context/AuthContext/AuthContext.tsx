@@ -34,7 +34,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [needsVerify, setNeedsVerify] = useState(false);
   const [authError, setAuthError] = useState<AuthError | null>(null);
   const [profile, setProfile] = useState<ProfileResponse | null>(null);

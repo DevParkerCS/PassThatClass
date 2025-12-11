@@ -24,6 +24,9 @@ export interface Plan {
   name: string;
   monthly_generation_limit: number;
   price_cents: number;
+  image_limit: number;
+  char_limit: number;
+  class_limit: number;
 }
 
 export interface ProfileResponse {

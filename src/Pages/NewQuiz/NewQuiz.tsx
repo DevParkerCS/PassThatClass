@@ -106,6 +106,7 @@ export const NewQuiz = () => {
                 profile={auth.profile}
                 classId={classId}
                 submitCb={handleSubmit}
+                setError={setError}
               />
             </div>
           )}

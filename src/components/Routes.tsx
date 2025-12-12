@@ -8,6 +8,7 @@ import { NewQuiz } from "../Pages/NewQuiz/NewQuiz";
 import { QuizContent } from "../Pages/Quiz/QuizContent";
 import { ClassFolder } from "../Pages/ClassFolder/ClassFolder";
 import { EmailVerified } from "../Pages/EmailVerified/EmailVerified";
+import { Account } from "../Pages/Account/Account";
 
 export type WithRequired<T, K extends keyof T> = Omit<T, K> &
   Required<Pick<T, K>>;
@@ -80,6 +81,10 @@ const routeTree: RouteConfig[] = [
         path: ":quizName/:quizId/edit",
       },
     ],
+  },
+  {
+    path: "/account",
+    element: Account,
   },
 ];
 

@@ -8,12 +8,13 @@ import { useAuthContext } from "../../../../../context/AuthContext/AuthContext";
 type FileInputProps = {
   setFiles: Dispatch<SetStateAction<File[]>>;
   files: File[];
+  setError: Dispatch<SetStateAction<string>>;
 };
 
 const MAX_MB = 20;
 const MAX_IMAGE_SIZE_BYTES = MAX_MB * 1024 * 1024;
 
-export const FileInput = ({ setFiles, files }: FileInputProps) => {
+export const FileInput = ({ setFiles, files, setError }: FileInputProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const authCtx = useAuthContext();
@@ -33,11 +34,9 @@ export const FileInput = ({ setFiles, files }: FileInputProps) => {
     const limited = curFiles.slice(0, authCtx.profile?.plan.image_limit);
 
     if (curFiles.length > authCtx.profile?.plan.image_limit) {
-      console.log(
-        `Too many files. Max for your subscription is ${authCtx.profile?.plan.image_limit}.`
-      );
+      setError(`Max ${authCtx.profile?.plan.image_limit} Files For Your Plan.`);
     } else if (rejected.length > 0) {
-      console.log("Some files were too big. Max size is 10MB.");
+      setError("Some files were too big. Max size is 10MB.");
     }
 
     setFiles(limited);
@@ -89,7 +88,7 @@ export const FileInput = ({ setFiles, files }: FileInputProps) => {
       >
         <label className={shared.inputLabel}>Upload Images</label>
         <p className={shared.inputNote}>
-          * Each page in a PDF counts as 1 image.
+          * Each page in a PDF counts as 1 image. Max 10MB
         </p>
 
         <div className={styles.filesInputBtn}>

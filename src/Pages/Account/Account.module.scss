@@ -1,0 +1,110 @@
+.container {
+  width: var(--app-width);
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 3rem;
+  color: var(--text-main);
+  margin: 2rem 0rem;
+  text-align: center;
+  border-bottom: 1px solid var(--light-border);
+  padding-bottom: 1rem;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.contentWrapper {
+  width: var(--app-width);
+  margin: 0 auto;
+}
+
+.itemWrapper {
+  display: grid;
+  grid-template-columns: 250px 400px 300px;
+  align-items: center;
+  gap: 2rem;
+
+  .itemTitle {
+    font-size: 2rem;
+    color: var(--text-secondary);
+  }
+
+  .itemValue {
+    font-size: 1.5rem;
+    color: var(--text-main);
+  }
+
+  .itemCta {
+    background-color: var(--cyan-soft);
+    width: 300px;
+    padding: 0.5rem;
+    font-size: 1.25rem;
+    border: none;
+    color: var(--text-secondary);
+    border-radius: var(--mid-radius);
+    cursor: pointer;
+    transition: all 0.1s linear;
+    justify-self: center;
+
+    &:hover {
+      background-color: var(--cyan-accent);
+    }
+  }
+}
+
+.acctCtas {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .acctCta {
+    width: 300px;
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    border-radius: var(--mid-radius);
+    border: 1px solid transparent;
+    background-color: var(--sec-layer);
+    color: var(--text-secondary);
+    transition: all 0.1s linear;
+    cursor: pointer;
+
+    &.logOut {
+      border-color: var(--cyan-soft);
+
+      &:hover {
+        border-color: var(--cyan-accent);
+        color: var(--cyan-accent);
+      }
+    }
+
+    &.delete {
+      border-color: var(--error-red-dark);
+
+      &:hover {
+        border-color: var(--error-red);
+        color: var(--error-red);
+      }
+    }
+  }
+}
+
+.dangerTitle {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--error-red);
+  text-align: center;
+}
+
+.dangerSub {
+  font-size: 1.5rem;
+  color: var(--text-main);
+  text-align: center;
+  margin: 1rem 0rem;
+}

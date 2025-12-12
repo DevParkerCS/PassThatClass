@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FileInput } from "./components/FileInput/FileInput";
 import { GradeInput } from "./components/GradeInput/GradeInput";
 import { NotesInput } from "./components/NotesInput/NotesInput";
@@ -24,9 +24,15 @@ type InputsProps = {
     numQuestions: number,
     genExamples: boolean
   ) => Promise<void>;
+  setError: Dispatch<SetStateAction<string>>;
 };
 
-export const Inputs = ({ submitCb, classId, profile }: InputsProps) => {
+export const Inputs = ({
+  submitCb,
+  classId,
+  profile,
+  setError,
+}: InputsProps) => {
   const [numQuestions, setNumQuestions] = useState(10);
   const [chosenGrade, setChosenGrade] = useState<Difficulty>("Select Grade");
   const [files, setFiles] = useState<File[]>([]);
@@ -80,7 +86,7 @@ export const Inputs = ({ submitCb, classId, profile }: InputsProps) => {
           numQuestions={numQuestions}
           setNumQuestions={setNumQuestions}
         />
-        <FileInput files={files} setFiles={setFiles} />
+        <FileInput files={files} setFiles={setFiles} setError={setError} />
         <NotesInput setInput={setInput} input={input} />
 
         <ExamplesInput

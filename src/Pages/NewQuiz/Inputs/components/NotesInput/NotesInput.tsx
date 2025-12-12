@@ -1,6 +1,12 @@
 import styles from "./NotesInput.module.scss";
 import shared from "../../../shared/styles.module.scss";
-import { Dispatch, SetStateAction } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { useAuthContext } from "../../../../../context/AuthContext/AuthContext";
 
 type NotesInputProps = {
@@ -8,10 +14,23 @@ type NotesInputProps = {
   input: string;
 };
 
-const MAX_CHARS = 20000;
-
 export const NotesInput = ({ setInput, input }: NotesInputProps) => {
   const authCtx = useAuthContext();
+  const [maxChars, setMaxChars] = useState(
+    authCtx.profile?.plan.char_limit || 5000
+  );
+
+  useEffect(() => {
+    if (!authCtx.profile) return;
+
+    setMaxChars(authCtx.profile.plan.char_limit);
+  }, [authCtx]);
+
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.target.value.length <= maxChars) {
+      setInput(e.target.value);
+    }
+  };
 
   return (
     <div className={`${styles.notesWrapper}`}>
@@ -19,16 +38,16 @@ export const NotesInput = ({ setInput, input }: NotesInputProps) => {
         Paste Notes
       </label>
       <p className={shared.inputNote}>
-        * We Will Use Up To The First{" "}
-        {authCtx.profile?.plan.char_limit.toLocaleString()} Characters Of Notes
+        * We Will Use Up To The First {maxChars.toLocaleString()} Characters Of
+        Notes
       </p>
       <textarea
-        maxLength={authCtx.profile?.plan.char_limit || 5000}
+        maxLength={maxChars}
         className={styles.notesInput}
         id="notes-paste"
         placeholder={`Paste Notes Here`}
         value={input}
-        onChange={(e) => setInput(e.target.value)}
+        onChange={(e) => handleChange(e)}
       />
     </div>
   );

@@ -42,8 +42,8 @@ export const Nav = () => {
           )}
 
           {auth.session && (
-            <p className={styles.navItem} onClick={handleSignout}>
-              Log Out
+            <p className={styles.navItem} onClick={() => nav("/account")}>
+              Account
             </p>
           )}
         </div>

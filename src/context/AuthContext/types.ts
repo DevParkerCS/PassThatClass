@@ -26,7 +26,7 @@ export interface Plan {
   price_cents: number;
   image_limit: number;
   char_limit: number;
-  class_limit: number;
+  class_limit: number | null;
 }
 
 export interface ProfileResponse {

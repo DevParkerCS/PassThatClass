@@ -87,6 +87,9 @@ export const Dashboard = () => {
   const showEmpty = !classesLoading && !classesError && classes.length === 0;
   const showError = !classesLoading && !!classesError;
   const showList = !classesLoading && !classesError && classes.length > 0;
+  const cantAdd =
+    auth.profile?.plan.class_limit &&
+    classes.length >= auth.profile?.plan.class_limit;
 
   useEffect(() => {
     if (isModalOpen) {
@@ -151,7 +154,7 @@ export const Dashboard = () => {
       )}
 
       {/* LIST STATE */}
-      {showList && (
+      {showList && auth.profile && (
         <div className={styles.classesWrapper}>
           <div className={styles.classesSizeWrapper}>
             {classes.map((cls) => (
@@ -163,11 +166,15 @@ export const Dashboard = () => {
               />
             ))}
 
-            <ClassCard
-              icon={faPlus}
-              onClick={() => setIsModalOpen(true)}
-              editable={false}
-            />
+            {!cantAdd ? (
+              <ClassCard
+                icon={faPlus}
+                onClick={() => setIsModalOpen(true)}
+                editable={false}
+              />
+            ) : (
+              <UpgradeCard />
+            )}
           </div>
         </div>
       )}
@@ -226,6 +233,24 @@ const ClassCard = ({
             />
           </div>
         )}
+      </div>
+    </div>
+  );
+};
+
+const UpgradeCard = () => {
+  const nav = useNavigate();
+
+  return (
+    <div
+      className={`${styles.cardWrapper} ${styles.addCard}`}
+      onClick={() => nav("/#pricing")}
+    >
+      <div className={styles.classWrapper}>
+        <div className={styles.classTxtWrapper}>
+          <FontAwesomeIcon className={styles.classIcon} icon={faPlus} />
+          <p className={styles.className}>Upgrade For More Classes</p>
+        </div>
       </div>
     </div>
   );
